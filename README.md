@@ -6,6 +6,18 @@
 
 An Android library that eliminates `shape` drawable XML files. Define shapes, gradients, strokes, shadows, ripples, and state colors **directly in your layout XML** — no more `drawable/` boilerplate.
 
+## Installation
+
+### Gradle (Maven Central)
+
+```groovy
+dependencies {
+    implementation 'io.github.impeterwayne:shape-view:1.0.0'
+}
+```
+
+---
+
 ## Features
 
 - **Shape types** — Rectangle, oval, line, ring
@@ -29,18 +41,6 @@ An Android library that eliminates `shape` drawable XML files. Define shapes, gr
   <img src="screenshots/screenshot_2.png" width="270" alt="Shadows, Ripple Containers & Text States" />
   <img src="screenshots/screenshot_3.png" width="270" alt="Gradient Text, Shape Layouts & EditText" />
 </p>
-
----
-
-## Installation
-
-### Gradle (Maven Central)
-
-```groovy
-dependencies {
-    implementation 'io.github.impeterwayne:shape-view:1.0.0'
-}
-```
 
 ---
 
