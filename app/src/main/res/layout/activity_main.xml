@@ -212,31 +212,31 @@
 
         </LinearLayout>
 
-        <!-- Section: Buttons with States -->
+        <!-- Section: Buttons with Selectors -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:text="Buttons with States"
+            android:text="Buttons with Selectors"
             android:textColor="#1F2937"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <!-- Primary Button -->
+        <!-- Primary Button (using color selector for solid) -->
         <com.genesys.shape.view.ShapeButton
             android:id="@+id/btnPrimary"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:text="Primary Button"
+            android:gravity="center"
+            android:text="Primary Button (Selector)"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textAllCaps="false"
             app:shape_radius="12dp"
-            app:shape_solidColor="#6366F1"
-            app:shape_solidPressedColor="#4F46E5" />
+            app:shape_solidColor="@color/btn_primary_solid_selector" />
 
         <!-- Ripple Button -->
         <com.genesys.shape.view.ShapeButton
@@ -244,6 +244,7 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="8dp"
+            android:gravity="center"
             android:text="Ripple Button (Tap me!)"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
@@ -254,21 +255,22 @@
             app:shape_ripple_enabled="true"
             app:shape_ripple_color="#40FFFFFF" />
 
-        <!-- Outline Button -->
+        <!-- Outline Button (using color selectors for solid + stroke) -->
         <com.genesys.shape.view.ShapeButton
             android:id="@+id/btnOutline"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="8dp"
-            android:text="Outline Button"
+            android:gravity="center"
+            android:text="Outline Button (Selector)"
             android:textColor="#6366F1"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textAllCaps="false"
             app:shape_radius="12dp"
-            app:shape_strokeColor="#6366F1"
+            app:shape_strokeColor="@color/btn_outline_stroke_selector"
             app:shape_strokeSize="2dp"
-            app:shape_solidPressedColor="#106366F1" />
+            app:shape_solidColor="@color/btn_outline_solid_selector" />
 
         <!-- Section: Shadow Effects -->
         <TextView

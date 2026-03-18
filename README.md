@@ -22,6 +22,16 @@ An Android library that eliminates `shape` drawable XML files. Define shapes, gr
 
 ---
 
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/screenshot_1.png" width="270" alt="Basic Shapes, Gradients, Strokes & Buttons" />
+  <img src="screenshots/screenshot_2.png" width="270" alt="Shadows, Ripple Containers & Text States" />
+  <img src="screenshots/screenshot_3.png" width="270" alt="Gradient Text, Shape Layouts & EditText" />
+</p>
+
+---
+
 ## Installation
 
 ### Gradle (Maven Central)
@@ -29,18 +39,6 @@ An Android library that eliminates `shape` drawable XML files. Define shapes, gr
 ```groovy
 dependencies {
     implementation 'io.github.impeterwayne:shape-view:1.0.0'
-}
-```
-
-### Local module
-
-```groovy
-// settings.gradle
-include ':shape-view'
-
-// app/build.gradle
-dependencies {
-    implementation project(':shape-view')
 }
 ```
 

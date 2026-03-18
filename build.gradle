@@ -1,3 +1,10 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.maven.publish) apply false
+}
+
 // ── Load local secrets (git-ignored) ────────────────────────────────────────
 // Secrets are stored in local.secret.properties and loaded into Gradle
 // project properties so signing and publishing plugins can find them.
@@ -21,11 +28,4 @@ if (secretFile.exists()) {
             }
         }
     }
-}
-
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-plugins {
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.maven.publish) apply false
 }
