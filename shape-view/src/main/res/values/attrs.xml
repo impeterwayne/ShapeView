@@ -1,0 +1,1430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Shape type (default is rectangle) -->
+    <attr name="shape_type">
+        <!-- Rectangle -->
+        <enum name="rectangle" value="0" />
+        <!-- Oval -->
+        <enum name="oval" value="1" />
+        <!-- Line -->
+        <enum name="line" value="2" />
+        <!-- Ring -->
+        <enum name="ring" value="3" />
+    </attr>
+
+    <!-- Shape width -->
+    <attr name="shape_width" format="dimension" />
+    <!-- Shape height -->
+    <attr name="shape_height" format="dimension" />
+
+    <!-- Corner radius size -->
+    <attr name="shape_radius" format="dimension" />
+    <!-- Top-left corner radius size -->
+    <attr name="shape_radiusInTopLeft" format="dimension" />
+    <attr name="shape_radiusInTopStart" format="dimension" />
+    <!-- Top-right corner radius size -->
+    <attr name="shape_radiusInTopRight" format="dimension" />
+    <attr name="shape_radiusInTopEnd" format="dimension" />
+    <!-- Bottom-left corner radius size -->
+    <attr name="shape_radiusInBottomLeft" format="dimension" />
+    <attr name="shape_radiusInBottomStart" format="dimension" />
+    <!-- Bottom-right corner radius size -->
+    <attr name="shape_radiusInBottomRight" format="dimension" />
+    <attr name="shape_radiusInBottomEnd" format="dimension" />
+
+    <!-- Solid color (default state) -->
+    <attr name="shape_solidColor" format="color" />
+    <!-- Solid color (pressed state) -->
+    <attr name="shape_solidPressedColor" format="color" />
+    <!-- Solid color (checked state) -->
+    <attr name="shape_solidCheckedColor" format="color" />
+    <!-- Solid color (disabled state) -->
+    <attr name="shape_solidDisabledColor" format="color" />
+    <!-- Solid color (focused state) -->
+    <attr name="shape_solidFocusedColor" format="color" />
+    <!-- Solid color (selected state) -->
+    <attr name="shape_solidSelectedColor" format="color" />
+
+    <!-- Solid gradient start color -->
+    <attr name="shape_solidGradientStartColor" format="color" />
+    <!-- Solid gradient center color (optional) -->
+    <attr name="shape_solidGradientCenterColor" format="color" />
+    <!-- Solid gradient end color -->
+    <attr name="shape_solidGradientEndColor" format="color" />
+
+    <!-- Solid gradient orientation (only for linear gradient) -->
+    <attr name="shape_solidGradientOrientation">
+        <!-- Draw gradient from left to right (0 degrees) -->
+        <enum name="leftToRight" value="0" />
+        <enum name="startToEnd" value="10" />
+
+        <!-- Draw gradient from right to left (180 degrees) -->
+        <enum name="rightToLeft" value="180" />
+        <enum name="endToStart" value="1800" />
+
+        <!-- Draw gradient from bottom to top (90 degrees) -->
+        <enum name="bottomToTop" value="90" />
+        <!-- Draw gradient from top to bottom (270 degrees) -->
+        <enum name="topToBottom" value="270" />
+
+        <!-- Draw gradient from top-left to bottom-right (315 degrees) -->
+        <enum name="topLeftToBottomRight" value="315" />
+        <enum name="topStartToBottomEnd" value="3150" />
+
+        <!-- Draw gradient from bottom-left to top-right (45 degrees) -->
+        <enum name="bottomLeftToTopRight" value="45" />
+        <enum name="bottomStartToTopEnd" value="450" />
+
+        <!-- Draw gradient from top-right to bottom-left (225 degrees) -->
+        <enum name="topRightToBottomLeft" value="225" />
+        <enum name="topEndToBottomStart" value="2250" />
+
+        <!-- Draw gradient from bottom-right to top-left (135 degrees) -->
+        <enum name="bottomRightToTopLeft" value="135" />
+        <enum name="bottomEndToTopStart" value="1350" />
+    </attr>
+    <!-- Solid gradient type (default is linear) -->
+    <attr name="shape_solidGradientType">
+        <!-- Linear gradient -->
+        <enum name="linear" value="0" />
+        <!-- Radial gradient -->
+        <enum name="radial" value="1" />
+        <!-- Sweep gradient -->
+        <enum name="sweep" value="2" />
+    </attr>
+    <!-- The relative position of the solid gradient center X coordinate (default is 0.5)-->
+    <attr name="shape_solidGradientCenterX" format="float|fraction" />
+    <!-- The relative position of the solid gradient center Y coordinate (default is 0.5)-->
+    <attr name="shape_solidGradientCenterY" format="float|fraction" />
+    <!-- Solid gradient radius (only for radial gradient) -->
+    <attr name="shape_solidGradientRadius" format="float|fraction|dimension" />
+    <!-- Radial gradient ellipse X scale factor (for elliptical gradients, default -1 = disabled) -->
+    <attr name="shape_solidGradientRadiusX" format="float" />
+    <!-- Radial gradient ellipse Y scale factor (for elliptical gradients, default -1 = disabled) -->
+    <attr name="shape_solidGradientRadiusY" format="float" />
+    <!-- Radial gradient rotation angle in degrees (default 0 = no rotation) -->
+    <attr name="shape_solidRadialAngle" format="float" />
+
+    <!-- Gradient color stop positions (0.0 to 1.0) -->
+    <!-- Position of start color in gradient (default 0.0 = beginning) -->
+    <attr name="shape_solidGradientStartPercent" format="float" />
+    <!-- Position of center color in gradient (default 0.5 = middle) -->
+    <attr name="shape_solidGradientCenterPercent" format="float" />
+    <!-- Position of end color in gradient (default 1.0 = end) -->
+    <attr name="shape_solidGradientEndPercent" format="float" />
+
+    <!-- Gradient extent positions (0.0 to 1.0 as percentage of view dimensions) -->
+    <!-- X position where linear gradient starts (default NaN = use orientation) -->
+    <attr name="shape_solidGradientStartX" format="float" />
+    <!-- Y position where linear gradient starts (default NaN = use orientation) -->
+    <attr name="shape_solidGradientStartY" format="float" />
+    <!-- X position where linear gradient ends (default NaN = use orientation) -->
+    <attr name="shape_solidGradientEndX" format="float" />
+    <!-- Y position where linear gradient ends (default NaN = use orientation) -->
+    <attr name="shape_solidGradientEndY" format="float" />
+
+    <!-- Stroke color (default state) -->
+    <attr name="shape_strokeColor" format="color" />
+    <!-- Stroke color (pressed state) -->
+    <attr name="shape_strokePressedColor" format="color" />
+    <!-- Stroke color (checked state) -->
+    <attr name="shape_strokeCheckedColor" format="color" />
+    <!-- Stroke color (disabled state) -->
+    <attr name="shape_strokeDisabledColor" format="color" />
+    <!-- Stroke color (focused state) -->
+    <attr name="shape_strokeFocusedColor" format="color" />
+    <!-- Stroke color (selected state) -->
+    <attr name="shape_strokeSelectedColor" format="color" />
+
+    <!-- Stroke gradient start color -->
+    <attr name="shape_strokeGradientStartColor" format="color" />
+    <!-- Stroke gradient center color (optional) -->
+    <attr name="shape_strokeGradientCenterColor" format="color" />
+    <!-- Stroke gradient end color -->
+    <attr name="shape_strokeGradientEndColor" format="color" />
+
+    <!-- Stroke gradient orientation (only for linear gradient) -->
+    <attr name="shape_strokeGradientOrientation">
+        <!-- Draw gradient from left to right (0 degrees) -->
+        <enum name="leftToRight" value="0" />
+        <enum name="startToEnd" value="10" />
+
+        <!-- Draw gradient from right to left (180 degrees) -->
+        <enum name="rightToLeft" value="180" />
+        <enum name="endToStart" value="1800" />
+
+        <!-- Draw gradient from bottom to top (90 degrees) -->
+        <enum name="bottomToTop" value="90" />
+        <!-- Draw gradient from top to bottom (270 degrees) -->
+        <enum name="topToBottom" value="270" />
+
+        <!-- Draw gradient from top-left to bottom-right (315 degrees) -->
+        <enum name="topLeftToBottomRight" value="315" />
+        <enum name="topStartToBottomEnd" value="3150" />
+
+        <!-- Draw gradient from bottom-left to top-right (45 degrees) -->
+        <enum name="bottomLeftToTopRight" value="45" />
+        <enum name="bottomStartToTopEnd" value="450" />
+
+        <!-- Draw gradient from top-right to bottom-left (225 degrees) -->
+        <enum name="topRightToBottomLeft" value="225" />
+        <enum name="topEndToBottomStart" value="2250" />
+
+        <!-- Draw gradient from bottom-right to top-left (135 degrees) -->
+        <enum name="bottomRightToTopLeft" value="135" />
+        <enum name="bottomEndToTopStart" value="1350" />
+    </attr>
+
+    <!-- Stroke size -->
+    <attr name="shape_strokeSize" format="dimension" />
+    <!-- Stroke dash size (0 for solid line, >0 for dashed line) -->
+    <attr name="shape_strokeDashSize" format="dimension" />
+    <!-- Stroke dash gap (gap between dash segments) -->
+    <attr name="shape_strokeDashGap" format="dimension" />
+
+    <!-- Outer Shadow size -->
+    <attr name="shape_outerShadowSize" format="dimension" />
+    <!-- Outer Shadow color -->
+    <attr name="shape_outerShadowColor" format="color" />
+    <!-- Outer Shadow horizontal offset -->
+    <attr name="shape_outerShadowOffsetX" format="dimension" />
+    <!-- Outer Shadow vertical offset -->
+    <attr name="shape_outerShadowOffsetY" format="dimension" />
+
+    <!-- Primary Inner Shadow (typically the dark/main shadow) -->
+    <!-- Inner Shadow size (blur radius) -->
+    <attr name="shape_innerShadowSize" format="dimension" />
+    <!-- Inner Shadow color -->
+    <attr name="shape_innerShadowColor" format="color" />
+    <!-- Inner Shadow horizontal offset -->
+    <attr name="shape_innerShadowOffsetX" format="dimension" />
+    <!-- Inner Shadow vertical offset -->
+    <attr name="shape_innerShadowOffsetY" format="dimension" />
+
+    <!-- Secondary Inner Shadow (typically the light highlight for bevel effects) -->
+    <!-- Second Inner Shadow size (blur radius) -->
+    <attr name="shape_innerShadow2Size" format="dimension" />
+    <!-- Second Inner Shadow color -->
+    <attr name="shape_innerShadow2Color" format="color" />
+    <!-- Second Inner Shadow horizontal offset -->
+    <attr name="shape_innerShadow2OffsetX" format="dimension" />
+    <!-- Second Inner Shadow vertical offset -->
+    <attr name="shape_innerShadow2OffsetY" format="dimension" />
+
+    <!-- Inner radius of the ring (only effective when shape="ring") -->
+    <attr name="shape_ringInnerRadiusSize" format="dimension" />
+    <!-- Inner radius ratio of the ring (only effective when shape="ring"), formula: total ring / innerRadiusRatio = innerRadius -->
+    <attr name="shape_ringInnerRadiusRatio" format="float" />
+    <!-- Thickness of the ring (only effective when shape="ring") -->
+    <attr name="shape_ringThicknessSize" format="dimension" />
+    <!-- Thickness ratio of the ring (only effective when shape="ring"), formula: total ring / thicknessRatio = thickness -->
+    <attr name="shape_ringThicknessRatio" format="float" />
+
+    <!-- Line gravity (only effective when shape="line") -->
+    <attr name="shape_lineGravity">
+        <flag name="top" value="0x30" />
+        <flag name="bottom" value="0x50" />
+        <flag name="left" value="0x03" />
+        <flag name="right" value="0x05" />
+        <flag name="start" value="0x00800003" />
+        <flag name="end" value="0x00800005" />
+        <flag name="center" value="0x11" />
+    </attr>
+
+    <!-- Text color (default state) -->
+    <attr name="shape_textColor" format="color" />
+    <!-- Text color (pressed state) -->
+    <attr name="shape_textPressedColor" format="color" />
+    <!-- Text color (checked state) -->
+    <attr name="shape_textCheckedColor" format="color" />
+    <!-- Text color (disabled state) -->
+    <attr name="shape_textDisabledColor" format="color" />
+    <!-- Text color (focused state) -->
+    <attr name="shape_textFocusedColor" format="color" />
+    <!-- Text color (selected state) -->
+    <attr name="shape_textSelectedColor" format="color" />
+
+    <!-- Text gradient start color -->
+    <attr name="shape_textStartColor" format="color" />
+    <!-- Text gradient center color (optional) -->
+    <attr name="shape_textCenterColor" format="color" />
+    <!-- Text gradient end color -->
+    <attr name="shape_textEndColor" format="color" />
+    <!-- Text gradient orientation (default is horizontal) -->
+    <attr name="shape_textGradientOrientation">
+        <!-- Horizontal gradient -->
+        <enum name="horizontal" value="0" />
+        <!-- Vertical gradient -->
+        <enum name="vertical" value="1" />
+    </attr>
+
+    <!-- Text stroke color -->
+    <attr name="shape_textStrokeColor" format="color" />
+    <!-- Text stroke size -->
+    <attr name="shape_textStrokeSize" format="dimension" />
+
+    <!-- CheckBox or RadioButton icon (default state) -->
+    <attr name="shape_buttonDrawable" format="reference" />
+    <!-- CheckBox or RadioButton icon (pressed state) -->
+    <attr name="shape_buttonPressedDrawable" format="reference" />
+    <!-- CheckBox or RadioButton icon (checked state) -->
+    <attr name="shape_buttonCheckedDrawable" format="reference" />
+    <!-- CheckBox or RadioButton icon (disabled state) -->
+    <attr name="shape_buttonDisabledDrawable" format="reference" />
+    <!-- CheckBox or RadioButton icon (focused state) -->
+    <attr name="shape_buttonFocusedDrawable" format="reference" />
+    <!-- CheckBox or RadioButton icon (selected state) -->
+    <attr name="shape_buttonSelectedDrawable" format="reference" />
+
+    <attr name="shape_ripple_enabled" format="boolean" />
+    <attr name="shape_ripple_color" format="color" />
+    <attr name="shape_ripple_radius" format="dimension" />
+
+
+    <!-- Wrapped View -->
+
+    <declare-styleable name="ShapeTextView">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_textColor" />
+        <attr name="shape_textPressedColor" />
+        <attr name="shape_textDisabledColor" />
+        <attr name="shape_textFocusedColor" />
+        <attr name="shape_textSelectedColor" />
+
+        <attr name="shape_textStartColor" />
+        <attr name="shape_textCenterColor" />
+        <attr name="shape_textEndColor" />
+        <attr name="shape_textGradientOrientation" />
+
+        <attr name="shape_textStrokeColor" />
+        <attr name="shape_textStrokeSize" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeButton" parent="TextView">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_textColor" />
+        <attr name="shape_textPressedColor" />
+        <attr name="shape_textDisabledColor" />
+        <attr name="shape_textFocusedColor" />
+        <attr name="shape_textSelectedColor" />
+
+        <attr name="shape_textStartColor" />
+        <attr name="shape_textCenterColor" />
+        <attr name="shape_textEndColor" />
+        <attr name="shape_textGradientOrientation" />
+
+        <attr name="shape_textStrokeColor" />
+        <attr name="shape_textStrokeSize" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeRadioButton">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidCheckedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeCheckedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_textColor" />
+        <attr name="shape_textPressedColor" />
+        <attr name="shape_textCheckedColor" />
+        <attr name="shape_textDisabledColor" />
+        <attr name="shape_textFocusedColor" />
+        <attr name="shape_textSelectedColor" />
+
+        <attr name="shape_textStartColor" />
+        <attr name="shape_textCenterColor" />
+        <attr name="shape_textEndColor" />
+        <attr name="shape_textGradientOrientation" />
+
+        <attr name="shape_textStrokeColor" />
+        <attr name="shape_textStrokeSize" />
+
+        <attr name="shape_buttonDrawable" />
+        <attr name="shape_buttonPressedDrawable" />
+        <attr name="shape_buttonCheckedDrawable" />
+        <attr name="shape_buttonDisabledDrawable" />
+        <attr name="shape_buttonFocusedDrawable" />
+        <attr name="shape_buttonSelectedDrawable" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeCheckBox">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidCheckedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeCheckedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_textColor" />
+        <attr name="shape_textPressedColor" />
+        <attr name="shape_textCheckedColor" />
+        <attr name="shape_textDisabledColor" />
+        <attr name="shape_textFocusedColor" />
+        <attr name="shape_textSelectedColor" />
+
+        <attr name="shape_textStartColor" />
+        <attr name="shape_textCenterColor" />
+        <attr name="shape_textEndColor" />
+        <attr name="shape_textGradientOrientation" />
+
+        <attr name="shape_textStrokeColor" />
+        <attr name="shape_textStrokeSize" />
+
+        <attr name="shape_buttonDrawable" />
+        <attr name="shape_buttonPressedDrawable" />
+        <attr name="shape_buttonCheckedDrawable" />
+        <attr name="shape_buttonDisabledDrawable" />
+        <attr name="shape_buttonFocusedDrawable" />
+        <attr name="shape_buttonSelectedDrawable" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeEditText">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_textColor" />
+        <attr name="shape_textPressedColor" />
+        <attr name="shape_textDisabledColor" />
+        <attr name="shape_textFocusedColor" />
+        <attr name="shape_textSelectedColor" />
+
+        <attr name="shape_textStartColor" />
+        <attr name="shape_textCenterColor" />
+        <attr name="shape_textEndColor" />
+        <attr name="shape_textGradientOrientation" />
+
+        <attr name="shape_textStrokeColor" />
+        <attr name="shape_textStrokeSize" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeImageView">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeView">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeLinearLayout">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeFrameLayout">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeRelativeLayout">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeConstraintLayout">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeRecyclerView">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeRadioGroup">
+        <attr name="shape_type" />
+        <attr name="shape_width" />
+        <attr name="shape_height" />
+
+        <attr name="shape_radius" />
+        <attr name="shape_radiusInTopLeft" />
+        <attr name="shape_radiusInTopStart" />
+        <attr name="shape_radiusInTopRight" />
+        <attr name="shape_radiusInTopEnd" />
+        <attr name="shape_radiusInBottomLeft" />
+        <attr name="shape_radiusInBottomStart" />
+        <attr name="shape_radiusInBottomRight" />
+        <attr name="shape_radiusInBottomEnd" />
+
+        <attr name="shape_solidColor" />
+        <attr name="shape_solidPressedColor" />
+        <attr name="shape_solidDisabledColor" />
+        <attr name="shape_solidFocusedColor" />
+        <attr name="shape_solidSelectedColor" />
+        <attr name="shape_solidGradientStartColor" />
+        <attr name="shape_solidGradientCenterColor" />
+        <attr name="shape_solidGradientEndColor" />
+        <attr name="shape_solidGradientOrientation" />
+        <attr name="shape_solidGradientType" />
+        <attr name="shape_solidGradientCenterX" />
+        <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadius" />
+        <attr name="shape_solidGradientRadiusX" />
+        <attr name="shape_solidGradientRadiusY" />
+        <attr name="shape_solidRadialAngle" />
+        <attr name="shape_solidGradientStartPercent" />
+        <attr name="shape_solidGradientCenterPercent" />
+        <attr name="shape_solidGradientEndPercent" />
+        <attr name="shape_solidGradientStartX" />
+        <attr name="shape_solidGradientStartY" />
+        <attr name="shape_solidGradientEndX" />
+        <attr name="shape_solidGradientEndY" />
+
+        <attr name="shape_strokeColor" />
+        <attr name="shape_strokePressedColor" />
+        <attr name="shape_strokeDisabledColor" />
+        <attr name="shape_strokeFocusedColor" />
+        <attr name="shape_strokeSelectedColor" />
+        <attr name="shape_strokeGradientStartColor" />
+        <attr name="shape_strokeGradientCenterColor" />
+        <attr name="shape_strokeGradientEndColor" />
+        <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeSize" />
+        <attr name="shape_strokeDashSize" />
+        <attr name="shape_strokeDashGap" />
+
+        <attr name="shape_outerShadowSize" />
+        <attr name="shape_outerShadowColor" />
+        <attr name="shape_outerShadowOffsetX" />
+        <attr name="shape_outerShadowOffsetY" />
+
+        <!-- Primary Inner Shadow -->
+        <attr name="shape_innerShadowSize" />
+        <attr name="shape_innerShadowColor" />
+        <attr name="shape_innerShadowOffsetX" />
+        <attr name="shape_innerShadowOffsetY" />
+
+        <!-- Secondary Inner Shadow (for bevel effects) -->
+        <attr name="shape_innerShadow2Size" />
+        <attr name="shape_innerShadow2Color" />
+        <attr name="shape_innerShadow2OffsetX" />
+        <attr name="shape_innerShadow2OffsetY" />
+
+        <attr name="shape_ringInnerRadiusRatio" />
+        <attr name="shape_ringInnerRadiusSize" />
+        <attr name="shape_ringThicknessRatio" />
+        <attr name="shape_ringThicknessSize" />
+
+        <attr name="shape_lineGravity" />
+
+        <attr name="shape_ripple_enabled" />
+        <attr name="shape_ripple_color" />
+        <attr name="shape_ripple_radius" />
+    </declare-styleable>
+
+</resources>

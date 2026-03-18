@@ -1,0 +1,31 @@
+// ── Load local secrets (git-ignored) ────────────────────────────────────────
+// Secrets are stored in local.secret.properties and loaded into Gradle
+// project properties so signing and publishing plugins can find them.
+def secretFile = rootProject.file("local.secret.properties")
+if (secretFile.exists()) {
+    def secretProps = new Properties()
+    secretFile.withInputStream { secretProps.load(it) }
+    secretProps.each { key, value ->
+        // Set as project-level ext property (accessible everywhere)
+        ext.set(key.toString(), value)
+        // Also inject into Gradle project properties so signing plugin picks them up
+        if (!project.hasProperty(key.toString())) {
+            project.ext.set(key.toString(), value)
+        }
+    }
+    // Propagate to all subprojects too
+    subprojects {
+        secretProps.each { key, value ->
+            if (!project.hasProperty(key.toString())) {
+                project.ext.set(key.toString(), value)
+            }
+        }
+    }
+}
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.maven.publish) apply false
+}

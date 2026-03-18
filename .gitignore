@@ -1,0 +1,44 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build/
+/captures
+.externalNativeBuild/
+.cxx/
+local.properties
+
+# Module build outputs
+**/build/
+
+# APK/AAB files
+*.apk
+*.aab
+*.ap_
+
+# Class & dex files
+*.class
+*.dex
+
+# Generated
+bin/
+gen/
+out/
+
+# Signing
+*.jks
+*.keystore
+
+# GPG keys (Maven Central signing)
+*.gpg
+
+# Secrets file (contains signing passwords & Maven Central tokens)
+local.secret.properties
+
+# Google Services
+google-services.json
+
+# Build logs
+publish_output.txt
+build_output.txt

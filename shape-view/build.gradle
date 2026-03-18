@@ -1,0 +1,68 @@
+plugins {
+    id 'com.android.library'
+    alias(libs.plugins.maven.publish)
+}
+
+android {
+    namespace "com.genesys.shape"
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 23
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.constraintlayout
+}
+
+// ── Maven Central Publishing Configuration ──────────────────────────────────
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
+
+    coordinates("io.github.impeterwayne", "shape-view", "1.0.0")
+
+    pom {
+        name = "ShapeView-ktx"
+        description = "An Android XML library that replaces shape drawable XML files with inline view attributes. Define shapes, gradients, strokes, shadows, ripples, and state colors directly in your layout XML."
+        url = "https://github.com/impeterwayne/ShapeView"
+        inceptionYear = "2026"
+
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "repo"
+            }
+        }
+
+        developers {
+            developer {
+                id = "impeterwayne"
+                name = "impeterwayne"
+                url = "https://github.com/impeterwayne"
+            }
+        }
+
+        scm {
+            url = "https://github.com/impeterwayne/ShapeView"
+            connection = "scm:git:git://github.com/impeterwayne/ShapeView.git"
+            developerConnection = "scm:git:ssh://git@github.com/impeterwayne/ShapeView.git"
+        }
+    }
+}
