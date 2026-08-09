@@ -58,8 +58,7 @@ public class ShapeDrawable extends Drawable {
     private Path mRingPath;
     private boolean mPathDirty = true;
 
-    // Cached radial gradient objects to avoid allocation during draw
-    private RadialGradient mCachedRadialGradient;
+    // Cached matrix reused when building gradients, to avoid allocation during draw
     private Matrix mCachedGradientMatrix;
 
     // Cached BlurMaskFilter for outer shadow to avoid per-frame allocation
@@ -244,13 +243,35 @@ public class ShapeDrawable extends Drawable {
     }
 
     /**
-     * Set fill color gradient radius size
+     * Set the fill gradient radius as a ratio of half the shortest side
+     * (0.5 = half the shortest side, 1.0 = the whole shortest side)
      */
-    public ShapeDrawable setSolidGradientRadius(float radius) {
-        mShapeState.gradientRadius = radius;
+    public ShapeDrawable setSolidGradientRadiusRatio(float ratio) {
+        mShapeState.gradientRadius = ratio;
+        mShapeState.gradientRadiusInPx = false;
         mRectDirty = true;
         invalidateSelf();
         return this;
+    }
+
+    /**
+     * Set the fill gradient radius as an absolute size in pixels
+     */
+    public ShapeDrawable setSolidGradientRadiusSize(float size) {
+        mShapeState.gradientRadius = size;
+        mShapeState.gradientRadiusInPx = true;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    /**
+     * @deprecated use {@link #setSolidGradientRadiusRatio(float)} or
+     *             {@link #setSolidGradientRadiusSize(float)}
+     */
+    @Deprecated
+    public ShapeDrawable setSolidGradientRadius(float radius) {
+        return setSolidGradientRadiusRatio(radius);
     }
 
     /**
@@ -457,6 +478,187 @@ public class ShapeDrawable extends Drawable {
         mRectDirty = true;
         invalidateSelf();
         return this;
+    }
+
+    /**
+     * Set stroke color gradient type
+     */
+    public ShapeDrawable setStrokeGradientType(@ShapeGradientTypeLimit int type) {
+        mShapeState.setStrokeGradientType(type);
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    /**
+     * Set the relative position of the stroke color gradient center X coordinate (default is 0.5)
+     */
+    public ShapeDrawable setStrokeGradientCenterX(float centerX) {
+        mShapeState.strokeCenterX = centerX;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    /**
+     * Set the relative position of the stroke color gradient center Y coordinate (default is 0.5)
+     */
+    public ShapeDrawable setStrokeGradientCenterY(float centerY) {
+        mShapeState.strokeCenterY = centerY;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    /**
+     * Set the stroke gradient radius as a ratio of half the shortest side
+     * (0.5 = half the shortest side, 1.0 = the whole shortest side)
+     */
+    public ShapeDrawable setStrokeGradientRadiusRatio(float ratio) {
+        mShapeState.strokeGradientRadius = ratio;
+        mShapeState.strokeGradientRadiusInPx = false;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    /**
+     * Set the stroke gradient radius as an absolute size in pixels
+     */
+    public ShapeDrawable setStrokeGradientRadiusSize(float size) {
+        mShapeState.strokeGradientRadius = size;
+        mShapeState.strokeGradientRadiusInPx = true;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    /**
+     * Set rotation angle for the stroke radial gradient.
+     * Creates a rotated elliptical effect.
+     *
+     * @param angleDegrees Rotation angle (0-360), positive = clockwise
+     */
+    public ShapeDrawable setStrokeRadialAngle(float angleDegrees) {
+        mShapeState.strokeRadialGradientAngle = angleDegrees;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    public float getStrokeRadialAngle() {
+        return mShapeState.strokeRadialGradientAngle;
+    }
+
+    /**
+     * Set elliptical scale factors for the stroke radial gradient.
+     * When scaleX != scaleY, creates an elliptical gradient.
+     *
+     * @param scaleX Horizontal scale factor (1.0 = no scale, 2.0 = 2x stretch)
+     * @param scaleY Vertical scale factor (1.0 = no scale, 2.0 = 2x stretch)
+     */
+    public ShapeDrawable setStrokeGradientRadii(float scaleX, float scaleY) {
+        mShapeState.strokeGradientRadiusX = scaleX;
+        mShapeState.strokeGradientRadiusY = scaleY;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    /**
+     * Set the start position (focal point) for the stroke radial gradient.
+     * Creates an off-center radial effect when different from center.
+     *
+     * @param startX X position relative to view (0.0 - 1.0)
+     * @param startY Y position relative to view (0.0 - 1.0)
+     */
+    public ShapeDrawable setStrokeRadialStartPosition(float startX, float startY) {
+        mShapeState.strokeRadialStartX = startX;
+        mShapeState.strokeRadialStartY = startY;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    /**
+     * Set custom color stop positions for the stroke gradient colors.
+     * Works exactly like {@link #setSolidGradientPositions(float...)} but for the stroke.
+     *
+     * @param positions Color stop positions (must match number of gradient colors)
+     * @return This ShapeDrawable for chaining
+     */
+    public ShapeDrawable setStrokeGradientPositions(float... positions) {
+        mShapeState.strokePositions = positions;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    /**
+     * Get the current stroke gradient color stop positions.
+     *
+     * @return float array of positions, or null if using default (evenly distributed)
+     */
+    public float[] getStrokeGradientPositions() {
+        return mShapeState.strokePositions;
+    }
+
+    /**
+     * Set the start position for the stroke linear gradient as percentage of view dimensions.
+     * When set, this overrides the orientation-based gradient positioning.
+     *
+     * @param x X position (0.0 to 1.0, left to right)
+     * @param y Y position (0.0 to 1.0, top to bottom)
+     */
+    public ShapeDrawable setStrokeGradientStartPosition(float x, float y) {
+        mShapeState.strokeLinearGradientStartX = x;
+        mShapeState.strokeLinearGradientStartY = y;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    /**
+     * Set the end position for the stroke linear gradient as percentage of view dimensions.
+     * When set, this overrides the orientation-based gradient positioning.
+     *
+     * @param x X position (0.0 to 1.0, left to right)
+     * @param y Y position (0.0 to 1.0, top to bottom)
+     */
+    public ShapeDrawable setStrokeGradientEndPosition(float x, float y) {
+        mShapeState.strokeLinearGradientEndX = x;
+        mShapeState.strokeLinearGradientEndY = y;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
+    }
+
+    public float getStrokeLinearGradientStartX() {
+        return mShapeState.strokeLinearGradientStartX;
+    }
+
+    public float getStrokeLinearGradientStartY() {
+        return mShapeState.strokeLinearGradientStartY;
+    }
+
+    public float getStrokeLinearGradientEndX() {
+        return mShapeState.strokeLinearGradientEndX;
+    }
+
+    public float getStrokeLinearGradientEndY() {
+        return mShapeState.strokeLinearGradientEndY;
+    }
+
+    /**
+     * Check if custom stroke linear gradient positions are set.
+     *
+     * @return true if at least one custom position is set
+     */
+    public boolean hasCustomStrokeLinearGradientPositions() {
+        return !Float.isNaN(mShapeState.strokeLinearGradientStartX) ||
+               !Float.isNaN(mShapeState.strokeLinearGradientStartY) ||
+               !Float.isNaN(mShapeState.strokeLinearGradientEndX) ||
+               !Float.isNaN(mShapeState.strokeLinearGradientEndY);
     }
 
     /**
@@ -1224,199 +1426,7 @@ public class ShapeDrawable extends Drawable {
         }
 
         if (st.solidColors != null) {
-            RectF rect = mRect;
-
-            switch (st.solidGradientType) {
-                case ShapeGradientType.LINEAR_GRADIENT: {
-                    final float level = st.useLevel ? getLevel() / 10000f : 1f;
-                    float[] coordinate;
-                    
-                    // Check for custom linear gradient positions
-                    boolean hasCustomPositions = !Float.isNaN(st.linearGradientStartX) ||
-                                                  !Float.isNaN(st.linearGradientStartY) ||
-                                                  !Float.isNaN(st.linearGradientEndX) ||
-                                                  !Float.isNaN(st.linearGradientEndY);
-                    
-                    if (hasCustomPositions) {
-                        // Use custom positions (with fallback to defaults)
-                        float startX = Float.isNaN(st.linearGradientStartX) ? 0.5f : st.linearGradientStartX;
-                        float startY = Float.isNaN(st.linearGradientStartY) ? 0f : st.linearGradientStartY;
-                        float endX = Float.isNaN(st.linearGradientEndX) ? 0.5f : st.linearGradientEndX;
-                        float endY = Float.isNaN(st.linearGradientEndY) ? 1f : st.linearGradientEndY;
-                        
-                        // Convert from percentage (0-1) to actual coordinates
-                        coordinate = new float[] {
-                            rect.left + rect.width() * startX,
-                            rect.top + rect.height() * startY,
-                            rect.left + rect.width() * (startX + (endX - startX) * level),
-                            rect.top + rect.height() * (startY + (endY - startY) * level)
-                        };
-                    } else {
-                        // Use orientation-based coordinates
-                        coordinate = ShapeDrawableUtils.computeLinearGradientCoordinate(
-                            mLayoutDirection, mRect, level, st.solidGradientOrientation);
-                    }
-                    
-                    mSolidPaint.setShader(new LinearGradient(coordinate[0], coordinate[1], coordinate[2], coordinate[3],
-                            st.solidColors, st.positions, Shader.TileMode.CLAMP));
-                    break;
-                }
-                case ShapeGradientType.RADIAL_GRADIENT: {
-                    float centerX, centerY, radius;
-                    float angle = 0;
-                    float scaleX = 1f, scaleY = 1f;
-
-                    final float level = st.useLevel ? getLevel() / 10000f : 1f;
-
-                    // Check if we have Start/End positions (Figma style)
-                    // These attributes (linearGradientStartX etc.) are generic position attributes now
-                    boolean hasCustomPositions = !Float.isNaN(st.linearGradientStartX) &&
-                                                  !Float.isNaN(st.linearGradientStartY) &&
-                                                  !Float.isNaN(st.linearGradientEndX) &&
-                                                  !Float.isNaN(st.linearGradientEndY);
-
-                    if (hasCustomPositions) {
-                        // Figma Style: Gradient defined by a vector from Start(Center) to End(Radius edge)
-                        
-                        // 1. Calculate Center (Start Point)
-                        centerX = rect.left + rect.width() * st.linearGradientStartX;
-                        centerY = rect.top + rect.height() * st.linearGradientStartY;
-
-                        // 2. Calculate End Point
-                        float endX = rect.left + rect.width() * st.linearGradientEndX;
-                        float endY = rect.top + rect.height() * st.linearGradientEndY;
-
-                        // 3. Calculate Radius (Distance between Start and End)
-                        // This defines the radius of the gradient circle/ellipse at 100%
-                        double dx = endX - centerX;
-                        double dy = endY - centerY;
-                        radius = (float) Math.sqrt(dx * dx + dy * dy);
-
-                        // 4. Calculate Angle (Rotation)
-                        // Warning: Math.atan2 returns radians. We need degrees.
-                        // Standard radial gradient 0 degrees is usually 3 o'clock.
-                        // We calculate the angle of the vector (dx, dy).
-                        angle = (float) Math.toDegrees(Math.atan2(dy, dx));
-                        
-                        // Since standard RadialGradient draws concentric circles, 'angle' usually rotates the *context* (matrix).
-                        
-                        // Apply level if needed (though less common for this style)
-                        radius *= level;
-
-                        // Scale X/Y from attributes if present (elliptical)
-                        if (st.gradientRadiusX > 0 && st.gradientRadiusY > 0) {
-                            scaleX = st.gradientRadiusX;
-                            scaleY = st.gradientRadiusY;
-                        }
-
-                    } else {
-                        // Standard Style: Center + Radius + Angle attributes
-                        
-                        // Center position (relative 0-1)
-                        centerX = rect.left + rect.width() * st.solidCenterX;
-                        centerY = rect.top + rect.height() * st.solidCenterY;
-
-                        // Calculate base radius from view dimensions
-                        // gradientRadius is a multiplier (1.0 = half of min dimension)
-                        float baseRadius = Math.min(rect.width(), rect.height()) / 2f;
-                        radius = level * baseRadius;
-                        if (st.gradientRadius > 0 && st.gradientRadius != 0.5f) {
-                            // gradientRadius is now a multiplier of base radius
-                            radius = level * baseRadius * (st.gradientRadius * 2f);
-                        }
-                        
-                        // Get explicit angle and scales
-                        angle = st.radialGradientAngle;
-                        if (st.gradientRadiusX > 0 && st.gradientRadiusY > 0) {
-                            scaleX = st.gradientRadiusX;
-                            scaleY = st.gradientRadiusY;
-                        }
-                    }
-
-                    // Create or update cached radial gradient
-                    // Note: We use the calculated radius directly.
-                    // If radius is 0, Shader might crash or do nothing, so clamp to small value.
-                    if (radius <= 0) radius = 1f;
-
-                    mCachedRadialGradient = new RadialGradient(
-                            centerX, centerY, radius,
-                            st.solidColors, st.positions, Shader.TileMode.CLAMP);
-
-                    // Apply Matrix transformations (Scaling, Rotation, Focal Offset)
-                    boolean hasTransform = (scaleX != 1f || scaleY != 1f) || (angle != 0f) ||
-                                           (hasCustomPositions ? false : (!Float.isNaN(st.radialStartX) || !Float.isNaN(st.radialStartY)));
-
-                    if (hasTransform) {
-                        if (mCachedGradientMatrix == null) {
-                            mCachedGradientMatrix = new Matrix();
-                        } else {
-                            mCachedGradientMatrix.reset();
-                        }
-
-                        // Apply elliptical scaling
-                        if (scaleX != 1f || scaleY != 1f) {
-                            mCachedGradientMatrix.postScale(scaleX, scaleY, centerX, centerY);
-                        }
-
-                        // Apply rotation
-                        if (angle != 0f) {
-                            mCachedGradientMatrix.postRotate(angle, centerX, centerY);
-                        }
-
-                        // Apply focal point offset (Only for Standard Style, generic start/end handles this via center calculation)
-                        if (!hasCustomPositions && (!Float.isNaN(st.radialStartX) || !Float.isNaN(st.radialStartY))) {
-                            float focalX = Float.isNaN(st.radialStartX) ? centerX
-                                    : rect.left + rect.width() * st.radialStartX;
-                            float focalY = Float.isNaN(st.radialStartY) ? centerY
-                                    : rect.top + rect.height() * st.radialStartY;
-                            mCachedGradientMatrix.setTranslate(focalX - centerX, focalY - centerY);
-                        }
-
-                        mCachedRadialGradient.setLocalMatrix(mCachedGradientMatrix);
-                    }
-
-                    mSolidPaint.setShader(mCachedRadialGradient);
-                    break;
-                }
-                case ShapeGradientType.SWEEP_GRADIENT: {
-                    float x0;
-                    float y0;
-
-                    x0 = rect.left + (rect.right - rect.left) * st.solidCenterX;
-                    y0 = rect.top + (rect.bottom - rect.top) * st.solidCenterY;
-
-                    int[] tempSolidColors = st.solidColors;
-                    float[] tempSolidPositions = null;
-
-                    if (st.useLevel) {
-                        tempSolidColors = st.tempSolidColors;
-                        final int length = st.solidColors.length;
-                        if (tempSolidColors == null || tempSolidColors.length != length + 1) {
-                            tempSolidColors = st.tempSolidColors = new int[length + 1];
-                        }
-                        System.arraycopy(st.solidColors, 0, tempSolidColors, 0, length);
-                        tempSolidColors[length] = st.solidColors[length - 1];
-
-
-                        tempSolidPositions = st.tempSolidPositions;
-                        final float fraction = 1f / (length - 1);
-                        if (tempSolidPositions == null || tempSolidPositions.length != length + 1) {
-                            tempSolidPositions = st.tempSolidPositions = new float[length + 1];
-                        }
-
-                        final float level = getLevel() / 10000f;
-                        for (int i = 0; i < length; i++) {
-                            tempSolidPositions[i] = i * fraction * level;
-                        }
-                        tempSolidPositions[length] = 1f;
-                    }
-
-                    mSolidPaint.setShader(new SweepGradient(x0, y0, tempSolidColors, tempSolidPositions));
-                    break;
-                }
-                default:
-                    break;
-            }
+            mSolidPaint.setShader(buildGradientShader(mRect, false));
 
             // If we don't have a solid color, the alpha channel must be
             // maxed out so that alpha modulation works correctly.
@@ -1426,17 +1436,239 @@ public class ShapeDrawable extends Drawable {
         }
 
         if (st.strokeColors != null) {
-            final float level = st.useLevel ? getLevel() / 10000f : 1f;
-            float[] coordinate = ShapeDrawableUtils.computeLinearGradientCoordinate(
-                    mLayoutDirection, mRect, level, st.strokeGradientOrientation);
-            mStrokePaint.setShader(new LinearGradient(coordinate[0], coordinate[1], coordinate[2], coordinate[3],
-                    st.strokeColors, st.positions, Shader.TileMode.CLAMP));
+            mStrokePaint.setShader(buildGradientShader(mRect, true));
 
             if (!st.hasStrokeColor) {
                 mStrokePaint.setColor(Color.BLACK);
             }
         }
         return !mRect.isEmpty();
+    }
+
+    /**
+     * Build the gradient shader for either the fill or the stroke paint.
+     * <p>
+     * Both sides support the same set of options (gradient type, orientation, center,
+     * radius, elliptical scale, rotation, focal point, color stops and explicit
+     * start/end extents); they only differ in which {@link ShapeState} fields they read.
+     *
+     * @param rect   Rectangle the gradient is mapped onto
+     * @param stroke true to build the stroke gradient, false to build the fill gradient
+     */
+    private Shader buildGradientShader(RectF rect, boolean stroke) {
+        final ShapeState st = mShapeState;
+
+        final int gradientType = stroke ? st.strokeGradientType : st.solidGradientType;
+        final int[] colors = stroke ? st.strokeColors : st.solidColors;
+
+        // The platform shaders throw when the stop count doesn't match the color count,
+        // so fall back to evenly distributed stops instead of crashing
+        float[] stops = stroke ? st.strokePositions : st.positions;
+        if (stops != null && stops.length != colors.length) {
+            stops = null;
+        }
+        final float[] colorPositions = stops;
+
+        final ShapeGradientOrientation orientation = stroke ?
+                st.strokeGradientOrientation : st.solidGradientOrientation;
+        final float relativeCenterX = stroke ? st.strokeCenterX : st.solidCenterX;
+        final float relativeCenterY = stroke ? st.strokeCenterY : st.solidCenterY;
+        final float gradientRadius = stroke ? st.strokeGradientRadius : st.gradientRadius;
+        final boolean gradientRadiusInPx = stroke ? st.strokeGradientRadiusInPx : st.gradientRadiusInPx;
+        final float radiusX = stroke ? st.strokeGradientRadiusX : st.gradientRadiusX;
+        final float radiusY = stroke ? st.strokeGradientRadiusY : st.gradientRadiusY;
+        final float radialAngle = stroke ? st.strokeRadialGradientAngle : st.radialGradientAngle;
+        final float focalStartX = stroke ? st.strokeRadialStartX : st.radialStartX;
+        final float focalStartY = stroke ? st.strokeRadialStartY : st.radialStartY;
+        final float extentStartX = stroke ? st.strokeLinearGradientStartX : st.linearGradientStartX;
+        final float extentStartY = stroke ? st.strokeLinearGradientStartY : st.linearGradientStartY;
+        final float extentEndX = stroke ? st.strokeLinearGradientEndX : st.linearGradientEndX;
+        final float extentEndY = stroke ? st.strokeLinearGradientEndY : st.linearGradientEndY;
+
+        final float level = st.useLevel ? getLevel() / 10000f : 1f;
+
+        switch (gradientType) {
+            case ShapeGradientType.RADIAL_GRADIENT: {
+                float centerX, centerY, radius;
+                float angle;
+                float scaleX = 1f, scaleY = 1f;
+
+                // Figma style needs all four extents to describe the center-to-edge vector
+                boolean hasCustomExtent = !Float.isNaN(extentStartX) && !Float.isNaN(extentStartY) &&
+                        !Float.isNaN(extentEndX) && !Float.isNaN(extentEndY);
+
+                if (hasCustomExtent) {
+                    // Figma Style: Gradient defined by a vector from Start(Center) to End(Radius edge)
+
+                    // 1. Calculate Center (Start Point)
+                    centerX = rect.left + rect.width() * extentStartX;
+                    centerY = rect.top + rect.height() * extentStartY;
+
+                    // 2. Calculate End Point
+                    float endX = rect.left + rect.width() * extentEndX;
+                    float endY = rect.top + rect.height() * extentEndY;
+
+                    // 3. Calculate Radius (Distance between Start and End)
+                    // This defines the radius of the gradient circle/ellipse at 100%
+                    double dx = endX - centerX;
+                    double dy = endY - centerY;
+                    radius = (float) Math.sqrt(dx * dx + dy * dy);
+
+                    // 4. Calculate Angle (Rotation)
+                    // Math.atan2 returns radians, the matrix wants degrees.
+                    // Standard radial gradient 0 degrees is at 3 o'clock.
+                    angle = (float) Math.toDegrees(Math.atan2(dy, dx));
+
+                    // Apply level if needed (though less common for this style)
+                    radius *= level;
+                } else {
+                    // Standard Style: Center + Radius + Angle attributes
+
+                    // Center position (relative 0-1)
+                    centerX = rect.left + rect.width() * relativeCenterX;
+                    centerY = rect.top + rect.height() * relativeCenterY;
+
+                    if (gradientRadiusInPx) {
+                        // Radius was declared as a dimension, use it as-is
+                        radius = level * gradientRadius;
+                    } else {
+                        // Calculate base radius from view dimensions
+                        // gradientRadius is a multiplier (0.5 = half of min dimension)
+                        float baseRadius = Math.min(rect.width(), rect.height()) / 2f;
+                        radius = level * baseRadius;
+                        if (gradientRadius > 0 && gradientRadius != 0.5f) {
+                            radius = level * baseRadius * (gradientRadius * 2f);
+                        }
+                    }
+
+                    angle = radialAngle;
+                }
+
+                // Scale X/Y from attributes if present (elliptical)
+                if (radiusX > 0 && radiusY > 0) {
+                    scaleX = radiusX;
+                    scaleY = radiusY;
+                }
+
+                // If radius is 0, the shader would draw nothing, so clamp to a small value.
+                if (radius <= 0) {
+                    radius = 1f;
+                }
+
+                RadialGradient radialGradient = new RadialGradient(centerX, centerY, radius,
+                        colors, colorPositions, Shader.TileMode.CLAMP);
+
+                // Apply Matrix transformations (Scaling, Rotation, Focal Offset)
+                boolean hasFocalOffset = !hasCustomExtent &&
+                        (!Float.isNaN(focalStartX) || !Float.isNaN(focalStartY));
+                boolean hasTransform = scaleX != 1f || scaleY != 1f || angle != 0f || hasFocalOffset;
+
+                if (hasTransform) {
+                    if (mCachedGradientMatrix == null) {
+                        mCachedGradientMatrix = new Matrix();
+                    } else {
+                        mCachedGradientMatrix.reset();
+                    }
+
+                    // Apply elliptical scaling
+                    if (scaleX != 1f || scaleY != 1f) {
+                        mCachedGradientMatrix.postScale(scaleX, scaleY, centerX, centerY);
+                    }
+
+                    // Apply rotation
+                    if (angle != 0f) {
+                        mCachedGradientMatrix.postRotate(angle, centerX, centerY);
+                    }
+
+                    // Apply focal point offset (only for Standard Style, the Figma style
+                    // already encodes it in the center calculation above)
+                    if (hasFocalOffset) {
+                        float focalX = Float.isNaN(focalStartX) ? centerX
+                                : rect.left + rect.width() * focalStartX;
+                        float focalY = Float.isNaN(focalStartY) ? centerY
+                                : rect.top + rect.height() * focalStartY;
+                        mCachedGradientMatrix.postTranslate(focalX - centerX, focalY - centerY);
+                    }
+
+                    // setLocalMatrix() copies the values, so the shared matrix can be reused
+                    radialGradient.setLocalMatrix(mCachedGradientMatrix);
+                }
+
+                return radialGradient;
+            }
+            case ShapeGradientType.SWEEP_GRADIENT: {
+                float x0 = rect.left + rect.width() * relativeCenterX;
+                float y0 = rect.top + rect.height() * relativeCenterY;
+
+                int[] sweepColors = colors;
+                float[] sweepPositions = colorPositions;
+
+                if (st.useLevel) {
+                    final int length = colors.length;
+
+                    sweepColors = stroke ? st.tempStrokeColors : st.tempSolidColors;
+                    if (sweepColors == null || sweepColors.length != length + 1) {
+                        sweepColors = new int[length + 1];
+                        if (stroke) {
+                            st.tempStrokeColors = sweepColors;
+                        } else {
+                            st.tempSolidColors = sweepColors;
+                        }
+                    }
+                    System.arraycopy(colors, 0, sweepColors, 0, length);
+                    sweepColors[length] = colors[length - 1];
+
+                    sweepPositions = stroke ? st.tempStrokePositions : st.tempSolidPositions;
+                    if (sweepPositions == null || sweepPositions.length != length + 1) {
+                        sweepPositions = new float[length + 1];
+                        if (stroke) {
+                            st.tempStrokePositions = sweepPositions;
+                        } else {
+                            st.tempSolidPositions = sweepPositions;
+                        }
+                    }
+
+                    final float fraction = 1f / (length - 1);
+                    for (int i = 0; i < length; i++) {
+                        sweepPositions[i] = i * fraction * level;
+                    }
+                    sweepPositions[length] = 1f;
+                }
+
+                return new SweepGradient(x0, y0, sweepColors, sweepPositions);
+            }
+            case ShapeGradientType.LINEAR_GRADIENT:
+            default: {
+                float[] coordinate;
+
+                // Any one of the four extents opts into explicit positioning
+                boolean hasCustomExtent = !Float.isNaN(extentStartX) || !Float.isNaN(extentStartY) ||
+                        !Float.isNaN(extentEndX) || !Float.isNaN(extentEndY);
+
+                if (hasCustomExtent) {
+                    // Use custom positions (with fallback to defaults)
+                    float startX = Float.isNaN(extentStartX) ? 0.5f : extentStartX;
+                    float startY = Float.isNaN(extentStartY) ? 0f : extentStartY;
+                    float endX = Float.isNaN(extentEndX) ? 0.5f : extentEndX;
+                    float endY = Float.isNaN(extentEndY) ? 1f : extentEndY;
+
+                    // Convert from percentage (0-1) to actual coordinates
+                    coordinate = new float[] {
+                        rect.left + rect.width() * startX,
+                        rect.top + rect.height() * startY,
+                        rect.left + rect.width() * (startX + (endX - startX) * level),
+                        rect.top + rect.height() * (startY + (endY - startY) * level)
+                    };
+                } else {
+                    // Use orientation-based coordinates
+                    coordinate = ShapeDrawableUtils.computeLinearGradientCoordinate(
+                            mLayoutDirection, rect, level, orientation);
+                }
+
+                return new LinearGradient(coordinate[0], coordinate[1], coordinate[2], coordinate[3],
+                        colors, colorPositions, Shader.TileMode.CLAMP);
+            }
+        }
     }
 
     @Override

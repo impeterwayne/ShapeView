@@ -26,11 +26,17 @@ public class ShapeState extends Drawable.ConstantState {
     public int[] strokeColors;
     public int[] tempSolidColors; // no need to copy
     public float[] tempSolidPositions; // no need to copy
+    public int[] tempStrokeColors; // no need to copy
+    public float[] tempStrokePositions; // no need to copy
     public float[] positions;
+    /** Stroke gradient color stop positions. Null means evenly distributed. */
+    public float[] strokePositions;
     public boolean hasSolidColor;
     public boolean hasStrokeColor;
     public int solidColor;
     public int strokeSize = -1;   // if >= 0 use stroking.
+    @ShapeGradientTypeLimit
+    public int strokeGradientType = ShapeGradientType.LINEAR_GRADIENT;
     public ShapeGradientOrientation strokeGradientOrientation = ShapeGradientOrientation.TOP_TO_BOTTOM;
     public int strokeColor;
     public ColorStateList solidColorStateList;
@@ -59,6 +65,11 @@ public class ShapeState extends Drawable.ConstantState {
     public float solidCenterX = 0.5f;
     public float solidCenterY = 0.5f;
     public float gradientRadius = 0.5f;
+    /**
+     * True when {@link #gradientRadius} is an absolute pixel radius (declared as a dimension)
+     * rather than a multiplier of half the shortest side.
+     */
+    public boolean gradientRadiusInPx;
 
     // ===== Radial Gradient Transformation =====
     /** Rotation angle for radial gradient (in degrees). 0 = no rotation. */
@@ -81,6 +92,31 @@ public class ShapeState extends Drawable.ConstantState {
     public float linearGradientEndX = Float.NaN;
     /** End Y position for linear gradient (0-1). NaN = use orientation. */
     public float linearGradientEndY = Float.NaN;
+
+    // ===== Stroke Gradient Geometry (mirrors the solid gradient fields above) =====
+    public float strokeCenterX = 0.5f;
+    public float strokeCenterY = 0.5f;
+    public float strokeGradientRadius = 0.5f;
+    /** True when {@link #strokeGradientRadius} is an absolute pixel radius. */
+    public boolean strokeGradientRadiusInPx;
+    /** Rotation angle for the stroke radial gradient (in degrees). 0 = no rotation. */
+    public float strokeRadialGradientAngle = 0f;
+    /** Horizontal scale for elliptical stroke gradients. -1 means use strokeGradientRadius. */
+    public float strokeGradientRadiusX = -1f;
+    /** Vertical scale for elliptical stroke gradients. -1 means use strokeGradientRadius. */
+    public float strokeGradientRadiusY = -1f;
+    /** Start X position (focal point) relative to view (0-1). NaN = same as center. */
+    public float strokeRadialStartX = Float.NaN;
+    /** Start Y position (focal point) relative to view (0-1). NaN = same as center. */
+    public float strokeRadialStartY = Float.NaN;
+    /** Start X position for the stroke linear gradient (0-1). NaN = use orientation. */
+    public float strokeLinearGradientStartX = Float.NaN;
+    /** Start Y position for the stroke linear gradient (0-1). NaN = use orientation. */
+    public float strokeLinearGradientStartY = Float.NaN;
+    /** End X position for the stroke linear gradient (0-1). NaN = use orientation. */
+    public float strokeLinearGradientEndX = Float.NaN;
+    /** End Y position for the stroke linear gradient (0-1). NaN = use orientation. */
+    public float strokeLinearGradientEndY = Float.NaN;
 
     public boolean useLevel;
     public boolean useLevelForShape;
@@ -117,10 +153,14 @@ public class ShapeState extends Drawable.ConstantState {
         if (state.positions != null) {
             positions = state.positions.clone();
         }
+        if (state.strokePositions != null) {
+            strokePositions = state.strokePositions.clone();
+        }
         hasSolidColor = state.hasSolidColor;
         hasStrokeColor = state.hasStrokeColor;
         solidColor = state.solidColor;
         strokeSize = state.strokeSize;
+        strokeGradientType = state.strokeGradientType;
         strokeGradientOrientation = state.strokeGradientOrientation;
         strokeColor = state.strokeColor;
         strokeDashSize = state.strokeDashSize;
@@ -141,6 +181,7 @@ public class ShapeState extends Drawable.ConstantState {
         solidCenterX = state.solidCenterX;
         solidCenterY = state.solidCenterY;
         gradientRadius = state.gradientRadius;
+        gradientRadiusInPx = state.gradientRadiusInPx;
         radialGradientAngle = state.radialGradientAngle;
         gradientRadiusX = state.gradientRadiusX;
         gradientRadiusY = state.gradientRadiusY;
@@ -150,6 +191,19 @@ public class ShapeState extends Drawable.ConstantState {
         linearGradientStartY = state.linearGradientStartY;
         linearGradientEndX = state.linearGradientEndX;
         linearGradientEndY = state.linearGradientEndY;
+        strokeCenterX = state.strokeCenterX;
+        strokeCenterY = state.strokeCenterY;
+        strokeGradientRadius = state.strokeGradientRadius;
+        strokeGradientRadiusInPx = state.strokeGradientRadiusInPx;
+        strokeRadialGradientAngle = state.strokeRadialGradientAngle;
+        strokeGradientRadiusX = state.strokeGradientRadiusX;
+        strokeGradientRadiusY = state.strokeGradientRadiusY;
+        strokeRadialStartX = state.strokeRadialStartX;
+        strokeRadialStartY = state.strokeRadialStartY;
+        strokeLinearGradientStartX = state.strokeLinearGradientStartX;
+        strokeLinearGradientStartY = state.strokeLinearGradientStartY;
+        strokeLinearGradientEndX = state.strokeLinearGradientEndX;
+        strokeLinearGradientEndY = state.strokeLinearGradientEndY;
         useLevel = state.useLevel;
         useLevelForShape = state.useLevelForShape;
         opaque = state.opaque;
@@ -207,6 +261,10 @@ public class ShapeState extends Drawable.ConstantState {
 
     public void setSolidGradientType(int gradientType) {
         this.solidGradientType = gradientType;
+    }
+
+    public void setStrokeGradientType(int gradientType) {
+        this.strokeGradientType = gradientType;
     }
 
     public void setSolidColor(int... colors) {

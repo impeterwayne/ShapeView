@@ -64,6 +64,7 @@ public final class ShapeDrawableBuilder {
     private float mSolidGradientCenterX;
     private float mSolidGradientCenterY;
     private float mSolidGradientRadius;
+    private boolean mSolidGradientRadiusInPx;
 
     // Radial gradient transformations
     private float mRadialGradientAngle = 0f;
@@ -98,6 +99,32 @@ public final class ShapeDrawableBuilder {
     private ColorStateList mStrokeGradientCenterColorStateList;
     private ColorStateList mStrokeGradientEndColorStateList;
     private ShapeGradientOrientation mStrokeGradientOrientation;
+    @ShapeGradientTypeLimit
+    private int mStrokeGradientType;
+    private float mStrokeGradientCenterX;
+    private float mStrokeGradientCenterY;
+    private float mStrokeGradientRadius;
+    private boolean mStrokeGradientRadiusInPx;
+
+    // Stroke radial gradient transformations
+    private float mStrokeRadialAngle = 0f;
+    private float mStrokeGradientRadiusX = -1f;
+    private float mStrokeGradientRadiusY = -1f;
+    private float mStrokeRadialStartX = Float.NaN;
+    private float mStrokeRadialStartY = Float.NaN;
+
+    // Stroke gradient color stop positions (Figma compatibility)
+    private float mStrokeGradientStartPercent = -1f;
+    private float mStrokeGradientCenterPercent = -1f;
+    private float mStrokeGradientEndPercent = -1f;
+    private boolean mHasCustomStrokeGradientPositions = false;
+
+    // Stroke linear gradient extent positions (physical position in view)
+    private float mStrokeLinearGradientStartX = Float.NaN;
+    private float mStrokeLinearGradientStartY = Float.NaN;
+    private float mStrokeLinearGradientEndX = Float.NaN;
+    private float mStrokeLinearGradientEndY = Float.NaN;
+    private boolean mHasCustomStrokeLinearExtent = false;
 
     private int mStrokeSize;
     private int mStrokeDashSize;
@@ -264,18 +291,28 @@ public final class ShapeDrawableBuilder {
         mSolidGradientCenterX = typedArray.getFloat(styleable.getSolidGradientCenterXStyleable(), 0.5f);
         mSolidGradientCenterY = typedArray.getFloat(styleable.getSolidGradientCenterYStyleable(), 0.5f);
 
+        // Deprecated combined attribute: the unit decides how the value is read
+        mSolidGradientRadius = 0.5f;
         if (typedArray.hasValue(styleable.getSolidGradientRadiusStyleable())) {
             TypedValue value = new TypedValue();
             typedArray.getValue(styleable.getSolidGradientRadiusStyleable(), value);
             if (value.type == TypedValue.TYPE_DIMENSION) {
-                mSolidGradientRadius = typedArray.getDimensionPixelSize(styleable.getSolidGradientRadiusStyleable(), radius);
-            } else if (value.type == TypedValue.TYPE_FRACTION) {
-                mSolidGradientRadius = typedArray.getFraction(styleable.getSolidGradientRadiusStyleable(), 1, 1, 0f);
+                mSolidGradientRadius = typedArray.getDimensionPixelSize(styleable.getSolidGradientRadiusStyleable(), 0);
+                mSolidGradientRadiusInPx = true;
             } else {
-                mSolidGradientRadius = typedArray.getFloat(styleable.getSolidGradientRadiusStyleable(), 0f);
+                mSolidGradientRadius = getFloatOrFraction(typedArray, styleable.getSolidGradientRadiusStyleable(), 0.5f);
             }
-        } else {
-            mSolidGradientRadius = radius;
+        }
+        // The explicit size/ratio attributes take precedence over the deprecated one
+        if (styleable.getSolidGradientRadiusSizeStyleable() > 0 &&
+            typedArray.hasValue(styleable.getSolidGradientRadiusSizeStyleable())) {
+            mSolidGradientRadius = typedArray.getDimensionPixelSize(styleable.getSolidGradientRadiusSizeStyleable(), 0);
+            mSolidGradientRadiusInPx = true;
+        }
+        if (styleable.getSolidGradientRadiusRatioStyleable() > 0 &&
+            typedArray.hasValue(styleable.getSolidGradientRadiusRatioStyleable())) {
+            mSolidGradientRadius = getFloatOrFraction(typedArray, styleable.getSolidGradientRadiusRatioStyleable(), 0.5f);
+            mSolidGradientRadiusInPx = false;
         }
 
         // Parse radial gradient ellipse and angle attributes
@@ -389,6 +426,75 @@ public final class ShapeDrawableBuilder {
 
         mStrokeGradientOrientation = transformGradientOrientation(typedArray.getInt(styleable.getStrokeGradientOrientationStyleable(),
                                                                     getDefaultGradientOrientation()));
+
+        mStrokeGradientType = getInt(typedArray, styleable.getStrokeGradientTypeStyleable(), ShapeGradientType.LINEAR_GRADIENT);
+        mStrokeGradientCenterX = getFloat(typedArray, styleable.getStrokeGradientCenterXStyleable(), 0.5f);
+        mStrokeGradientCenterY = getFloat(typedArray, styleable.getStrokeGradientCenterYStyleable(), 0.5f);
+
+        mStrokeGradientRadius = 0.5f;
+        if (styleable.getStrokeGradientRadiusSizeStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientRadiusSizeStyleable())) {
+            mStrokeGradientRadius = typedArray.getDimensionPixelSize(styleable.getStrokeGradientRadiusSizeStyleable(), 0);
+            mStrokeGradientRadiusInPx = true;
+        }
+        if (styleable.getStrokeGradientRadiusRatioStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientRadiusRatioStyleable())) {
+            mStrokeGradientRadius = getFloatOrFraction(typedArray, styleable.getStrokeGradientRadiusRatioStyleable(), 0.5f);
+            mStrokeGradientRadiusInPx = false;
+        }
+
+        // Parse stroke radial gradient ellipse and angle attributes
+        if (styleable.getStrokeGradientRadiusXStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientRadiusXStyleable())) {
+            mStrokeGradientRadiusX = typedArray.getFloat(styleable.getStrokeGradientRadiusXStyleable(), -1f);
+        }
+        if (styleable.getStrokeGradientRadiusYStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientRadiusYStyleable())) {
+            mStrokeGradientRadiusY = typedArray.getFloat(styleable.getStrokeGradientRadiusYStyleable(), -1f);
+        }
+        if (styleable.getStrokeRadialAngleStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeRadialAngleStyleable())) {
+            mStrokeRadialAngle = typedArray.getFloat(styleable.getStrokeRadialAngleStyleable(), 0f);
+        }
+
+        // Parse stroke gradient color stop position attributes (Figma compatibility)
+        if (styleable.getStrokeGradientStartPercentStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientStartPercentStyleable())) {
+            mStrokeGradientStartPercent = typedArray.getFloat(styleable.getStrokeGradientStartPercentStyleable(), 0f);
+            mHasCustomStrokeGradientPositions = true;
+        }
+        if (styleable.getStrokeGradientCenterPercentStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientCenterPercentStyleable())) {
+            mStrokeGradientCenterPercent = typedArray.getFloat(styleable.getStrokeGradientCenterPercentStyleable(), 0.5f);
+            mHasCustomStrokeGradientPositions = true;
+        }
+        if (styleable.getStrokeGradientEndPercentStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientEndPercentStyleable())) {
+            mStrokeGradientEndPercent = typedArray.getFloat(styleable.getStrokeGradientEndPercentStyleable(), 1f);
+            mHasCustomStrokeGradientPositions = true;
+        }
+
+        // Parse stroke linear gradient extent positions (Figma compatibility)
+        if (styleable.getStrokeGradientStartXStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientStartXStyleable())) {
+            mStrokeLinearGradientStartX = typedArray.getFloat(styleable.getStrokeGradientStartXStyleable(), 0.5f);
+            mHasCustomStrokeLinearExtent = true;
+        }
+        if (styleable.getStrokeGradientStartYStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientStartYStyleable())) {
+            mStrokeLinearGradientStartY = typedArray.getFloat(styleable.getStrokeGradientStartYStyleable(), 0f);
+            mHasCustomStrokeLinearExtent = true;
+        }
+        if (styleable.getStrokeGradientEndXStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientEndXStyleable())) {
+            mStrokeLinearGradientEndX = typedArray.getFloat(styleable.getStrokeGradientEndXStyleable(), 0.5f);
+            mHasCustomStrokeLinearExtent = true;
+        }
+        if (styleable.getStrokeGradientEndYStyleable() > 0 &&
+            typedArray.hasValue(styleable.getStrokeGradientEndYStyleable())) {
+            mStrokeLinearGradientEndY = typedArray.getFloat(styleable.getStrokeGradientEndYStyleable(), 1f);
+            mHasCustomStrokeLinearExtent = true;
+        }
 
         mStrokeSize = typedArray.getDimensionPixelSize(styleable.getStrokeSizeStyleable(), 0);
         mStrokeDashSize = typedArray.getDimensionPixelSize(styleable.getStrokeDashSizeStyleable(), 0);
@@ -697,13 +803,39 @@ public final class ShapeDrawableBuilder {
         return mSolidGradientCenterY;
     }
 
-    public ShapeDrawableBuilder setSolidGradientRadius(float radius) {
-        mSolidGradientRadius = radius;
+    /**
+     * Set the fill gradient radius as a ratio of half the shortest side
+     */
+    public ShapeDrawableBuilder setSolidGradientRadiusRatio(float ratio) {
+        mSolidGradientRadius = ratio;
+        mSolidGradientRadiusInPx = false;
         return this;
+    }
+
+    /**
+     * Set the fill gradient radius as an absolute size in pixels
+     */
+    public ShapeDrawableBuilder setSolidGradientRadiusSize(float size) {
+        mSolidGradientRadius = size;
+        mSolidGradientRadiusInPx = true;
+        return this;
+    }
+
+    /**
+     * @deprecated use {@link #setSolidGradientRadiusRatio(float)} or
+     *             {@link #setSolidGradientRadiusSize(float)}
+     */
+    @Deprecated
+    public ShapeDrawableBuilder setSolidGradientRadius(float radius) {
+        return setSolidGradientRadiusRatio(radius);
     }
 
     public float getSolidGradientRadius() {
         return mSolidGradientRadius;
+    }
+
+    public boolean isSolidGradientRadiusInPx() {
+        return mSolidGradientRadiusInPx;
     }
 
     public ShapeDrawableBuilder setSolidRadialAngle(float angleDegrees) {
@@ -924,6 +1056,167 @@ public final class ShapeDrawableBuilder {
 
     public ShapeGradientOrientation getStrokeGradientOrientation() {
         return mStrokeGradientOrientation;
+    }
+
+    public ShapeDrawableBuilder setStrokeGradientType(@ShapeGradientTypeLimit int type) {
+        mStrokeGradientType = type;
+        return this;
+    }
+
+    @ShapeGradientTypeLimit
+    public int getStrokeGradientType() {
+        return mStrokeGradientType;
+    }
+
+    public ShapeDrawableBuilder setStrokeGradientCenterX(float centerX) {
+        mStrokeGradientCenterX = centerX;
+        return this;
+    }
+
+    public float getStrokeGradientCenterX() {
+        return mStrokeGradientCenterX;
+    }
+
+    public ShapeDrawableBuilder setStrokeGradientCenterY(float centerY) {
+        mStrokeGradientCenterY = centerY;
+        return this;
+    }
+
+    public float getStrokeGradientCenterY() {
+        return mStrokeGradientCenterY;
+    }
+
+    /**
+     * Set the stroke gradient radius as a ratio of half the shortest side
+     */
+    public ShapeDrawableBuilder setStrokeGradientRadiusRatio(float ratio) {
+        mStrokeGradientRadius = ratio;
+        mStrokeGradientRadiusInPx = false;
+        return this;
+    }
+
+    /**
+     * Set the stroke gradient radius as an absolute size in pixels
+     */
+    public ShapeDrawableBuilder setStrokeGradientRadiusSize(float size) {
+        mStrokeGradientRadius = size;
+        mStrokeGradientRadiusInPx = true;
+        return this;
+    }
+
+    public float getStrokeGradientRadius() {
+        return mStrokeGradientRadius;
+    }
+
+    public boolean isStrokeGradientRadiusInPx() {
+        return mStrokeGradientRadiusInPx;
+    }
+
+    public ShapeDrawableBuilder setStrokeRadialAngle(float angleDegrees) {
+        mStrokeRadialAngle = angleDegrees;
+        return this;
+    }
+
+    public float getStrokeRadialAngle() {
+        return mStrokeRadialAngle;
+    }
+
+    public ShapeDrawableBuilder setStrokeGradientRadii(float radiusX, float radiusY) {
+        mStrokeGradientRadiusX = radiusX;
+        mStrokeGradientRadiusY = radiusY;
+        return this;
+    }
+
+    public float getStrokeGradientRadiusX() {
+        return mStrokeGradientRadiusX;
+    }
+
+    public float getStrokeGradientRadiusY() {
+        return mStrokeGradientRadiusY;
+    }
+
+    public ShapeDrawableBuilder setStrokeRadialStartPosition(float startX, float startY) {
+        mStrokeRadialStartX = startX;
+        mStrokeRadialStartY = startY;
+        return this;
+    }
+
+    public float getStrokeRadialStartX() {
+        return mStrokeRadialStartX;
+    }
+
+    public float getStrokeRadialStartY() {
+        return mStrokeRadialStartY;
+    }
+
+    public ShapeDrawableBuilder setStrokeGradientPositions(float startPercent, float centerPercent, float endPercent) {
+        mStrokeGradientStartPercent = startPercent;
+        mStrokeGradientCenterPercent = centerPercent;
+        mStrokeGradientEndPercent = endPercent;
+        mHasCustomStrokeGradientPositions = true;
+        return this;
+    }
+
+    public ShapeDrawableBuilder setStrokeGradientPositions(float startPercent, float endPercent) {
+        mStrokeGradientStartPercent = startPercent;
+        mStrokeGradientCenterPercent = -1f;
+        mStrokeGradientEndPercent = endPercent;
+        mHasCustomStrokeGradientPositions = true;
+        return this;
+    }
+
+    public float getStrokeGradientStartPercent() {
+        return mStrokeGradientStartPercent;
+    }
+
+    public float getStrokeGradientCenterPercent() {
+        return mStrokeGradientCenterPercent;
+    }
+
+    public float getStrokeGradientEndPercent() {
+        return mStrokeGradientEndPercent;
+    }
+
+    public boolean hasCustomStrokeGradientPositions() {
+        return mHasCustomStrokeGradientPositions;
+    }
+
+    /**
+     * Set the stroke linear gradient start and end positions as percentage of view dimensions.
+     *
+     * @param startX Starting X position (0.0 = left, 1.0 = right)
+     * @param startY Starting Y position (0.0 = top, 1.0 = bottom)
+     * @param endX Ending X position (0.0 = left, 1.0 = right)
+     * @param endY Ending Y position (0.0 = top, 1.0 = bottom)
+     * @return This builder for chaining
+     */
+    public ShapeDrawableBuilder setStrokeLinearGradientPositions(float startX, float startY, float endX, float endY) {
+        mStrokeLinearGradientStartX = startX;
+        mStrokeLinearGradientStartY = startY;
+        mStrokeLinearGradientEndX = endX;
+        mStrokeLinearGradientEndY = endY;
+        mHasCustomStrokeLinearExtent = true;
+        return this;
+    }
+
+    public float getStrokeLinearGradientStartX() {
+        return mStrokeLinearGradientStartX;
+    }
+
+    public float getStrokeLinearGradientStartY() {
+        return mStrokeLinearGradientStartY;
+    }
+
+    public float getStrokeLinearGradientEndX() {
+        return mStrokeLinearGradientEndX;
+    }
+
+    public float getStrokeLinearGradientEndY() {
+        return mStrokeLinearGradientEndY;
+    }
+
+    public boolean hasCustomStrokeLinearExtent() {
+        return mHasCustomStrokeLinearExtent;
     }
 
     public ShapeDrawableBuilder setStrokeSize(int size) {
@@ -1197,9 +1490,14 @@ public final class ShapeDrawableBuilder {
 
         drawable.setSolidGradientType(mSolidGradientType)
                 .setSolidGradientOrientation(mSolidGradientOrientation)
-                .setSolidGradientRadius(mSolidGradientRadius)
                 .setSolidGradientCenterX(mSolidGradientCenterX)
                 .setSolidGradientCenterY(mSolidGradientCenterY);
+
+        if (mSolidGradientRadiusInPx) {
+            drawable.setSolidGradientRadiusSize(mSolidGradientRadius);
+        } else {
+            drawable.setSolidGradientRadiusRatio(mSolidGradientRadius);
+        }
 
         if (mSolidGradientColors != null && mSolidGradientColors.length > 0) {
              drawable.setSolidGradientStartColor(mSolidGradientStartColorStateList)
@@ -1247,15 +1545,62 @@ public final class ShapeDrawableBuilder {
             }
         }
 
-        drawable.setStrokeGradientOrientation(mStrokeGradientOrientation)
+        drawable.setStrokeGradientType(mStrokeGradientType)
+                .setStrokeGradientOrientation(mStrokeGradientOrientation)
+                .setStrokeGradientCenterX(mStrokeGradientCenterX)
+                .setStrokeGradientCenterY(mStrokeGradientCenterY)
                 .setStrokeSize(mStrokeSize)
                 .setStrokeDashSize(mStrokeDashSize)
                 .setStrokeDashGap(mStrokeDashGap);
-        
+
+        if (mStrokeGradientRadiusInPx) {
+            drawable.setStrokeGradientRadiusSize(mStrokeGradientRadius);
+        } else {
+            drawable.setStrokeGradientRadiusRatio(mStrokeGradientRadius);
+        }
+
         if (mStrokeGradientColors != null && mStrokeGradientColors.length > 0) {
              drawable.setStrokeGradientStartColor(mStrokeGradientStartColorStateList)
                      .setStrokeGradientCenterColor(mStrokeGradientCenterColorStateList)
                      .setStrokeGradientEndColor(mStrokeGradientEndColorStateList);
+        }
+
+        // Apply stroke radial gradient transformations if set
+        if (mStrokeRadialAngle != 0f) {
+            drawable.setStrokeRadialAngle(mStrokeRadialAngle);
+        }
+        if (mStrokeGradientRadiusX > 0 && mStrokeGradientRadiusY > 0) {
+            drawable.setStrokeGradientRadii(mStrokeGradientRadiusX, mStrokeGradientRadiusY);
+        }
+        if (!Float.isNaN(mStrokeRadialStartX) || !Float.isNaN(mStrokeRadialStartY)) {
+            drawable.setStrokeRadialStartPosition(mStrokeRadialStartX, mStrokeRadialStartY);
+        }
+
+        // Apply custom stroke gradient color stop positions (Figma compatibility)
+        if (mHasCustomStrokeGradientPositions) {
+            float start = mStrokeGradientStartPercent >= 0 ? mStrokeGradientStartPercent : 0f;
+            float end = mStrokeGradientEndPercent >= 0 ? mStrokeGradientEndPercent : 1f;
+            if (mStrokeGradientCenterPercent >= 0) {
+                // 3-color gradient with custom positions
+                drawable.setStrokeGradientPositions(start, mStrokeGradientCenterPercent, end);
+            } else if (mStrokeGradientStartPercent >= 0 || mStrokeGradientEndPercent >= 0) {
+                // 2-color gradient with custom positions
+                drawable.setStrokeGradientPositions(start, end);
+            }
+        }
+
+        // Apply custom stroke linear gradient extent positions (physical position in view)
+        if (mHasCustomStrokeLinearExtent) {
+            if (!Float.isNaN(mStrokeLinearGradientStartX) || !Float.isNaN(mStrokeLinearGradientStartY)) {
+                float startX = Float.isNaN(mStrokeLinearGradientStartX) ? 0.5f : mStrokeLinearGradientStartX;
+                float startY = Float.isNaN(mStrokeLinearGradientStartY) ? 0f : mStrokeLinearGradientStartY;
+                drawable.setStrokeGradientStartPosition(startX, startY);
+            }
+            if (!Float.isNaN(mStrokeLinearGradientEndX) || !Float.isNaN(mStrokeLinearGradientEndY)) {
+                float endX = Float.isNaN(mStrokeLinearGradientEndX) ? 0.5f : mStrokeLinearGradientEndX;
+                float endY = Float.isNaN(mStrokeLinearGradientEndY) ? 1f : mStrokeLinearGradientEndY;
+                drawable.setStrokeGradientEndPosition(endX, endY);
+            }
         }
 
         drawable.setOuterShadowSize(mOuterShadowSize)
@@ -1374,6 +1719,38 @@ public final class ShapeDrawableBuilder {
         mStrokeSelectedColor = null;
 
         mView.setBackground(null);
+    }
+
+    /**
+     * Read an int attribute, tolerating styleables that don't declare it (index 0)
+     */
+    private static int getInt(TypedArray typedArray, int styleableIndex, int defValue) {
+        if (styleableIndex <= 0 || !typedArray.hasValue(styleableIndex)) {
+            return defValue;
+        }
+        return typedArray.getInt(styleableIndex, defValue);
+    }
+
+    /**
+     * Read an attribute declared as {@code float|fraction}, accepting either form
+     */
+    private static float getFloatOrFraction(TypedArray typedArray, int styleableIndex, float defValue) {
+        TypedValue value = new TypedValue();
+        typedArray.getValue(styleableIndex, value);
+        if (value.type == TypedValue.TYPE_FRACTION) {
+            return typedArray.getFraction(styleableIndex, 1, 1, defValue);
+        }
+        return typedArray.getFloat(styleableIndex, defValue);
+    }
+
+    /**
+     * Read a float attribute, tolerating styleables that don't declare it (index 0)
+     */
+    private static float getFloat(TypedArray typedArray, int styleableIndex, float defValue) {
+        if (styleableIndex <= 0 || !typedArray.hasValue(styleableIndex)) {
+            return defValue;
+        }
+        return typedArray.getFloat(styleableIndex, defValue);
     }
 
      /**

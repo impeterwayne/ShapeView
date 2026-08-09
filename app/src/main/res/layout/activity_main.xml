@@ -12,28 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
-
-        <!-- Header -->
-        <com.genesys.shape.view.ShapeTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="20dp"
-            android:text="ShapeView-ktx Showcase"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            app:shape_radius="16dp"
-            app:shape_solidGradientStartColor="#6366F1"
-            app:shape_solidGradientEndColor="#8B5CF6"
-            app:shape_solidGradientOrientation="leftToRight" />
-
+        android:paddingHorizontal="8dp">
         <!-- Section: Basic Rounded Shapes -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
             android:text="Basic Shapes"
@@ -209,6 +193,148 @@
                 app:shape_strokeGradientStartColor="#3B82F6"
                 app:shape_strokeGradientEndColor="#10B981"
                 app:shape_strokeSize="2dp" />
+
+        </LinearLayout>
+
+        <!-- Section: Stroke Gradient Types -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="Stroke Gradient Types"
+            android:textColor="#1F2937"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <!-- Radial stroke, radius as a ratio of half the shortest side -->
+            <com.genesys.shape.view.ShapeTextView
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Radial\nratio"
+                android:textColor="#B45309"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:shape_radius="12dp"
+                app:shape_strokeGradientStartColor="#F59E0B"
+                app:shape_strokeGradientEndColor="#EF4444"
+                app:shape_strokeGradientType="radial"
+                app:shape_strokeGradientCenterX="0.2"
+                app:shape_strokeGradientRadiusRatio="1.0"
+                app:shape_strokeSize="5dp" />
+
+            <!-- Radial stroke, radius as an absolute size -->
+            <com.genesys.shape.view.ShapeTextView
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Radial\nsize"
+                android:textColor="#4338CA"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:shape_radius="12dp"
+                app:shape_strokeGradientStartColor="#06B6D4"
+                app:shape_strokeGradientEndColor="#6366F1"
+                app:shape_strokeGradientType="radial"
+                app:shape_strokeGradientRadiusSize="40dp"
+                app:shape_strokeSize="5dp" />
+
+            <!-- Sweep stroke -->
+            <com.genesys.shape.view.ShapeTextView
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Sweep"
+                android:textColor="#6D28D9"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:shape_radius="12dp"
+                app:shape_strokeGradientStartColor="#06B6D4"
+                app:shape_strokeGradientCenterColor="#8B5CF6"
+                app:shape_strokeGradientEndColor="#06B6D4"
+                app:shape_strokeGradientType="sweep"
+                app:shape_strokeSize="5dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <!-- Elliptical + rotated radial stroke -->
+            <com.genesys.shape.view.ShapeTextView
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Ellipse\n+ angle"
+                android:textColor="#BE185D"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:shape_radius="12dp"
+                app:shape_strokeGradientStartColor="#EC4899"
+                app:shape_strokeGradientEndColor="#F97316"
+                app:shape_strokeGradientType="radial"
+                app:shape_strokeGradientRadiusRatio="0.8"
+                app:shape_strokeGradientRadiusX="2.0"
+                app:shape_strokeGradientRadiusY="0.8"
+                app:shape_strokeRadialAngle="30"
+                app:shape_strokeSize="5dp" />
+
+            <!-- Custom colour-stop positions -->
+            <com.genesys.shape.view.ShapeTextView
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Custom\nstops"
+                android:textColor="#0F766E"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:shape_radius="12dp"
+                app:shape_strokeGradientStartColor="#14B8A6"
+                app:shape_strokeGradientCenterColor="#FACC15"
+                app:shape_strokeGradientEndColor="#0F172A"
+                app:shape_strokeGradientStartPercent="0.0"
+                app:shape_strokeGradientCenterPercent="0.15"
+                app:shape_strokeGradientEndPercent="1.0"
+                app:shape_strokeSize="5dp" />
+
+            <!-- Explicit start/end extents (Figma style) -->
+            <com.genesys.shape.view.ShapeTextView
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Diagonal\nextent"
+                android:textColor="#1D4ED8"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:shape_radius="12dp"
+                app:shape_strokeGradientStartColor="#3B82F6"
+                app:shape_strokeGradientEndColor="#A855F7"
+                app:shape_strokeGradientStartX="0.0"
+                app:shape_strokeGradientStartY="0.0"
+                app:shape_strokeGradientEndX="1.0"
+                app:shape_strokeGradientEndY="1.0"
+                app:shape_strokeSize="5dp" />
 
         </LinearLayout>
 
@@ -554,6 +680,120 @@
             app:shape_strokeGradientStartColor="#EC4899"
             app:shape_strokeGradientEndColor="#6366F1"
             app:shape_strokeSize="2dp" />
+
+        <!-- Section: Shape ImageView -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/shape_image_view_title"
+            android:textColor="#1F2937"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <!-- Rounded Corner Image View (Standard) -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="8dp">
+
+                <com.genesys.shape.view.ShapeImageView
+                    android:id="@+id/ivRounded"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_empty"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:shape_radius="16dp"
+                    app:shape_strokeColor="#E5E7EB"
+                    app:shape_strokeSize="1dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/label_rounded_16dp"
+                    android:textColor="#4B5563"
+                    android:textSize="12sp"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <!-- Circle / Oval Image View -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="8dp">
+
+                <com.genesys.shape.view.ShapeImageView
+                    android:id="@+id/ivCircle"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_thanks"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:shape_type="oval"
+                    app:shape_strokeColor="#8B5CF6"
+                    app:shape_strokeSize="2dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/label_circle_oval"
+                    android:textColor="#4B5563"
+                    android:textSize="12sp"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <!-- Custom Corners Image View -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <com.genesys.shape.view.ShapeImageView
+                    android:id="@+id/ivCustom"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_permission_manage"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:shape_radiusInTopLeft="24dp"
+                    app:shape_radiusInBottomRight="24dp"
+                    app:shape_strokeColor="#EF4444"
+                    app:shape_strokeSize="2dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/label_custom_corners"
+                    android:textColor="#4B5563"
+                    android:textSize="12sp"
+                    android:gravity="center" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <!-- Bottom spacer -->
         <View

@@ -60,7 +60,21 @@ public interface IShapeDrawableStyleable {
 
     int getSolidGradientCenterYStyleable();
 
+    /**
+     * @deprecated superseded by {@link #getSolidGradientRadiusSizeStyleable()} and
+     *             {@link #getSolidGradientRadiusRatioStyleable()}
+     */
+    @Deprecated
     int getSolidGradientRadiusStyleable();
+
+    // Radial gradient radius, as an absolute size or as a ratio of half the shortest side
+    default int getSolidGradientRadiusSizeStyleable() {
+        return 0;
+    }
+
+    default int getSolidGradientRadiusRatioStyleable() {
+        return 0;
+    }
 
     // Radial gradient ellipse scale factors (for elliptical gradients)
     default int getSolidGradientRadiusXStyleable() {
@@ -127,6 +141,70 @@ public interface IShapeDrawableStyleable {
     int getStrokeGradientEndColorStyleable();
 
     int getStrokeGradientOrientationStyleable();
+
+    default int getStrokeGradientTypeStyleable() {
+        return 0;
+    }
+
+    default int getStrokeGradientCenterXStyleable() {
+        return 0;
+    }
+
+    default int getStrokeGradientCenterYStyleable() {
+        return 0;
+    }
+
+    default int getStrokeGradientRadiusSizeStyleable() {
+        return 0;
+    }
+
+    default int getStrokeGradientRadiusRatioStyleable() {
+        return 0;
+    }
+
+    // Stroke radial gradient ellipse scale factors (for elliptical gradients)
+    default int getStrokeGradientRadiusXStyleable() {
+        return 0;
+    }
+
+    default int getStrokeGradientRadiusYStyleable() {
+        return 0;
+    }
+
+    // Stroke radial gradient rotation angle
+    default int getStrokeRadialAngleStyleable() {
+        return 0;
+    }
+
+    // Stroke gradient color stop positions (0.0 to 1.0)
+    default int getStrokeGradientStartPercentStyleable() {
+        return 0;
+    }
+
+    default int getStrokeGradientCenterPercentStyleable() {
+        return 0;
+    }
+
+    default int getStrokeGradientEndPercentStyleable() {
+        return 0;
+    }
+
+    // Stroke gradient extent positions (0.0 to 1.0 as percentage of view dimensions)
+    default int getStrokeGradientStartXStyleable() {
+        return 0;
+    }
+
+    default int getStrokeGradientStartYStyleable() {
+        return 0;
+    }
+
+    default int getStrokeGradientEndXStyleable() {
+        return 0;
+    }
+
+    default int getStrokeGradientEndYStyleable() {
+        return 0;
+    }
 
     int getStrokeSizeStyleable();
 

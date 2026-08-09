@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.genesys.shape.layout.ShapeConstraintLayout
 import com.genesys.shape.layout.ShapeFrameLayout
 import com.genesys.shape.view.ShapeButton
+import com.genesys.shape.view.ShapeImageView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,18 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<ShapeConstraintLayout>(R.id.rippleConstraint).setOnClickListener {
             Toast.makeText(this, "ShapeConstraintLayout tapped!", Toast.LENGTH_SHORT).show()
+        }
+
+        findViewById<ShapeImageView>(R.id.ivRounded).setOnClickListener {
+            Toast.makeText(this, getString(R.string.toast_rounded_clicked), Toast.LENGTH_SHORT).show()
+        }
+
+        findViewById<ShapeImageView>(R.id.ivCircle).setOnClickListener {
+            Toast.makeText(this, getString(R.string.toast_circle_clicked), Toast.LENGTH_SHORT).show()
+        }
+
+        findViewById<ShapeImageView>(R.id.ivCustom).setOnClickListener {
+            Toast.makeText(this, getString(R.string.toast_custom_clicked), Toast.LENGTH_SHORT).show()
         }
     }
 }

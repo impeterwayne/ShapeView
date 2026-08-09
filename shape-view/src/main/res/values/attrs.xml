@@ -97,7 +97,12 @@
     <attr name="shape_solidGradientCenterX" format="float|fraction" />
     <!-- The relative position of the solid gradient center Y coordinate (default is 0.5)-->
     <attr name="shape_solidGradientCenterY" format="float|fraction" />
-    <!-- Solid gradient radius (only for radial gradient) -->
+    <!-- Solid gradient radius as an absolute size (only for radial gradient) -->
+    <attr name="shape_solidGradientRadiusSize" format="dimension" />
+    <!-- Solid gradient radius as a ratio of half the shortest side (only for radial gradient) -->
+    <attr name="shape_solidGradientRadiusRatio" format="float|fraction" />
+    <!-- Deprecated: use shape_solidGradientRadiusSize or shape_solidGradientRadiusRatio.
+         A dimension is read as an absolute size, a float/fraction as a ratio. -->
     <attr name="shape_solidGradientRadius" format="float|fraction|dimension" />
     <!-- Radial gradient ellipse X scale factor (for elliptical gradients, default -1 = disabled) -->
     <attr name="shape_solidGradientRadiusX" format="float" />
@@ -175,6 +180,48 @@
         <enum name="bottomRightToTopLeft" value="135" />
         <enum name="bottomEndToTopStart" value="1350" />
     </attr>
+
+    <!-- Stroke gradient type (default is linear) -->
+    <attr name="shape_strokeGradientType">
+        <!-- Linear gradient -->
+        <enum name="linear" value="0" />
+        <!-- Radial gradient -->
+        <enum name="radial" value="1" />
+        <!-- Sweep gradient -->
+        <enum name="sweep" value="2" />
+    </attr>
+    <!-- The relative position of the stroke gradient center X coordinate (default is 0.5)-->
+    <attr name="shape_strokeGradientCenterX" format="float|fraction" />
+    <!-- The relative position of the stroke gradient center Y coordinate (default is 0.5)-->
+    <attr name="shape_strokeGradientCenterY" format="float|fraction" />
+    <!-- Stroke gradient radius as an absolute size (only for radial gradient) -->
+    <attr name="shape_strokeGradientRadiusSize" format="dimension" />
+    <!-- Stroke gradient radius as a ratio of half the shortest side (only for radial gradient) -->
+    <attr name="shape_strokeGradientRadiusRatio" format="float|fraction" />
+    <!-- Stroke radial gradient ellipse X scale factor (for elliptical gradients, default -1 = disabled) -->
+    <attr name="shape_strokeGradientRadiusX" format="float" />
+    <!-- Stroke radial gradient ellipse Y scale factor (for elliptical gradients, default -1 = disabled) -->
+    <attr name="shape_strokeGradientRadiusY" format="float" />
+    <!-- Stroke radial gradient rotation angle in degrees (default 0 = no rotation) -->
+    <attr name="shape_strokeRadialAngle" format="float" />
+
+    <!-- Stroke gradient color stop positions (0.0 to 1.0) -->
+    <!-- Position of stroke start color in gradient (default 0.0 = beginning) -->
+    <attr name="shape_strokeGradientStartPercent" format="float" />
+    <!-- Position of stroke center color in gradient (default 0.5 = middle) -->
+    <attr name="shape_strokeGradientCenterPercent" format="float" />
+    <!-- Position of stroke end color in gradient (default 1.0 = end) -->
+    <attr name="shape_strokeGradientEndPercent" format="float" />
+
+    <!-- Stroke gradient extent positions (0.0 to 1.0 as percentage of view dimensions) -->
+    <!-- X position where the stroke linear gradient starts (default NaN = use orientation) -->
+    <attr name="shape_strokeGradientStartX" format="float" />
+    <!-- Y position where the stroke linear gradient starts (default NaN = use orientation) -->
+    <attr name="shape_strokeGradientStartY" format="float" />
+    <!-- X position where the stroke linear gradient ends (default NaN = use orientation) -->
+    <attr name="shape_strokeGradientEndX" format="float" />
+    <!-- Y position where the stroke linear gradient ends (default NaN = use orientation) -->
+    <attr name="shape_strokeGradientEndY" format="float" />
 
     <!-- Stroke size -->
     <attr name="shape_strokeSize" format="dimension" />
@@ -311,6 +358,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -332,6 +381,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -406,6 +470,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -427,6 +493,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -502,6 +583,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -524,6 +607,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -607,6 +705,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -629,6 +729,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -711,6 +826,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -732,6 +849,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -806,6 +938,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -827,6 +961,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -887,6 +1036,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -908,6 +1059,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -968,6 +1134,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -989,6 +1157,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -1049,6 +1232,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -1070,6 +1255,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -1130,6 +1330,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -1151,6 +1353,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -1211,6 +1428,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -1232,6 +1451,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -1292,6 +1526,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -1313,6 +1549,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
@@ -1373,6 +1624,8 @@
         <attr name="shape_solidGradientType" />
         <attr name="shape_solidGradientCenterX" />
         <attr name="shape_solidGradientCenterY" />
+        <attr name="shape_solidGradientRadiusSize" />
+        <attr name="shape_solidGradientRadiusRatio" />
         <attr name="shape_solidGradientRadius" />
         <attr name="shape_solidGradientRadiusX" />
         <attr name="shape_solidGradientRadiusY" />
@@ -1394,6 +1647,21 @@
         <attr name="shape_strokeGradientCenterColor" />
         <attr name="shape_strokeGradientEndColor" />
         <attr name="shape_strokeGradientOrientation" />
+        <attr name="shape_strokeGradientType" />
+        <attr name="shape_strokeGradientCenterX" />
+        <attr name="shape_strokeGradientCenterY" />
+        <attr name="shape_strokeGradientRadiusSize" />
+        <attr name="shape_strokeGradientRadiusRatio" />
+        <attr name="shape_strokeGradientRadiusX" />
+        <attr name="shape_strokeGradientRadiusY" />
+        <attr name="shape_strokeRadialAngle" />
+        <attr name="shape_strokeGradientStartPercent" />
+        <attr name="shape_strokeGradientCenterPercent" />
+        <attr name="shape_strokeGradientEndPercent" />
+        <attr name="shape_strokeGradientStartX" />
+        <attr name="shape_strokeGradientStartY" />
+        <attr name="shape_strokeGradientEndX" />
+        <attr name="shape_strokeGradientEndY" />
         <attr name="shape_strokeSize" />
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />

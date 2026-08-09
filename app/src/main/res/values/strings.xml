@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ShapeView-ktx</string>
+    <string name="shape_image_view_title">Shape ImageView</string>
+    <string name="label_rounded_16dp">Rounded (16dp)</string>
+    <string name="label_circle_oval">Circle (Oval)</string>
+    <string name="label_custom_corners">Custom Corners</string>
+    <string name="toast_rounded_clicked">Rounded ShapeImageView clicked!</string>
+    <string name="toast_circle_clicked">Circle ShapeImageView clicked!</string>
+    <string name="toast_custom_clicked">Custom Corners ShapeImageView clicked!</string>
 </resources>

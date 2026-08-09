@@ -141,6 +141,16 @@ public final class ShapeViewStyleable implements IShapeDrawableStyleable {
     }
 
     @Override
+    public int getSolidGradientRadiusSizeStyleable() {
+        return R.styleable.ShapeView_shape_solidGradientRadiusSize;
+    }
+
+    @Override
+    public int getSolidGradientRadiusRatioStyleable() {
+        return R.styleable.ShapeView_shape_solidGradientRadiusRatio;
+    }
+
+    @Override
     public int getSolidGradientRadiusXStyleable() {
         return R.styleable.ShapeView_shape_solidGradientRadiusX;
     }
@@ -233,6 +243,81 @@ public final class ShapeViewStyleable implements IShapeDrawableStyleable {
     @Override
     public int getStrokeGradientOrientationStyleable() {
         return R.styleable.ShapeView_shape_strokeGradientOrientation;
+    }
+
+    @Override
+    public int getStrokeGradientTypeStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientType;
+    }
+
+    @Override
+    public int getStrokeGradientCenterXStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientCenterX;
+    }
+
+    @Override
+    public int getStrokeGradientCenterYStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientCenterY;
+    }
+
+    @Override
+    public int getStrokeGradientRadiusSizeStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientRadiusSize;
+    }
+
+    @Override
+    public int getStrokeGradientRadiusRatioStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientRadiusRatio;
+    }
+
+    @Override
+    public int getStrokeGradientRadiusXStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientRadiusX;
+    }
+
+    @Override
+    public int getStrokeGradientRadiusYStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientRadiusY;
+    }
+
+    @Override
+    public int getStrokeRadialAngleStyleable() {
+        return R.styleable.ShapeView_shape_strokeRadialAngle;
+    }
+
+    @Override
+    public int getStrokeGradientStartPercentStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientStartPercent;
+    }
+
+    @Override
+    public int getStrokeGradientCenterPercentStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientCenterPercent;
+    }
+
+    @Override
+    public int getStrokeGradientEndPercentStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientEndPercent;
+    }
+
+    @Override
+    public int getStrokeGradientStartXStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientStartX;
+    }
+
+    @Override
+    public int getStrokeGradientStartYStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientStartY;
+    }
+
+    @Override
+    public int getStrokeGradientEndXStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientEndX;
+    }
+
+    @Override
+    public int getStrokeGradientEndYStyleable() {
+        return R.styleable.ShapeView_shape_strokeGradientEndY;
     }
 
     @Override

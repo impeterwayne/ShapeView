@@ -149,6 +149,16 @@ public final class ShapeRadioButtonStyleable implements IShapeDrawableStyleable,
     }
 
     @Override
+    public int getSolidGradientRadiusSizeStyleable() {
+        return R.styleable.ShapeRadioButton_shape_solidGradientRadiusSize;
+    }
+
+    @Override
+    public int getSolidGradientRadiusRatioStyleable() {
+        return R.styleable.ShapeRadioButton_shape_solidGradientRadiusRatio;
+    }
+
+    @Override
     public int getSolidGradientRadiusXStyleable() {
         return R.styleable.ShapeRadioButton_shape_solidGradientRadiusX;
     }
@@ -246,6 +256,81 @@ public final class ShapeRadioButtonStyleable implements IShapeDrawableStyleable,
     @Override
     public int getStrokeGradientOrientationStyleable() {
         return R.styleable.ShapeRadioButton_shape_strokeGradientOrientation;
+    }
+
+    @Override
+    public int getStrokeGradientTypeStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientType;
+    }
+
+    @Override
+    public int getStrokeGradientCenterXStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientCenterX;
+    }
+
+    @Override
+    public int getStrokeGradientCenterYStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientCenterY;
+    }
+
+    @Override
+    public int getStrokeGradientRadiusSizeStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientRadiusSize;
+    }
+
+    @Override
+    public int getStrokeGradientRadiusRatioStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientRadiusRatio;
+    }
+
+    @Override
+    public int getStrokeGradientRadiusXStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientRadiusX;
+    }
+
+    @Override
+    public int getStrokeGradientRadiusYStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientRadiusY;
+    }
+
+    @Override
+    public int getStrokeRadialAngleStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeRadialAngle;
+    }
+
+    @Override
+    public int getStrokeGradientStartPercentStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientStartPercent;
+    }
+
+    @Override
+    public int getStrokeGradientCenterPercentStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientCenterPercent;
+    }
+
+    @Override
+    public int getStrokeGradientEndPercentStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientEndPercent;
+    }
+
+    @Override
+    public int getStrokeGradientStartXStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientStartX;
+    }
+
+    @Override
+    public int getStrokeGradientStartYStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientStartY;
+    }
+
+    @Override
+    public int getStrokeGradientEndXStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientEndX;
+    }
+
+    @Override
+    public int getStrokeGradientEndYStyleable() {
+        return R.styleable.ShapeRadioButton_shape_strokeGradientEndY;
     }
 
     @Override
