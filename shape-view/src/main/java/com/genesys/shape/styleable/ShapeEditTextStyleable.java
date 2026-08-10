@@ -5,12 +5,49 @@ import com.genesys.shape.config.IShapeDrawableStyleable;
 import com.genesys.shape.config.ITextColorStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/08/28
- *    desc   : EditText's Shape attribute values
+ * EditText's Shape attribute values
  */
 public final class ShapeEditTextStyleable implements IShapeDrawableStyleable, ITextColorStyleable {
+
+    /** {@link IShapeDrawableStyleable#getEffectStyleables()} */
+    private static final int[][] EFFECT_STYLEABLES = {
+        {
+            R.styleable.ShapeEditText_shape_effect1Type,
+            R.styleable.ShapeEditText_shape_effect1Color,
+            R.styleable.ShapeEditText_shape_effect1Blur,
+            R.styleable.ShapeEditText_shape_effect1Spread,
+            R.styleable.ShapeEditText_shape_effect1OffsetX,
+            R.styleable.ShapeEditText_shape_effect1OffsetY,
+            R.styleable.ShapeEditText_shape_effect1Edges,
+        },
+        {
+            R.styleable.ShapeEditText_shape_effect2Type,
+            R.styleable.ShapeEditText_shape_effect2Color,
+            R.styleable.ShapeEditText_shape_effect2Blur,
+            R.styleable.ShapeEditText_shape_effect2Spread,
+            R.styleable.ShapeEditText_shape_effect2OffsetX,
+            R.styleable.ShapeEditText_shape_effect2OffsetY,
+            R.styleable.ShapeEditText_shape_effect2Edges,
+        },
+        {
+            R.styleable.ShapeEditText_shape_effect3Type,
+            R.styleable.ShapeEditText_shape_effect3Color,
+            R.styleable.ShapeEditText_shape_effect3Blur,
+            R.styleable.ShapeEditText_shape_effect3Spread,
+            R.styleable.ShapeEditText_shape_effect3OffsetX,
+            R.styleable.ShapeEditText_shape_effect3OffsetY,
+            R.styleable.ShapeEditText_shape_effect3Edges,
+        },
+        {
+            R.styleable.ShapeEditText_shape_effect4Type,
+            R.styleable.ShapeEditText_shape_effect4Color,
+            R.styleable.ShapeEditText_shape_effect4Blur,
+            R.styleable.ShapeEditText_shape_effect4Spread,
+            R.styleable.ShapeEditText_shape_effect4OffsetX,
+            R.styleable.ShapeEditText_shape_effect4OffsetY,
+            R.styleable.ShapeEditText_shape_effect4Edges,
+        },
+    };
 
     /**
      * {@link IShapeDrawableStyleable}
@@ -337,23 +374,13 @@ public final class ShapeEditTextStyleable implements IShapeDrawableStyleable, IT
     }
 
     @Override
-    public int getOuterShadowSizeStyleable() {
-        return R.styleable.ShapeEditText_shape_outerShadowSize;
+    public int[][] getEffectStyleables() {
+        return EFFECT_STYLEABLES;
     }
 
     @Override
-    public int getOuterShadowColorStyleable() {
-        return R.styleable.ShapeEditText_shape_outerShadowColor;
-    }
-
-    @Override
-    public int getOuterShadowOffsetXStyleable() {
-        return R.styleable.ShapeEditText_shape_outerShadowOffsetX;
-    }
-
-    @Override
-    public int getOuterShadowOffsetYStyleable() {
-        return R.styleable.ShapeEditText_shape_outerShadowOffsetY;
+    public int getEffectPadContentStyleable() {
+        return R.styleable.ShapeEditText_shape_effectPadContent;
     }
 
     @Override
@@ -379,48 +406,6 @@ public final class ShapeEditTextStyleable implements IShapeDrawableStyleable, IT
     @Override
     public int getLineGravityStyleable() {
         return R.styleable.ShapeEditText_shape_lineGravity;
-    }
-
-    // Primary Inner Shadow
-    @Override
-    public int getInnerShadowSizeStyleable() {
-        return R.styleable.ShapeEditText_shape_innerShadowSize;
-    }
-
-    @Override
-    public int getInnerShadowColorStyleable() {
-        return R.styleable.ShapeEditText_shape_innerShadowColor;
-    }
-
-    @Override
-    public int getInnerShadowOffsetXStyleable() {
-        return R.styleable.ShapeEditText_shape_innerShadowOffsetX;
-    }
-
-    @Override
-    public int getInnerShadowOffsetYStyleable() {
-        return R.styleable.ShapeEditText_shape_innerShadowOffsetY;
-    }
-
-    // Secondary Inner Shadow
-    @Override
-    public int getInnerShadow2SizeStyleable() {
-        return R.styleable.ShapeEditText_shape_innerShadow2Size;
-    }
-
-    @Override
-    public int getInnerShadow2ColorStyleable() {
-        return R.styleable.ShapeEditText_shape_innerShadow2Color;
-    }
-
-    @Override
-    public int getInnerShadow2OffsetXStyleable() {
-        return R.styleable.ShapeEditText_shape_innerShadow2OffsetX;
-    }
-
-    @Override
-    public int getInnerShadow2OffsetYStyleable() {
-        return R.styleable.ShapeEditText_shape_innerShadow2OffsetY;
     }
 
     /**

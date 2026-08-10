@@ -14,10 +14,7 @@ import com.genesys.shape.config.ITextViewAttribute;
 import com.genesys.shape.other.TextViewAttribute;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2022/05/04
- *    desc   : Stroke Font Span
+ * Stroke Font Span
  */
 public class StrokeFontSpan extends CommonFontSpan {
 

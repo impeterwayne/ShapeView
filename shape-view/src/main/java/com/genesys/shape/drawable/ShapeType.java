@@ -1,10 +1,7 @@
 package com.genesys.shape.drawable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeDrawable
- *    time   : 2021/08/15
- *    desc   : Shape Type
+ * Shape Type
  */
 public final class ShapeType {
 

@@ -19,10 +19,7 @@ import com.genesys.shape.config.IGetTextColorBuilder;
 import com.genesys.shape.styleable.ShapeCheckBoxStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/07/17
- *    desc   : CheckBox that supports direct definition of Shape background
+ * CheckBox that supports direct definition of Shape background
  */
 public class ShapeCheckBox extends AppCompatCheckBox implements
         IGetShapeDrawableBuilder, IGetTextColorBuilder, IGetButtonDrawableBuilder {

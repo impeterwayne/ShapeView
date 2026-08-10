@@ -5,10 +5,6 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * Shape Type Assignment Limitation
- */
-@IntDef({ShapeType.RECTANGLE, ShapeType.OVAL,
-        ShapeType.LINE, ShapeType.RING})
+@IntDef({ShapeEffectType.DROP_SHADOW, ShapeEffectType.INNER_SHADOW})
 @Retention(RetentionPolicy.SOURCE)
-public @interface ShapeTypeLimit {}
+public @interface ShapeEffectTypeLimit {}

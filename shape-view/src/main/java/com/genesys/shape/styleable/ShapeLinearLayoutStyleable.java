@@ -4,12 +4,49 @@ import com.genesys.shape.R;
 import com.genesys.shape.config.IShapeDrawableStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/08/28
- *    desc   : LinearLayout's Shape attribute values
+ * LinearLayout's Shape attribute values
  */
 public final class ShapeLinearLayoutStyleable implements IShapeDrawableStyleable {
+
+    /** {@link IShapeDrawableStyleable#getEffectStyleables()} */
+    private static final int[][] EFFECT_STYLEABLES = {
+        {
+            R.styleable.ShapeLinearLayout_shape_effect1Type,
+            R.styleable.ShapeLinearLayout_shape_effect1Color,
+            R.styleable.ShapeLinearLayout_shape_effect1Blur,
+            R.styleable.ShapeLinearLayout_shape_effect1Spread,
+            R.styleable.ShapeLinearLayout_shape_effect1OffsetX,
+            R.styleable.ShapeLinearLayout_shape_effect1OffsetY,
+            R.styleable.ShapeLinearLayout_shape_effect1Edges,
+        },
+        {
+            R.styleable.ShapeLinearLayout_shape_effect2Type,
+            R.styleable.ShapeLinearLayout_shape_effect2Color,
+            R.styleable.ShapeLinearLayout_shape_effect2Blur,
+            R.styleable.ShapeLinearLayout_shape_effect2Spread,
+            R.styleable.ShapeLinearLayout_shape_effect2OffsetX,
+            R.styleable.ShapeLinearLayout_shape_effect2OffsetY,
+            R.styleable.ShapeLinearLayout_shape_effect2Edges,
+        },
+        {
+            R.styleable.ShapeLinearLayout_shape_effect3Type,
+            R.styleable.ShapeLinearLayout_shape_effect3Color,
+            R.styleable.ShapeLinearLayout_shape_effect3Blur,
+            R.styleable.ShapeLinearLayout_shape_effect3Spread,
+            R.styleable.ShapeLinearLayout_shape_effect3OffsetX,
+            R.styleable.ShapeLinearLayout_shape_effect3OffsetY,
+            R.styleable.ShapeLinearLayout_shape_effect3Edges,
+        },
+        {
+            R.styleable.ShapeLinearLayout_shape_effect4Type,
+            R.styleable.ShapeLinearLayout_shape_effect4Color,
+            R.styleable.ShapeLinearLayout_shape_effect4Blur,
+            R.styleable.ShapeLinearLayout_shape_effect4Spread,
+            R.styleable.ShapeLinearLayout_shape_effect4OffsetX,
+            R.styleable.ShapeLinearLayout_shape_effect4OffsetY,
+            R.styleable.ShapeLinearLayout_shape_effect4Edges,
+        },
+    };
 
     /**
      * {@link IShapeDrawableStyleable}
@@ -336,23 +373,13 @@ public final class ShapeLinearLayoutStyleable implements IShapeDrawableStyleable
     }
 
     @Override
-    public int getOuterShadowSizeStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_outerShadowSize;
+    public int[][] getEffectStyleables() {
+        return EFFECT_STYLEABLES;
     }
 
     @Override
-    public int getOuterShadowColorStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_outerShadowColor;
-    }
-
-    @Override
-    public int getOuterShadowOffsetXStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_outerShadowOffsetX;
-    }
-
-    @Override
-    public int getOuterShadowOffsetYStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_outerShadowOffsetY;
+    public int getEffectPadContentStyleable() {
+        return R.styleable.ShapeLinearLayout_shape_effectPadContent;
     }
 
     @Override
@@ -380,45 +407,4 @@ public final class ShapeLinearLayoutStyleable implements IShapeDrawableStyleable
         return R.styleable.ShapeLinearLayout_shape_lineGravity;
     }
 
-    // Primary Inner Shadow
-    @Override
-    public int getInnerShadowSizeStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_innerShadowSize;
-    }
-
-    @Override
-    public int getInnerShadowColorStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_innerShadowColor;
-    }
-
-    @Override
-    public int getInnerShadowOffsetXStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_innerShadowOffsetX;
-    }
-
-    @Override
-    public int getInnerShadowOffsetYStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_innerShadowOffsetY;
-    }
-
-    // Secondary Inner Shadow
-    @Override
-    public int getInnerShadow2SizeStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_innerShadow2Size;
-    }
-
-    @Override
-    public int getInnerShadow2ColorStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_innerShadow2Color;
-    }
-
-    @Override
-    public int getInnerShadow2OffsetXStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_innerShadow2OffsetX;
-    }
-
-    @Override
-    public int getInnerShadow2OffsetYStyleable() {
-        return R.styleable.ShapeLinearLayout_shape_innerShadow2OffsetY;
-    }
 }

@@ -12,10 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2022/05/04
- *    desc   : Support defining multiple types of AlignmentReplacementSpan
+ * Support defining multiple types of AlignmentReplacementSpan
  */
 public class MultiFontSpan extends AlignmentReplacementSpan {
 

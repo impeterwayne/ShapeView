@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.View;
@@ -15,8 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.genesys.shape.config.IShapeDrawableStyleable;
-import com.genesys.shape.drawable.InnerShadow;
 import com.genesys.shape.drawable.ShapeDrawable;
+import com.genesys.shape.drawable.ShapeEffect;
+import com.genesys.shape.drawable.ShapeEffectType;
 import com.genesys.shape.drawable.ShapeGradientOrientation;
 import com.genesys.shape.drawable.ShapeGradientType;
 import com.genesys.shape.drawable.ShapeGradientTypeLimit;
@@ -24,11 +26,12 @@ import com.genesys.shape.drawable.ShapeType;
 import com.genesys.shape.drawable.ShapeTypeLimit;
 import com.genesys.shape.other.ExtendStateListDrawable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/08/28
- *    desc   : ShapeDrawable Builder class
+ * ShapeDrawable Builder class
  */
 public final class ShapeDrawableBuilder {
 
@@ -130,11 +133,14 @@ public final class ShapeDrawableBuilder {
     private int mStrokeDashSize;
     private int mStrokeDashGap;
 
-    private int mOuterShadowSize;
-    private int mOuterShadowColor;
-    private ColorStateList mOuterShadowColorStateList;
-    private int mOuterShadowOffsetX;
-    private int mOuterShadowOffsetY;
+    /** Drop and inner shadows, in the order they are painted. */
+    private final List<ShapeEffect> mEffects = new ArrayList<>();
+    private boolean mEffectPadContent = true;
+    /**
+     * Padding this builder has already added on the drop shadows' behalf, so that re-applying
+     * is idempotent instead of stacking a second inset on top of the first.
+     */
+    private final Rect mAppliedShadowPadding = new Rect();
 
     private int mRingInnerRadiusSize;
     private float mRingInnerRadiusRatio;
@@ -142,20 +148,6 @@ public final class ShapeDrawableBuilder {
     private float mRingThicknessRatio;
 
     private int mLineGravity;
-
-    // Primary Inner Shadow
-    private int mInnerShadowSize;
-    private int mInnerShadowColor;
-    private ColorStateList mInnerShadowColorStateList;
-    private int mInnerShadowOffsetX;
-    private int mInnerShadowOffsetY;
-
-    // Secondary Inner Shadow (for bevel effects)
-    private int mInnerShadow2Size;
-    private int mInnerShadow2Color;
-    private ColorStateList mInnerShadow2ColorStateList;
-    private int mInnerShadow2OffsetX;
-    private int mInnerShadow2OffsetY;
 
     public ShapeDrawableBuilder(View view, TypedArray typedArray, IShapeDrawableStyleable styleable) {
         mView = view;
@@ -177,7 +169,7 @@ public final class ShapeDrawableBuilder {
         if (typedArray.hasValue(styleable.getSolidPressedColorStyleable())) {
             mSolidPressedColor = typedArray.getColor(styleable.getSolidPressedColorStyleable(), NO_COLOR);
         }
-        if (styleable.getSolidCheckedColorStyleable() > 0 && typedArray.hasValue(styleable.getSolidCheckedColorStyleable())) {
+        if (styleable.getSolidCheckedColorStyleable() >= 0 && typedArray.hasValue(styleable.getSolidCheckedColorStyleable())) {
             mSolidCheckedColor = typedArray.getColor(styleable.getSolidCheckedColorStyleable(), NO_COLOR);
         }
         if (typedArray.hasValue(styleable.getSolidDisabledColorStyleable())) {
@@ -304,65 +296,65 @@ public final class ShapeDrawableBuilder {
             }
         }
         // The explicit size/ratio attributes take precedence over the deprecated one
-        if (styleable.getSolidGradientRadiusSizeStyleable() > 0 &&
+        if (styleable.getSolidGradientRadiusSizeStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientRadiusSizeStyleable())) {
             mSolidGradientRadius = typedArray.getDimensionPixelSize(styleable.getSolidGradientRadiusSizeStyleable(), 0);
             mSolidGradientRadiusInPx = true;
         }
-        if (styleable.getSolidGradientRadiusRatioStyleable() > 0 &&
+        if (styleable.getSolidGradientRadiusRatioStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientRadiusRatioStyleable())) {
             mSolidGradientRadius = getFloatOrFraction(typedArray, styleable.getSolidGradientRadiusRatioStyleable(), 0.5f);
             mSolidGradientRadiusInPx = false;
         }
 
         // Parse radial gradient ellipse and angle attributes
-        if (styleable.getSolidGradientRadiusXStyleable() > 0 &&
+        if (styleable.getSolidGradientRadiusXStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientRadiusXStyleable())) {
             mGradientRadiusX = typedArray.getFloat(styleable.getSolidGradientRadiusXStyleable(), -1f);
         }
-        if (styleable.getSolidGradientRadiusYStyleable() > 0 &&
+        if (styleable.getSolidGradientRadiusYStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientRadiusYStyleable())) {
             mGradientRadiusY = typedArray.getFloat(styleable.getSolidGradientRadiusYStyleable(), -1f);
         }
-        if (styleable.getSolidRadialAngleStyleable() > 0 &&
+        if (styleable.getSolidRadialAngleStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidRadialAngleStyleable())) {
             mRadialGradientAngle = typedArray.getFloat(styleable.getSolidRadialAngleStyleable(), 0f);
         }
 
         // Parse gradient color stop position attributes (Figma compatibility)
-        if (styleable.getSolidGradientStartPercentStyleable() > 0 &&
+        if (styleable.getSolidGradientStartPercentStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientStartPercentStyleable())) {
             mGradientStartPercent = typedArray.getFloat(styleable.getSolidGradientStartPercentStyleable(), 0f);
             mHasCustomGradientPositions = true;
         }
-        if (styleable.getSolidGradientCenterPercentStyleable() > 0 &&
+        if (styleable.getSolidGradientCenterPercentStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientCenterPercentStyleable())) {
             mGradientCenterPercent = typedArray.getFloat(styleable.getSolidGradientCenterPercentStyleable(), 0.5f);
             mHasCustomGradientPositions = true;
         }
-        if (styleable.getSolidGradientEndPercentStyleable() > 0 &&
+        if (styleable.getSolidGradientEndPercentStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientEndPercentStyleable())) {
             mGradientEndPercent = typedArray.getFloat(styleable.getSolidGradientEndPercentStyleable(), 1f);
             mHasCustomGradientPositions = true;
         }
 
         // Parse linear gradient extent positions (Figma compatibility)
-        if (styleable.getSolidGradientStartXStyleable() > 0 &&
+        if (styleable.getSolidGradientStartXStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientStartXStyleable())) {
             mLinearGradientStartX = typedArray.getFloat(styleable.getSolidGradientStartXStyleable(), 0.5f);
             mHasCustomLinearExtent = true;
         }
-        if (styleable.getSolidGradientStartYStyleable() > 0 &&
+        if (styleable.getSolidGradientStartYStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientStartYStyleable())) {
             mLinearGradientStartY = typedArray.getFloat(styleable.getSolidGradientStartYStyleable(), 0f);
             mHasCustomLinearExtent = true;
         }
-        if (styleable.getSolidGradientEndXStyleable() > 0 &&
+        if (styleable.getSolidGradientEndXStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientEndXStyleable())) {
             mLinearGradientEndX = typedArray.getFloat(styleable.getSolidGradientEndXStyleable(), 0.5f);
             mHasCustomLinearExtent = true;
         }
-        if (styleable.getSolidGradientEndYStyleable() > 0 &&
+        if (styleable.getSolidGradientEndYStyleable() >= 0 &&
             typedArray.hasValue(styleable.getSolidGradientEndYStyleable())) {
             mLinearGradientEndY = typedArray.getFloat(styleable.getSolidGradientEndYStyleable(), 1f);
             mHasCustomLinearExtent = true;
@@ -381,7 +373,7 @@ public final class ShapeDrawableBuilder {
         if (typedArray.hasValue(styleable.getStrokePressedColorStyleable())) {
             mStrokePressedColor = typedArray.getColor(styleable.getStrokePressedColorStyleable(), NO_COLOR);
         }
-        if (styleable.getStrokeCheckedColorStyleable() > 0 && typedArray.hasValue(styleable.getStrokeCheckedColorStyleable())) {
+        if (styleable.getStrokeCheckedColorStyleable() >= 0 && typedArray.hasValue(styleable.getStrokeCheckedColorStyleable())) {
             mStrokeCheckedColor = typedArray.getColor(styleable.getStrokeCheckedColorStyleable(), NO_COLOR);
         }
         if (typedArray.hasValue(styleable.getStrokeDisabledColorStyleable())) {
@@ -432,65 +424,65 @@ public final class ShapeDrawableBuilder {
         mStrokeGradientCenterY = getFloat(typedArray, styleable.getStrokeGradientCenterYStyleable(), 0.5f);
 
         mStrokeGradientRadius = 0.5f;
-        if (styleable.getStrokeGradientRadiusSizeStyleable() > 0 &&
+        if (styleable.getStrokeGradientRadiusSizeStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientRadiusSizeStyleable())) {
             mStrokeGradientRadius = typedArray.getDimensionPixelSize(styleable.getStrokeGradientRadiusSizeStyleable(), 0);
             mStrokeGradientRadiusInPx = true;
         }
-        if (styleable.getStrokeGradientRadiusRatioStyleable() > 0 &&
+        if (styleable.getStrokeGradientRadiusRatioStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientRadiusRatioStyleable())) {
             mStrokeGradientRadius = getFloatOrFraction(typedArray, styleable.getStrokeGradientRadiusRatioStyleable(), 0.5f);
             mStrokeGradientRadiusInPx = false;
         }
 
         // Parse stroke radial gradient ellipse and angle attributes
-        if (styleable.getStrokeGradientRadiusXStyleable() > 0 &&
+        if (styleable.getStrokeGradientRadiusXStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientRadiusXStyleable())) {
             mStrokeGradientRadiusX = typedArray.getFloat(styleable.getStrokeGradientRadiusXStyleable(), -1f);
         }
-        if (styleable.getStrokeGradientRadiusYStyleable() > 0 &&
+        if (styleable.getStrokeGradientRadiusYStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientRadiusYStyleable())) {
             mStrokeGradientRadiusY = typedArray.getFloat(styleable.getStrokeGradientRadiusYStyleable(), -1f);
         }
-        if (styleable.getStrokeRadialAngleStyleable() > 0 &&
+        if (styleable.getStrokeRadialAngleStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeRadialAngleStyleable())) {
             mStrokeRadialAngle = typedArray.getFloat(styleable.getStrokeRadialAngleStyleable(), 0f);
         }
 
         // Parse stroke gradient color stop position attributes (Figma compatibility)
-        if (styleable.getStrokeGradientStartPercentStyleable() > 0 &&
+        if (styleable.getStrokeGradientStartPercentStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientStartPercentStyleable())) {
             mStrokeGradientStartPercent = typedArray.getFloat(styleable.getStrokeGradientStartPercentStyleable(), 0f);
             mHasCustomStrokeGradientPositions = true;
         }
-        if (styleable.getStrokeGradientCenterPercentStyleable() > 0 &&
+        if (styleable.getStrokeGradientCenterPercentStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientCenterPercentStyleable())) {
             mStrokeGradientCenterPercent = typedArray.getFloat(styleable.getStrokeGradientCenterPercentStyleable(), 0.5f);
             mHasCustomStrokeGradientPositions = true;
         }
-        if (styleable.getStrokeGradientEndPercentStyleable() > 0 &&
+        if (styleable.getStrokeGradientEndPercentStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientEndPercentStyleable())) {
             mStrokeGradientEndPercent = typedArray.getFloat(styleable.getStrokeGradientEndPercentStyleable(), 1f);
             mHasCustomStrokeGradientPositions = true;
         }
 
         // Parse stroke linear gradient extent positions (Figma compatibility)
-        if (styleable.getStrokeGradientStartXStyleable() > 0 &&
+        if (styleable.getStrokeGradientStartXStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientStartXStyleable())) {
             mStrokeLinearGradientStartX = typedArray.getFloat(styleable.getStrokeGradientStartXStyleable(), 0.5f);
             mHasCustomStrokeLinearExtent = true;
         }
-        if (styleable.getStrokeGradientStartYStyleable() > 0 &&
+        if (styleable.getStrokeGradientStartYStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientStartYStyleable())) {
             mStrokeLinearGradientStartY = typedArray.getFloat(styleable.getStrokeGradientStartYStyleable(), 0f);
             mHasCustomStrokeLinearExtent = true;
         }
-        if (styleable.getStrokeGradientEndXStyleable() > 0 &&
+        if (styleable.getStrokeGradientEndXStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientEndXStyleable())) {
             mStrokeLinearGradientEndX = typedArray.getFloat(styleable.getStrokeGradientEndXStyleable(), 0.5f);
             mHasCustomStrokeLinearExtent = true;
         }
-        if (styleable.getStrokeGradientEndYStyleable() > 0 &&
+        if (styleable.getStrokeGradientEndYStyleable() >= 0 &&
             typedArray.hasValue(styleable.getStrokeGradientEndYStyleable())) {
             mStrokeLinearGradientEndY = typedArray.getFloat(styleable.getStrokeGradientEndYStyleable(), 1f);
             mHasCustomStrokeLinearExtent = true;
@@ -500,20 +492,9 @@ public final class ShapeDrawableBuilder {
         mStrokeDashSize = typedArray.getDimensionPixelSize(styleable.getStrokeDashSizeStyleable(), 0);
         mStrokeDashGap = typedArray.getDimensionPixelSize(styleable.getStrokeDashGapStyleable(), 0);
 
-        mOuterShadowSize = typedArray.getDimensionPixelSize(styleable.getOuterShadowSizeStyleable(), 0);
-        
-        if (typedArray.hasValue(styleable.getOuterShadowColorStyleable())) {
-            mOuterShadowColorStateList = typedArray.getColorStateList(styleable.getOuterShadowColorStyleable());
-            if (mOuterShadowColorStateList != null) {
-                mOuterShadowColor = mOuterShadowColorStateList.getDefaultColor();
-            } else {
-                mOuterShadowColor = typedArray.getColor(styleable.getOuterShadowColorStyleable(), 0x10000000);
-            }
-        } else {
-            mOuterShadowColor = 0x10000000;
-        }
-        mOuterShadowOffsetX = typedArray.getDimensionPixelOffset(styleable.getOuterShadowOffsetXStyleable(), 0);
-        mOuterShadowOffsetY = typedArray.getDimensionPixelOffset(styleable.getOuterShadowOffsetYStyleable(), 0);
+        mEffectPadContent = styleable.getEffectPadContentStyleable() < 0
+                || typedArray.getBoolean(styleable.getEffectPadContentStyleable(), true);
+        parseEffects(typedArray, styleable);
 
         mRingInnerRadiusSize = typedArray.getDimensionPixelOffset(styleable.getRingInnerRadiusSizeStyleable(), -1);
         mRingInnerRadiusRatio = typedArray.getFloat(styleable.getRingInnerRadiusRatioStyleable(), 3.0f);
@@ -521,47 +502,48 @@ public final class ShapeDrawableBuilder {
         mRingThicknessRatio = typedArray.getFloat(styleable.getRingThicknessRatioStyleable(), 9.0f);
 
         mLineGravity = typedArray.getInt(styleable.getLineGravityStyleable(), Gravity.CENTER);
+    }
 
-        // Primary Inner Shadow attributes
-        if (styleable.getInnerShadowSizeStyleable() > 0 || styleable.getInnerShadowColorStyleable() > 0) {
-             if (typedArray.hasValue(styleable.getInnerShadowSizeStyleable())) {
-                mInnerShadowSize = typedArray.getDimensionPixelSize(styleable.getInnerShadowSizeStyleable(), 0);
-             }
-             if (typedArray.hasValue(styleable.getInnerShadowColorStyleable())) {
-                 mInnerShadowColorStateList = typedArray.getColorStateList(styleable.getInnerShadowColorStyleable());
-                 if (mInnerShadowColorStateList != null) {
-                     mInnerShadowColor = mInnerShadowColorStateList.getDefaultColor();
-                 } else {
-                     mInnerShadowColor = typedArray.getColor(styleable.getInnerShadowColorStyleable(), 0);
-                 }
-             }
-             if (typedArray.hasValue(styleable.getInnerShadowOffsetXStyleable())) {
-                mInnerShadowOffsetX = typedArray.getDimensionPixelOffset(styleable.getInnerShadowOffsetXStyleable(), 0);
-             }
-             if (typedArray.hasValue(styleable.getInnerShadowOffsetYStyleable())) {
-                mInnerShadowOffsetY = typedArray.getDimensionPixelOffset(styleable.getInnerShadowOffsetYStyleable(), 0);
-             }
+    /**
+     * Read the numbered effect slots — {@code shape_effect1*}, {@code shape_effect2*} and so
+     * on — into the effect list, keeping the slot order the layout wrote them in.
+     *
+     * A slot that declares no geometry contributes nothing, so a layout only pays for the
+     * effects it actually asks for.
+     */
+    private void parseEffects(TypedArray typedArray, IShapeDrawableStyleable styleable) {
+        final int[][] slots = styleable.getEffectStyleables();
+        if (slots == null) {
+            return;
         }
+        for (int[] slot : slots) {
+            if (slot == null || slot.length < IShapeDrawableStyleable.EFFECT_ATTR_COUNT) {
+                continue;
+            }
+            ShapeEffect effect = new ShapeEffect();
+            effect.type = getInt(typedArray, slot[IShapeDrawableStyleable.EFFECT_TYPE],
+                    ShapeEffectType.DROP_SHADOW);
+            effect.blur = getDimensionPixelSize(typedArray, slot[IShapeDrawableStyleable.EFFECT_BLUR], 0);
+            // getDimensionPixelOffset truncates rather than rounding, which keeps a negative
+            // spread (a shadow tucked in behind the shape) on the value that was written.
+            effect.spread = getDimensionPixelOffset(typedArray, slot[IShapeDrawableStyleable.EFFECT_SPREAD], 0);
+            effect.offsetX = getDimensionPixelOffset(typedArray, slot[IShapeDrawableStyleable.EFFECT_OFFSET_X], 0);
+            effect.offsetY = getDimensionPixelOffset(typedArray, slot[IShapeDrawableStyleable.EFFECT_OFFSET_Y], 0);
+            effect.edges = getInt(typedArray, slot[IShapeDrawableStyleable.EFFECT_EDGES], ShapeEffect.EDGE_ALL);
 
-        // Secondary Inner Shadow attributes
-        if (styleable.getInnerShadow2SizeStyleable() > 0 || styleable.getInnerShadow2ColorStyleable() > 0) {
-             if (typedArray.hasValue(styleable.getInnerShadow2SizeStyleable())) {
-                mInnerShadow2Size = typedArray.getDimensionPixelSize(styleable.getInnerShadow2SizeStyleable(), 0);
-             }
-             if (typedArray.hasValue(styleable.getInnerShadow2ColorStyleable())) {
-                 mInnerShadow2ColorStateList = typedArray.getColorStateList(styleable.getInnerShadow2ColorStyleable());
-                 if (mInnerShadow2ColorStateList != null) {
-                     mInnerShadow2Color = mInnerShadow2ColorStateList.getDefaultColor();
-                 } else {
-                     mInnerShadow2Color = typedArray.getColor(styleable.getInnerShadow2ColorStyleable(), 0);
-                 }
-             }
-             if (typedArray.hasValue(styleable.getInnerShadow2OffsetXStyleable())) {
-                mInnerShadow2OffsetX = typedArray.getDimensionPixelOffset(styleable.getInnerShadow2OffsetXStyleable(), 0);
-             }
-             if (typedArray.hasValue(styleable.getInnerShadow2OffsetYStyleable())) {
-                mInnerShadow2OffsetY = typedArray.getDimensionPixelOffset(styleable.getInnerShadow2OffsetYStyleable(), 0);
-             }
+            final int colorStyleable = slot[IShapeDrawableStyleable.EFFECT_COLOR];
+            if (colorStyleable >= 0 && typedArray.hasValue(colorStyleable)) {
+                ColorStateList colorStateList = typedArray.getColorStateList(colorStyleable);
+                if (colorStateList != null) {
+                    effect.setColor(colorStateList);
+                } else {
+                    effect.color = typedArray.getColor(colorStyleable, ShapeEffect.DEFAULT_COLOR);
+                }
+            }
+
+            if (effect.isEnabled()) {
+                mEffects.add(effect);
+            }
         }
     }
 
@@ -1286,135 +1268,96 @@ public final class ShapeDrawableBuilder {
         return mRingThicknessRatio;
     }
 
-    public boolean isOuterShadowEnable() {
-        return mOuterShadowSize > 0;
+    // ===== Effects =====
+
+    /**
+     * True when at least one effect would actually paint something.
+     */
+    public boolean isEffectEnable() {
+        for (int i = 0; i < mEffects.size(); i++) {
+            if (mEffects.get(i).isEnabled()) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public ShapeDrawableBuilder setOuterShadowSize(int size) {
-        mOuterShadowSize = size;
+    /**
+     * The effects this builder will apply, in paint order. The list is read-only; reach for
+     * {@link #addEffect}, {@link #setEffects} or {@link #clearEffects} to change it.
+     */
+    @NonNull
+    public List<ShapeEffect> getEffects() {
+        return Collections.unmodifiableList(mEffects);
+    }
+
+    /**
+     * Replace the effect stack. Effects are painted in list order — drop shadows behind the
+     * shape, inner shadows over it.
+     *
+     * @param effects Effects to apply, each copied on the way in
+     */
+    public ShapeDrawableBuilder setEffects(List<ShapeEffect> effects) {
+        mEffects.clear();
+        if (effects != null) {
+            for (int i = 0; i < effects.size(); i++) {
+                ShapeEffect effect = effects.get(i);
+                if (effect != null) {
+                    mEffects.add(effect.copy());
+                }
+            }
+        }
         return this;
     }
 
-    public int getOuterShadowSize() {
-        return mOuterShadowSize;
+    /**
+     * Replace the effect stack with a single effect.
+     */
+    public ShapeDrawableBuilder setEffect(ShapeEffect effect) {
+        mEffects.clear();
+        return addEffect(effect);
     }
 
-    public ShapeDrawableBuilder setOuterShadowColor(int color) {
-        mOuterShadowColor = color;
+    /**
+     * Add an effect on top of the ones already set — a second drop shadow for an elevation
+     * ramp, or a light inner shadow over a dark one for a bevel.
+     *
+     * @param effect Effect configuration, copied on the way in
+     */
+    public ShapeDrawableBuilder addEffect(ShapeEffect effect) {
+        if (effect != null) {
+            mEffects.add(effect.copy());
+        }
         return this;
     }
 
-    public int getOuterShadowColor() {
-        return mOuterShadowColor;
-    }
-
-    public ShapeDrawableBuilder setOuterShadowOffsetX(int offsetX) {
-        mOuterShadowOffsetX = offsetX;
+    public ShapeDrawableBuilder clearEffects() {
+        mEffects.clear();
         return this;
     }
 
-    public int getOuterShadowOffsetX() {
-        return mOuterShadowOffsetX;
-    }
-
-    public ShapeDrawableBuilder setOuterShadowOffsetY(int offsetY) {
-        mOuterShadowOffsetY = offsetY;
+    /**
+     * Whether the room the drop shadows take is also added to the view's padding, so content
+     * stays inside the visible shape.
+     */
+    public ShapeDrawableBuilder setEffectPadContent(boolean padContent) {
+        mEffectPadContent = padContent;
         return this;
     }
 
-    public int getOuterShadowOffsetY() {
-        return mOuterShadowOffsetY;
+    public boolean isEffectPadContent() {
+        return mEffectPadContent;
     }
 
-    public int getLineGravity() {
-        return mLineGravity;
-    }
-
-    public ShapeDrawableBuilder setLineGravity(int gravity) {
-        mLineGravity = gravity;
-        return this;
-    }
-
-    // Primary Inner Shadow methods
-    public boolean hasInnerShadow() {
-        return mInnerShadowSize > 0;
-    }
-
-    public int getInnerShadowSize() {
-        return mInnerShadowSize;
-    }
-
-    public ShapeDrawableBuilder setInnerShadowSize(int size) {
-        mInnerShadowSize = size;
-        return this;
-    }
-
-    public int getInnerShadowColor() {
-        return mInnerShadowColor;
-    }
-
-    public ShapeDrawableBuilder setInnerShadowColor(int color) {
-        mInnerShadowColor = color;
-        return this;
-    }
-
-    public int getInnerShadowOffsetX() {
-        return mInnerShadowOffsetX;
-    }
-
-    public ShapeDrawableBuilder setInnerShadowOffsetX(int offsetX) {
-        mInnerShadowOffsetX = offsetX;
-        return this;
-    }
-
-    public int getInnerShadowOffsetY() {
-        return mInnerShadowOffsetY;
-    }
-
-    public ShapeDrawableBuilder setInnerShadowOffsetY(int offsetY) {
-        mInnerShadowOffsetY = offsetY;
-        return this;
-    }
-
-    // Secondary Inner Shadow methods
-    public boolean hasInnerShadow2() {
-        return mInnerShadow2Size > 0;
-    }
-
-    public int getInnerShadow2Size() {
-        return mInnerShadow2Size;
-    }
-
-    public ShapeDrawableBuilder setInnerShadow2Size(int size) {
-        mInnerShadow2Size = size;
-        return this;
-    }
-
-    public int getInnerShadow2Color() {
-        return mInnerShadow2Color;
-    }
-
-    public ShapeDrawableBuilder setInnerShadow2Color(int color) {
-        mInnerShadow2Color = color;
-        return this;
-    }
-
-    public int getInnerShadow2OffsetX() {
-        return mInnerShadow2OffsetX;
-    }
-
-    public ShapeDrawableBuilder setInnerShadow2OffsetX(int offsetX) {
-        mInnerShadow2OffsetX = offsetX;
-        return this;
-    }
-
-    public int getInnerShadow2OffsetY() {
-        return mInnerShadow2OffsetY;
-    }
-
-    public ShapeDrawableBuilder setInnerShadow2OffsetY(int offsetY) {
-        mInnerShadow2OffsetY = offsetY;
-        return this;
+    /**
+     * Room the drop shadows take out of the view on each edge: the most any one of them asks
+     * for. The shape is drawn inside these insets, so anything laying content over this
+     * drawable has to inset by the same amount to stay within the visible shape.
+     */
+    public Rect getShadowInsets() {
+        Rect insets = new Rect();
+        ShapeEffect.computeInsets(insets, mEffects);
+        return insets;
     }
 
     @Nullable
@@ -1603,37 +1546,8 @@ public final class ShapeDrawableBuilder {
             }
         }
 
-        drawable.setOuterShadowSize(mOuterShadowSize)
-                .setOuterShadowColor(mOuterShadowColor)
-                .setOuterShadowColor(mOuterShadowColorStateList) // Set CSL
-                .setOuterShadowOffsetX(mOuterShadowOffsetX)
-                .setOuterShadowOffsetY(mOuterShadowOffsetY);
-
-        // Apply primary inner shadow if configured
-        if (hasInnerShadow()) {
-            if (mInnerShadowColorStateList != null) {
-                drawable.addInnerShadow(new InnerShadow(
-                    mInnerShadowColorStateList, mInnerShadowSize,
-                    mInnerShadowOffsetX, mInnerShadowOffsetY, 0f)); // Assuming spread is 0 or needed
-            } else {
-                drawable.addInnerShadow(new InnerShadow(
-                    mInnerShadowColor, mInnerShadowSize,
-                    mInnerShadowOffsetX, mInnerShadowOffsetY));
-            }
-        }
-
-        // Apply secondary inner shadow if configured
-        if (hasInnerShadow2()) {
-             if (mInnerShadow2ColorStateList != null) {
-                drawable.addInnerShadow(new InnerShadow(
-                    mInnerShadow2ColorStateList, mInnerShadow2Size,
-                    mInnerShadow2OffsetX, mInnerShadow2OffsetY, 0f));
-             } else {
-                drawable.addInnerShadow(new InnerShadow(
-                    mInnerShadow2Color, mInnerShadow2Size,
-                    mInnerShadow2OffsetX, mInnerShadow2OffsetY));
-             }
-        }
+        // Painted in the order they were declared, so a later effect layers over an earlier one.
+        drawable.setEffects(mEffects);
 
         if (mRingInnerRadiusRatio > 0) {
             drawable.setRingInnerRadiusRatio(mRingInnerRadiusRatio);
@@ -1683,16 +1597,42 @@ public final class ShapeDrawableBuilder {
     public void intoBackground() {
         // The obtained Drawable may be null
         Drawable drawable = buildBackgroundDrawable();
-        if (isStrokeDashLineEnable() || isOuterShadowEnable() || hasInnerShadow() || hasInnerShadow2()) {
-            // Hardware acceleration needs to be disabled, otherwise dashed lines, shadows,
-            // or BlurMaskFilter (used by inner shadows) may not take effect on some phones
-            // and can cause native SIGSEGV crashes in libhwui's RenderThread.
+        if (isStrokeDashLineEnable()) {
+            // Hardware acceleration needs to be disabled, otherwise dashed lines may not
+            // take effect on some phones and can cause native SIGSEGV crashes in libhwui's
+            // RenderThread.
             // https://developer.android.com/guide/topics/graphics/hardware-accel?hl=zh-cn
+            // Neither shadow is in this list on purpose: both rasterize their blur into a
+            // bitmap of their own, so they can stay on the GPU.
             mView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         if (drawable != null) {
             mView.setBackground(drawable);
         }
+        applyShadowPadding();
+    }
+
+    /**
+     * Push the view's content inside the room the shadow claimed.
+     *
+     * The shadow is painted within the view's bounds, which means the shape is drawn smaller
+     * than the view. Without this the view's content would still be laid out to the full
+     * bounds and would spill over the visible shape's edge — most obviously at a large corner
+     * radius. Runs after {@code setBackground} because setting a background can itself rewrite
+     * padding.
+     */
+    private void applyShadowPadding() {
+        Rect insets = mEffectPadContent ? getShadowInsets() : new Rect();
+        if (insets.equals(mAppliedShadowPadding)) {
+            return;
+        }
+        // Subtract what was added last time, so calling this repeatedly settles on one inset.
+        mView.setPadding(
+                mView.getPaddingLeft() - mAppliedShadowPadding.left + insets.left,
+                mView.getPaddingTop() - mAppliedShadowPadding.top + insets.top,
+                mView.getPaddingRight() - mAppliedShadowPadding.right + insets.right,
+                mView.getPaddingBottom() - mAppliedShadowPadding.bottom + insets.bottom);
+        mAppliedShadowPadding.set(insets);
     }
 
     public Drawable getDrawable() {
@@ -1718,14 +1658,40 @@ public final class ShapeDrawableBuilder {
         mStrokeFocusedColor = null;
         mStrokeSelectedColor = null;
 
+        mEffects.clear();
+
         mView.setBackground(null);
+        // Hand back the padding the drop shadows were holding.
+        applyShadowPadding();
     }
 
     /**
-     * Read an int attribute, tolerating styleables that don't declare it (index 0)
+     * Read a dimension attribute (rounded, never negative), tolerating styleables that
+     * don't declare it (index -1)
+     */
+    private static int getDimensionPixelSize(TypedArray typedArray, int styleableIndex, int defValue) {
+        if (styleableIndex < 0 || !typedArray.hasValue(styleableIndex)) {
+            return defValue;
+        }
+        return typedArray.getDimensionPixelSize(styleableIndex, defValue);
+    }
+
+    /**
+     * Read a dimension attribute that may be negative — an offset, or a spread that tucks the
+     * shadow in. Truncates rather than rounding, which keeps the sign the author wrote.
+     */
+    private static int getDimensionPixelOffset(TypedArray typedArray, int styleableIndex, int defValue) {
+        if (styleableIndex < 0 || !typedArray.hasValue(styleableIndex)) {
+            return defValue;
+        }
+        return typedArray.getDimensionPixelOffset(styleableIndex, defValue);
+    }
+
+    /**
+     * Read an int attribute, tolerating styleables that don't declare it (index -1)
      */
     private static int getInt(TypedArray typedArray, int styleableIndex, int defValue) {
-        if (styleableIndex <= 0 || !typedArray.hasValue(styleableIndex)) {
+        if (styleableIndex < 0 || !typedArray.hasValue(styleableIndex)) {
             return defValue;
         }
         return typedArray.getInt(styleableIndex, defValue);
@@ -1744,10 +1710,10 @@ public final class ShapeDrawableBuilder {
     }
 
     /**
-     * Read a float attribute, tolerating styleables that don't declare it (index 0)
+     * Read a float attribute, tolerating styleables that don't declare it (index -1)
      */
     private static float getFloat(TypedArray typedArray, int styleableIndex, float defValue) {
-        if (styleableIndex <= 0 || !typedArray.hasValue(styleableIndex)) {
+        if (styleableIndex < 0 || !typedArray.hasValue(styleableIndex)) {
             return defValue;
         }
         return typedArray.getFloat(styleableIndex, defValue);

@@ -4,10 +4,7 @@ import android.widget.TextView;
 import com.genesys.shape.config.ITextViewAttribute;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2024/09/15
- *    desc   : Get text control attributes
+ * Get text control attributes
  */
 public class TextViewAttribute implements ITextViewAttribute {
 

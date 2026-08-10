@@ -13,10 +13,7 @@ import com.genesys.shape.config.IGetShapeDrawableBuilder;
 import com.genesys.shape.styleable.ShapeRecyclerViewStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/07/17
- *    desc   : RecyclerView that supports direct definition of Shape background
+ * RecyclerView that supports direct definition of Shape background
  */
 public class ShapeRecyclerView extends RecyclerView implements IGetShapeDrawableBuilder {
 

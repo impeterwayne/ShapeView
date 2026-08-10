@@ -16,10 +16,7 @@ import com.genesys.shape.config.IGetTextColorBuilder;
 import com.genesys.shape.styleable.ShapeTextViewStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/07/17
- *    desc   : TextView that supports direct definition of Shape background
+ * TextView that supports direct definition of Shape background
  */
 public class ShapeTextView extends AppCompatTextView implements
         IGetShapeDrawableBuilder, IGetTextColorBuilder {

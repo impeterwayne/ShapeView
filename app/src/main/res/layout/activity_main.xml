@@ -398,69 +398,43 @@
             app:shape_strokeSize="2dp"
             app:shape_solidColor="@color/btn_outline_solid_selector" />
 
-        <!-- Section: Shadow Effects -->
+        <!-- Section: Shadows — the shadow attributes have a screen of their own -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:text="Shadow Effects"
+            android:text="@string/section_shadows"
             android:textColor="#1F2937"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <!-- Outer Shadow -->
-        <com.genesys.shape.view.ShapeTextView
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
             android:gravity="center"
-            android:text="Outer Shadow Card"
-            android:textColor="#1F2937"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:shape_radius="16dp"
-            app:shape_solidColor="#FFFFFF"
-            app:shape_outerShadowSize="8dp"
-            app:shape_outerShadowColor="#30000000" />
+            android:text="@string/hint_shadow_showcase"
+            android:textColor="#6B7280"
+            android:textSize="12sp" />
 
-        <!-- Inner Shadow -->
-        <com.genesys.shape.view.ShapeTextView
+        <com.genesys.shape.view.ShapeButton
+            android:id="@+id/btnShadowShowcase"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Inner Shadow (Inset)"
+            android:paddingVertical="16dp"
+            android:text="@string/action_open_shadow_showcase"
+            android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:shape_radius="16dp"
-            app:shape_solidColor="#374151"
-            app:shape_innerShadowSize="6dp"
-            app:shape_innerShadowColor="#80000000"
-            app:shape_innerShadowOffsetX="3dp"
-            app:shape_innerShadowOffsetY="3dp" />
-
-        <!-- Bevel Effect (dual inner shadow) -->
-        <com.genesys.shape.view.ShapeTextView
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="Bevel Effect (Dual Inner Shadow)"
-            android:textColor="#D1D5DB"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:shape_radius="16dp"
-            app:shape_solidColor="#4B5563"
-            app:shape_innerShadowSize="4dp"
-            app:shape_innerShadowColor="#60000000"
-            app:shape_innerShadowOffsetX="2dp"
-            app:shape_innerShadowOffsetY="2dp"
-            app:shape_innerShadow2Size="4dp"
-            app:shape_innerShadow2Color="#30FFFFFF"
-            app:shape_innerShadow2OffsetX="-2dp"
-            app:shape_innerShadow2OffsetY="-2dp" />
+            android:textSize="15sp"
+            app:shape_radius="14dp"
+            app:shape_effect1Color="#556366F1"
+            app:shape_effect1Blur="12dp"
+            app:shape_effect1OffsetY="6dp"
+            app:shape_solidColor="#6366F1"
+            app:shape_solidPressedColor="#4F46E5" />
 
         <!-- Section: Ripple Layouts -->
         <TextView
@@ -599,8 +573,9 @@
             android:padding="16dp"
             app:shape_radius="16dp"
             app:shape_solidColor="#FFFFFF"
-            app:shape_outerShadowSize="4dp"
-            app:shape_outerShadowColor="#20000000">
+            app:shape_effect1Color="#20000000"
+            app:shape_effect1Blur="8dp"
+            app:shape_effect1OffsetY="2dp" >
 
             <TextView
                 android:layout_width="match_parent"

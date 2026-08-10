@@ -1,10 +1,7 @@
 package com.genesys.shape.config;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2024/09/15
- *    desc   : TextView attribute interface class
+ * TextView attribute interface class
  */
 public interface ITextViewAttribute {
 

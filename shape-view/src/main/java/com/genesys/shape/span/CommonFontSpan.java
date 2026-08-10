@@ -12,10 +12,7 @@ import androidx.annotation.Nullable;
 import com.genesys.shape.config.ITextViewAttribute;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2022/05/04
- *    desc   : Common Span class
+ * Common Span class
  */
 public abstract class CommonFontSpan extends AlignmentReplacementSpan {
 

@@ -13,10 +13,7 @@ import com.genesys.shape.config.IGetShapeDrawableBuilder;
 import com.genesys.shape.styleable.ShapeConstraintLayoutStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/07/17
- *    desc   : ConstraintLayout that supports direct definition of Shape background
+ * ConstraintLayout that supports direct definition of Shape background
  */
 public class ShapeConstraintLayout extends ConstraintLayout implements IGetShapeDrawableBuilder {
 

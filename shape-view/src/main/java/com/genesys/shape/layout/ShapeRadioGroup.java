@@ -12,10 +12,7 @@ import com.genesys.shape.config.IGetShapeDrawableBuilder;
 import com.genesys.shape.styleable.ShapeRadioGroupStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/09/07
- *    desc   : RadioGroup that supports direct definition of Shape background
+ * RadioGroup that supports direct definition of Shape background
  */
 public class ShapeRadioGroup extends RadioGroup implements IGetShapeDrawableBuilder {
 

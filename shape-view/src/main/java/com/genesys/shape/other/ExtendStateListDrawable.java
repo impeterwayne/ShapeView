@@ -6,10 +6,7 @@ import android.graphics.drawable.StateListDrawable;
 import java.util.HashMap;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2022/04/23
- *    desc   : Extension based on the StateListDrawable class
+ * Extension based on the StateListDrawable class
  */
 public class ExtendStateListDrawable extends StateListDrawable {
 

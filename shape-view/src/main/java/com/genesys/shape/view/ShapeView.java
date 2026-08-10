@@ -12,10 +12,7 @@ import com.genesys.shape.config.IGetShapeDrawableBuilder;
 import com.genesys.shape.styleable.ShapeViewStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/07/17
- *    desc   : View that supports direct definition of Shape background
+ * View that supports direct definition of Shape background
  */
 public class ShapeView extends View implements IGetShapeDrawableBuilder {
 

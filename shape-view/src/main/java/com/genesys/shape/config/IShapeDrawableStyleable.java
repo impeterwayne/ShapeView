@@ -1,10 +1,7 @@
 package com.genesys.shape.config;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/08/28
- *    desc   : ShapeDrawable View attribute collection interface
+ * ShapeDrawable View attribute collection interface
  */
 public interface IShapeDrawableStyleable {
 
@@ -37,7 +34,7 @@ public interface IShapeDrawableStyleable {
     int getSolidPressedColorStyleable();
 
     default int getSolidCheckedColorStyleable() {
-        return 0;
+        return -1;
     }
 
     int getSolidDisabledColorStyleable();
@@ -69,55 +66,55 @@ public interface IShapeDrawableStyleable {
 
     // Radial gradient radius, as an absolute size or as a ratio of half the shortest side
     default int getSolidGradientRadiusSizeStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getSolidGradientRadiusRatioStyleable() {
-        return 0;
+        return -1;
     }
 
     // Radial gradient ellipse scale factors (for elliptical gradients)
     default int getSolidGradientRadiusXStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getSolidGradientRadiusYStyleable() {
-        return 0;
+        return -1;
     }
 
     // Radial gradient rotation angle
     default int getSolidRadialAngleStyleable() {
-        return 0;
+        return -1;
     }
 
     // Gradient color stop positions (0.0 to 1.0)
     default int getSolidGradientStartPercentStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getSolidGradientCenterPercentStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getSolidGradientEndPercentStyleable() {
-        return 0;
+        return -1;
     }
 
     // Gradient extent positions (0.0 to 1.0 as percentage of view dimensions)
     default int getSolidGradientStartXStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getSolidGradientStartYStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getSolidGradientEndXStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getSolidGradientEndYStyleable() {
-        return 0;
+        return -1;
     }
 
     int getStrokeColorStyleable();
@@ -125,7 +122,7 @@ public interface IShapeDrawableStyleable {
     int getStrokePressedColorStyleable();
 
     default int getStrokeCheckedColorStyleable() {
-        return 0;
+        return -1;
     }
 
     int getStrokeDisabledColorStyleable();
@@ -143,67 +140,67 @@ public interface IShapeDrawableStyleable {
     int getStrokeGradientOrientationStyleable();
 
     default int getStrokeGradientTypeStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getStrokeGradientCenterXStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getStrokeGradientCenterYStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getStrokeGradientRadiusSizeStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getStrokeGradientRadiusRatioStyleable() {
-        return 0;
+        return -1;
     }
 
     // Stroke radial gradient ellipse scale factors (for elliptical gradients)
     default int getStrokeGradientRadiusXStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getStrokeGradientRadiusYStyleable() {
-        return 0;
+        return -1;
     }
 
     // Stroke radial gradient rotation angle
     default int getStrokeRadialAngleStyleable() {
-        return 0;
+        return -1;
     }
 
     // Stroke gradient color stop positions (0.0 to 1.0)
     default int getStrokeGradientStartPercentStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getStrokeGradientCenterPercentStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getStrokeGradientEndPercentStyleable() {
-        return 0;
+        return -1;
     }
 
     // Stroke gradient extent positions (0.0 to 1.0 as percentage of view dimensions)
     default int getStrokeGradientStartXStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getStrokeGradientStartYStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getStrokeGradientEndXStyleable() {
-        return 0;
+        return -1;
     }
 
     default int getStrokeGradientEndYStyleable() {
-        return 0;
+        return -1;
     }
 
     int getStrokeSizeStyleable();
@@ -212,13 +209,38 @@ public interface IShapeDrawableStyleable {
 
     int getStrokeDashGapStyleable();
 
-    int getOuterShadowSizeStyleable();
+    // ===== Effects =====
 
-    int getOuterShadowColorStyleable();
+    /** Index of the type attribute within an effect slot, see {@link #getEffectStyleables()}. */
+    int EFFECT_TYPE = 0;
+    int EFFECT_COLOR = 1;
+    int EFFECT_BLUR = 2;
+    int EFFECT_SPREAD = 3;
+    int EFFECT_OFFSET_X = 4;
+    int EFFECT_OFFSET_Y = 5;
+    int EFFECT_EDGES = 6;
+    /** Number of attributes making up one effect slot. */
+    int EFFECT_ATTR_COUNT = 7;
 
-    int getOuterShadowOffsetXStyleable();
+    /**
+     * The numbered effect slots this view declares — {@code shape_effect1*},
+     * {@code shape_effect2*} and so on — one row per slot, read in order.
+     *
+     * Each row holds the styleable index of that slot's attributes, in the order given by the
+     * {@code EFFECT_*} constants above; an attribute the view does not declare is left at
+     * {@code -1} and simply falls back to its default. Returning {@code null} means the view
+     * carries no effect attributes at all.
+     */
+    default int[][] getEffectStyleables() {
+        return null;
+    }
 
-    int getOuterShadowOffsetYStyleable();
+    /**
+     * Whether the room the drop shadows take is added to the view's padding as well.
+     */
+    default int getEffectPadContentStyleable() {
+        return -1;
+    }
 
     int getRingInnerRadiusSizeStyleable();
 
@@ -229,38 +251,4 @@ public interface IShapeDrawableStyleable {
     int getRingThicknessRatioStyleable();
 
     int getLineGravityStyleable();
-
-    // Primary Inner Shadow styleable methods
-    default int getInnerShadowSizeStyleable() {
-        return 0;
-    }
-
-    default int getInnerShadowColorStyleable() {
-        return 0;
-    }
-
-    default int getInnerShadowOffsetXStyleable() {
-        return 0;
-    }
-
-    default int getInnerShadowOffsetYStyleable() {
-        return 0;
-    }
-
-    // Secondary Inner Shadow styleable methods (for bevel effects)
-    default int getInnerShadow2SizeStyleable() {
-        return 0;
-    }
-
-    default int getInnerShadow2ColorStyleable() {
-        return 0;
-    }
-
-    default int getInnerShadow2OffsetXStyleable() {
-        return 0;
-    }
-
-    default int getInnerShadow2OffsetYStyleable() {
-        return 0;
-    }
 }

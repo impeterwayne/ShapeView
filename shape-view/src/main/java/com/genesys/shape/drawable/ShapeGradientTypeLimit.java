@@ -6,10 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeDrawable
- *    time   : 2023/07/16
- *    desc   : Shape Gradient Type Assignment Limitation
+ * Shape Gradient Type Assignment Limitation
  */
 @IntDef({
     ShapeGradientType.LINEAR_GRADIENT,

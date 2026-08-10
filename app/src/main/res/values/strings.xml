@@ -7,4 +7,10 @@
     <string name="toast_rounded_clicked">Rounded ShapeImageView clicked!</string>
     <string name="toast_circle_clicked">Circle ShapeImageView clicked!</string>
     <string name="toast_custom_clicked">Custom Corners ShapeImageView clicked!</string>
+    <string name="title_shadows">Shadows</string>
+    <string name="section_shadows">Shadows</string>
+    <string name="section_shadow_effects">Shadow Effects</string>
+    <string name="section_shadow_geometry">Shadow Geometry</string>
+    <string name="action_open_shadow_showcase">Open shadow showcase</string>
+    <string name="hint_shadow_showcase">Outer shadow blur · spread · offset · edges, and inner shadows.</string>
 </resources>

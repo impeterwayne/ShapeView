@@ -11,10 +11,7 @@ import com.genesys.shape.R;
 import com.genesys.shape.config.ICompoundButtonStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/08/28
- *    desc   : ButtonDrawable Builder class
+ * ButtonDrawable Builder class
  */
 public final class ButtonDrawableBuilder {
 

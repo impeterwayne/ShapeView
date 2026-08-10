@@ -16,10 +16,7 @@ import com.genesys.shape.config.IGetTextColorBuilder;
 import com.genesys.shape.styleable.ShapeButtonStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/07/17
- *    desc   : Button that supports direct definition of Shape background
+ * Button that supports direct definition of Shape background
  */
 public class ShapeButton extends AppCompatButton implements
         IGetShapeDrawableBuilder, IGetTextColorBuilder {

@@ -27,10 +27,7 @@ import com.genesys.shape.span.LinearGradientFontSpan;
 import com.genesys.shape.span.StrokeFontSpan;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/08/28
- *    desc   : TextColor Builder class
+ * TextColor Builder class
  */
 public final class TextColorBuilder {
 
@@ -91,7 +88,7 @@ public final class TextColorBuilder {
         if (typedArray.hasValue(styleable.getTextPressedColorStyleable())) {
             mTextPressedColor = typedArray.getColor(styleable.getTextPressedColorStyleable(), mTextColor);
         }
-        if (styleable.getTextCheckedColorStyleable() > 0 && typedArray.hasValue(styleable.getTextCheckedColorStyleable())) {
+        if (styleable.getTextCheckedColorStyleable() >= 0 && typedArray.hasValue(styleable.getTextCheckedColorStyleable())) {
             mTextCheckedColor = typedArray.getColor(styleable.getTextCheckedColorStyleable(), mTextColor);
         }
         if (typedArray.hasValue(styleable.getTextDisabledColorStyleable())) {

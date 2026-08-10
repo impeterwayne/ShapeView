@@ -9,10 +9,7 @@ import android.view.Gravity;
 import java.util.ArrayList;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeDrawable
- *    time   : 2021/08/15
- *    desc   : ShapeDrawable parameter construction
+ * ShapeDrawable parameter construction
  */
 public class ShapeState extends Drawable.ConstantState {
 
@@ -50,7 +47,6 @@ public class ShapeState extends Drawable.ConstantState {
     public ColorStateList strokeGradientCenterColorStateList;
     public ColorStateList strokeGradientEndColorStateList;
 
-    public ColorStateList outerShadowColorStateList;
     public float strokeDashSize;
     public float strokeDashGap;
     public float radius;    // use this if mRadiusArray is null
@@ -122,20 +118,13 @@ public class ShapeState extends Drawable.ConstantState {
     public boolean useLevelForShape;
     public boolean opaque;
 
-    /** Shadow size */
-    public int outerShadowSize;
-    /** Shadow color */
-    public int outerShadowColor;
-    /** Shadow horizontal offset */
-    public int outerShadowOffsetX;
-    /** Shadow vertical offset */
-    public int outerShadowOffsetY;
-
     public int lineGravity = Gravity.CENTER;
 
-    // ===== Inner Shadow Support =====
-    /** List of inner shadow effects (rendered in order from first to last) */
-    public ArrayList<InnerShadow> innerShadows;
+    // ===== Effects =====
+    /**
+     * Drop and inner shadows, painted in the order they were added. See {@link ShapeEffect}.
+     */
+    public ArrayList<ShapeEffect> effects;
 
     public ShapeState() {}
 
@@ -208,13 +197,6 @@ public class ShapeState extends Drawable.ConstantState {
         useLevelForShape = state.useLevelForShape;
         opaque = state.opaque;
 
-        outerShadowSize = state.outerShadowSize;
-        outerShadowColor = state.outerShadowColor;
-        outerShadowOffsetX = state.outerShadowOffsetX;
-        outerShadowOffsetY = state.outerShadowOffsetY;
-
-        outerShadowOffsetX = state.outerShadowOffsetX;
-        outerShadowOffsetY = state.outerShadowOffsetY;
         solidColorStateList = state.solidColorStateList;
         strokeColorStateList = state.strokeColorStateList;
 
@@ -226,15 +208,13 @@ public class ShapeState extends Drawable.ConstantState {
         strokeGradientCenterColorStateList = state.strokeGradientCenterColorStateList;
         strokeGradientEndColorStateList = state.strokeGradientEndColorStateList;
 
-        outerShadowColorStateList = state.outerShadowColorStateList;
-
         lineGravity = state.lineGravity;
 
-        // Copy inner shadows
-        if (state.innerShadows != null) {
-            innerShadows = new ArrayList<>(state.innerShadows.size());
-            for (InnerShadow shadow : state.innerShadows) {
-                innerShadows.add(shadow.copy());
+        // Copy effects
+        if (state.effects != null) {
+            effects = new ArrayList<>(state.effects.size());
+            for (ShapeEffect effect : state.effects) {
+                effects.add(effect.copy());
             }
         }
     }
@@ -294,7 +274,34 @@ public class ShapeState extends Drawable.ConstantState {
         computeOpacity();
     }
 
-    private void computeOpacity() {
+    /**
+     * True when at least one drop shadow would actually paint something.
+     */
+    public boolean hasDropShadow() {
+        return hasEffect(ShapeEffectType.DROP_SHADOW);
+    }
+
+    /**
+     * True when at least one of the stacked inner shadows would actually paint something.
+     */
+    public boolean hasInnerShadow() {
+        return hasEffect(ShapeEffectType.INNER_SHADOW);
+    }
+
+    private boolean hasEffect(@ShapeEffectTypeLimit int type) {
+        if (effects == null) {
+            return false;
+        }
+        for (int i = 0; i < effects.size(); i++) {
+            ShapeEffect effect = effects.get(i);
+            if (effect.type == type && effect.isEnabled()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void computeOpacity() {
         if (shapeType != ShapeType.RECTANGLE) {
             opaque = false;
             return;
@@ -305,12 +312,12 @@ public class ShapeState extends Drawable.ConstantState {
             return;
         }
 
-        if (outerShadowSize > 0) {
+        if (hasDropShadow()) {
             opaque = false;
             return;
         }
 
-        if (innerShadows != null && !innerShadows.isEmpty()) {
+        if (hasInnerShadow()) {
             opaque = false;
             return;
         }

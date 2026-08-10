@@ -17,10 +17,7 @@ import com.genesys.shape.config.ITextViewAttribute;
 import com.genesys.shape.other.TextViewAttribute;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/08/17
- *    desc   : Span that supports direct definition of text gradient color
+ * Span that supports direct definition of text gradient color
  */
 public class LinearGradientFontSpan extends CommonFontSpan {
 

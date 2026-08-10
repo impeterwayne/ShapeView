@@ -11,10 +11,7 @@ import androidx.annotation.IntRange;
 import androidx.annotation.Nullable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeDrawable
- *    time   : 2023/07/15
- *    desc   : ShapeDrawable utility class (for internal use only)
+ * ShapeDrawable utility class (for internal use only)
  */
 final class ShapeDrawableUtils {
    

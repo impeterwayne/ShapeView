@@ -1,5 +1,6 @@
 package com.infinity.shapeview_ktx
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -56,6 +57,10 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<ShapeImageView>(R.id.ivCustom).setOnClickListener {
             Toast.makeText(this, getString(R.string.toast_custom_clicked), Toast.LENGTH_SHORT).show()
+        }
+
+        findViewById<ShapeButton>(R.id.btnShadowShowcase).setOnClickListener {
+            startActivity(Intent(this, ShadowActivity::class.java))
         }
     }
 }

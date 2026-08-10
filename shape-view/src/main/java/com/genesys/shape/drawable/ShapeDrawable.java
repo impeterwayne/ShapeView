@@ -1,6 +1,7 @@
 package com.genesys.shape.drawable;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +12,8 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RadialGradient;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -26,12 +29,10 @@ import androidx.annotation.NonNull;
 
 import android.content.res.ColorStateList;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * author : Android Wheel
- * github : https://github.com/getActivity/ShapeDrawable
- * time   : 2021/08/14
- * desc   : Reconstructed based on {@link android.graphics.drawable.GradientDrawable}
+ * Reconstructed based on {@link android.graphics.drawable.GradientDrawable}
  */
 public class ShapeDrawable extends Drawable {
 
@@ -42,6 +43,7 @@ public class ShapeDrawable extends Drawable {
     private final Paint mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);   // optional, set by the caller
     private Paint mShadowPaint;
     private Paint mInnerShadowPaint;  // Paint used for drawing inner shadows
+    private Paint mInnerShadowMaskPaint;  // Trims the inner shadows back to the shape
     private ColorFilter mColorFilter;   // optional, set by the caller
     private int mAlpha = 0xFF;  // modified by the caller
     private boolean mDither;
@@ -51,6 +53,37 @@ public class ShapeDrawable extends Drawable {
 
     private final RectF mShadowRect = new RectF();
     private final Path mShadowPath = new Path();
+    /** Room the shadow takes out of the bounds, per edge. Recomputed with {@link #mRect}. */
+    private final Rect mShadowInsets = new Rect();
+
+    /**
+     * The blurred shadow, rasterized once per bounds/attribute change instead of every frame.
+     * BlurMaskFilter has no hardware-accelerated path, so blurring straight onto the view's
+     * canvas forces the whole view (and its children) into a software layer. Rasterizing here
+     * and blitting the result keeps the view on the GPU.
+     */
+    private Bitmap mShadowBitmap;
+    private final Rect mShadowBitmapSrc = new Rect();
+    private final Rect mShadowBitmapDst = new Rect();
+    private Paint mShadowBitmapPaint;
+    private boolean mShadowDirty = true;
+    /** Per-corner radii of the spread shadow, reused so drawing allocates nothing. */
+    private float[] mShadowRadii;
+    /** Scratch {startX, startY, stopX, stopY} for {@link ShapeType#LINE}. */
+    private final float[] mLinePoints = new float[4];
+
+    /**
+     * The blurred inner shadows, rasterized together on the same terms as {@link #mShadowBitmap}
+     * and for the same reason: BlurMaskFilter has no hardware-accelerated path, and painting one
+     * straight onto the view's canvas used to drag the whole view into a software layer.
+     */
+    private Bitmap mInnerShadowBitmap;
+    private final Rect mInnerShadowBitmapSrc = new Rect();
+    private final Rect mInnerShadowBitmapDst = new Rect();
+    private Paint mInnerShadowBitmapPaint;
+    private boolean mInnerShadowDirty = true;
+    /** Per-corner radii of an inner shadow's opening, reused so drawing allocates nothing. */
+    private float[] mInnerShadowRadii;
 
     private Paint mLayerPaint;    // internal, used if we use saveLayer()
     private boolean mRectDirty;   // internal state
@@ -61,12 +94,16 @@ public class ShapeDrawable extends Drawable {
     // Cached matrix reused when building gradients, to avoid allocation during draw
     private Matrix mCachedGradientMatrix;
 
-    // Cached BlurMaskFilter for outer shadow to avoid per-frame allocation
-    private BlurMaskFilter mCachedOuterShadowFilter;
-    private float mCachedOuterShadowRadius = -1f;
+    /** Scratch geometry for the inner shadows, reused across the rasterize pass. */
+    private final Path mInnerShadowPath = new Path();
+    private final RectF mInnerShadowRect = new RectF();
 
-    // Cached clip path for inner shadow rendering to avoid per-frame allocation
-    private final Path mInnerShadowClipPath = new Path();
+    /**
+     * Ceiling on a shadow bitmap's pixel count. A large view (a bottom sheet, say) renders
+     * its shadow downscaled and is blitted back up — a blur has no detail to lose, so the
+     * only visible effect is the memory saved.
+     */
+    private static final int MAX_SHADOW_PIXELS = 512 * 512;
 
     /**
      * Current layout direction
@@ -122,8 +159,18 @@ public class ShapeDrawable extends Drawable {
         mRingPath = null;
         mShapeState.setType(shape);
         mPathDirty = true;
-        invalidateSelf();
+        invalidateShapeOutline();
         return this;
+    }
+
+    /**
+     * The silhouette the shadows are traced from just changed, so both rasterized copies of
+     * it are stale.
+     */
+    private void invalidateShapeOutline() {
+        mShadowDirty = true;
+        mInnerShadowDirty = true;
+        invalidateSelf();
     }
 
     /**
@@ -152,7 +199,7 @@ public class ShapeDrawable extends Drawable {
     public ShapeDrawable setRadius(float radius) {
         mShapeState.setCornerRadius(radius);
         mPathDirty = true;
-        invalidateSelf();
+        invalidateShapeOutline();
         return this;
     }
 
@@ -173,7 +220,7 @@ public class ShapeDrawable extends Drawable {
                 topLeftRadius, topLeftRadius, topRightRadius, topRightRadius,
                 bottomRightRadius, bottomRightRadius, bottomLeftRadius, bottomLeftRadius});
         mPathDirty = true;
-        invalidateSelf();
+        invalidateShapeOutline();
         return this;
     }
 
@@ -715,38 +762,6 @@ public class ShapeDrawable extends Drawable {
         return this;
     }
 
-    public ShapeDrawable setOuterShadowColor(@ColorInt int color) {
-        mShapeState.outerShadowColor = color;
-        mPathDirty = true;
-        mRectDirty = true;
-        invalidateSelf();
-        return this;
-    }
-
-    public ShapeDrawable setOuterShadowSize(int size) {
-        mShapeState.outerShadowSize = size;
-        mPathDirty = true;
-        mRectDirty = true;
-        invalidateSelf();
-        return this;
-    }
-
-    public ShapeDrawable setOuterShadowOffsetX(int offsetX) {
-        mShapeState.outerShadowOffsetX = offsetX;
-        mPathDirty = true;
-        mRectDirty = true;
-        invalidateSelf();
-        return this;
-    }
-
-    public ShapeDrawable setOuterShadowOffsetY(int offsetY) {
-        mShapeState.outerShadowOffsetY = offsetY;
-        mPathDirty = true;
-        mRectDirty = true;
-        invalidateSelf();
-        return this;
-    }
-
     /**
      * Set the inner radius size of the ring
      */
@@ -801,84 +816,134 @@ public class ShapeDrawable extends Drawable {
         return this;
     }
 
-    // ===== Inner Shadow API =====
+    // ===== Effect API =====
 
     /**
-     * Set a single inner shadow effect.
-     * This clears any existing inner shadows and adds the specified shadow.
-     * <p>
-     * Inner shadows create an inset/beveled appearance by drawing
-     * blurred shadows inside the shape bounds.
+     * Replace the effect stack. Effects are painted in list order — drop shadows behind the
+     * shape, inner shadows over it. Passing {@code null} or an empty list clears them.
      *
-     * @param color      Shadow color (ARGB)
-     * @param blurRadius Blur radius in pixels (0 = sharp edge)
-     * @param offsetX    Horizontal offset (positive = right)
-     * @param offsetY    Vertical offset (positive = down)
+     * @param effects Effects to apply, each copied on the way in
      * @return This ShapeDrawable for chaining
      */
-    public ShapeDrawable setInnerShadow(@ColorInt int color, float blurRadius,
-                                         float offsetX, float offsetY) {
-        if (mShapeState.innerShadows == null) {
-            mShapeState.innerShadows = new ArrayList<>();
-        } else {
-            mShapeState.innerShadows.clear();
+    public ShapeDrawable setEffects(List<ShapeEffect> effects) {
+        if (mShapeState.effects != null) {
+            mShapeState.effects.clear();
         }
-        mShapeState.innerShadows.add(new InnerShadow(color, blurRadius, offsetX, offsetY));
-        invalidateSelf();
-        return this;
+        if (effects == null || effects.isEmpty()) {
+            return invalidateEffects();
+        }
+        for (int i = 0; i < effects.size(); i++) {
+            addEffectInternal(effects.get(i));
+        }
+        return invalidateEffects();
     }
 
     /**
-     * Add an inner shadow effect to the shadow stack.
-     * Multiple inner shadows are rendered in order (first added = bottom layer).
-     * <p>
-     * Use this to create complex beveled effects like highlight and shadow pairs.
-     *
-     * @param shadow InnerShadow configuration
-     * @return This ShapeDrawable for chaining
+     * Replace the effect stack with a single effect. Passing {@code null} clears it.
      */
-    public ShapeDrawable addInnerShadow(InnerShadow shadow) {
-        if (shadow == null) return this;
-        if (mShapeState.innerShadows == null) {
-            mShapeState.innerShadows = new ArrayList<>();
+    public ShapeDrawable setEffect(ShapeEffect effect) {
+        if (mShapeState.effects != null) {
+            mShapeState.effects.clear();
         }
-        mShapeState.innerShadows.add(shadow.copy());
-        invalidateSelf();
-        return this;
+        addEffectInternal(effect);
+        return invalidateEffects();
     }
 
     /**
-     * Clear all inner shadow effects.
+     * Add an effect on top of the ones already set. They are painted in the order they were
+     * added, which is what makes a bevel — a dark inner shadow under a light one — possible.
      *
+     * @param effect Effect configuration, copied on the way in
      * @return This ShapeDrawable for chaining
      */
-    public ShapeDrawable clearInnerShadows() {
-        if (mShapeState.innerShadows != null) {
-            mShapeState.innerShadows.clear();
+    public ShapeDrawable addEffect(ShapeEffect effect) {
+        addEffectInternal(effect);
+        return invalidateEffects();
+    }
+
+    private void addEffectInternal(ShapeEffect effect) {
+        if (effect == null) {
+            return;
         }
-        invalidateSelf();
-        return this;
+        if (mShapeState.effects == null) {
+            mShapeState.effects = new ArrayList<>();
+        }
+        mShapeState.effects.add(effect.copy());
     }
 
     /**
-     * Check if this drawable has any inner shadows configured.
-     *
-     * @return true if at least one inner shadow is configured
+     * The effects currently applied, in paint order. Mutating the returned list does not
+     * affect the drawable — hand it back through {@link #setEffects(List)} to apply changes.
      */
-    public boolean hasInnerShadows() {
-        return mShapeState.innerShadows != null && !mShapeState.innerShadows.isEmpty();
+    @NonNull
+    public List<ShapeEffect> getEffects() {
+        if (mShapeState.effects == null) {
+            return new ArrayList<>();
+        }
+        List<ShapeEffect> copy = new ArrayList<>(mShapeState.effects.size());
+        for (int i = 0; i < mShapeState.effects.size(); i++) {
+            copy.add(mShapeState.effects.get(i).copy());
+        }
+        return copy;
+    }
+
+    /**
+     * Clear all effects.
+     *
+     * @return This ShapeDrawable for chaining
+     */
+    public ShapeDrawable clearEffects() {
+        if (mShapeState.effects != null) {
+            mShapeState.effects.clear();
+        }
+        return invalidateEffects();
+    }
+
+    /**
+     * True when at least one drop shadow has a visible color and geometry of its own.
+     */
+    public boolean hasDropShadow() {
+        return mShapeState.hasDropShadow();
+    }
+
+    /**
+     * True when at least one inner shadow has a visible color and geometry of its own.
+     */
+    public boolean hasInnerShadow() {
+        return mShapeState.hasInnerShadow();
+    }
+
+    /**
+     * Room the drop shadows take out of the drawable's bounds, per edge: the most any one of
+     * them asks for.
+     *
+     * The shape is drawn inside these insets, so anything laying out content over this
+     * drawable has to inset by the same amount to stay within the visible shape.
+     */
+    public void getShadowInsets(@NonNull Rect out) {
+        ShapeEffect.computeInsets(out, mShapeState.effects);
+    }
+
+    private ShapeDrawable invalidateEffects() {
+        mShapeState.computeOpacity();
+        mShadowDirty = true;
+        mInnerShadowDirty = true;
+        mPathDirty = true;
+        mRectDirty = true;
+        invalidateSelf();
+        return this;
     }
 
     /**
      * Apply the current Drawable object to the View background
      */
     public void intoBackground(View view) {
-        boolean needsSoftwareLayer = mShapeState.strokeDashGap > 0
-                || mShapeState.outerShadowSize > 0
-                || hasInnerShadows();
+        // Neither shadow is in this list: both rasterize their blur into a bitmap of their
+        // own, so neither needs the view to drop off the GPU.
+        boolean needsSoftwareLayer = mShapeState.strokeDashGap > 0;
 
         if (needsSoftwareLayer) {
-            // Hardware acceleration needs to be disabled, otherwise dashed lines or shadows may not take effect on some phones
+            // Hardware acceleration needs to be disabled, otherwise dashed lines may not take effect on some phones
             view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         view.setBackground(this);
@@ -907,7 +972,7 @@ public class ShapeDrawable extends Drawable {
         final int currFillAlpha = modulateAlpha(prevFillAlpha);
         final int currStrokeAlpha = modulateAlpha(prevStrokeAlpha);
 
-        final boolean haveShadow = mShapeState.outerShadowSize > 0;
+        final boolean haveShadow = mShapeState.hasDropShadow();
         final boolean haveStroke = currStrokeAlpha > 0 && mStrokePaint.getStrokeWidth() > 0;
         final boolean haveFill = currFillAlpha > 0;
         final ShapeState st = mShapeState;
@@ -918,6 +983,26 @@ public class ShapeDrawable extends Drawable {
          */
         final boolean useLayer = haveStroke && haveFill && st.shapeType != ShapeType.LINE &&
                 currStrokeAlpha < 255 && (mAlpha < 255 || mColorFilter != null);
+
+        // Painted before any saveLayer() below, whose layer is only as big as the shape plus
+        // its stroke and would clip the shadow away.
+        if (haveShadow) {
+            if (mShadowDirty) {
+                buildShadowBitmap();
+                mShadowDirty = false;
+            }
+            if (mShadowBitmap != null) {
+                if (mShadowBitmapPaint == null) {
+                    mShadowBitmapPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
+                }
+                // The shadow's own alpha is already baked into the bitmap; this applies the
+                // drawable-level alpha on top of it.
+                mShadowBitmapPaint.setAlpha(mAlpha);
+                canvas.drawBitmap(mShadowBitmap, mShadowBitmapSrc, mShadowBitmapDst, mShadowBitmapPaint);
+            }
+        } else {
+            mShadowBitmap = null;
+        }
 
         /*  Drawing with a layer is slower than direct drawing, but it
             allows us to apply paint effects like alpha and color filter to
@@ -960,46 +1045,6 @@ public class ShapeDrawable extends Drawable {
             }
         }
 
-        if (haveShadow) {
-            if (mShadowPaint == null) {
-                mShadowPaint = new Paint();
-                mShadowPaint.setColor(Color.TRANSPARENT);
-                mShadowPaint.setStyle(Paint.Style.STROKE);
-            }
-
-            if (haveStroke) {
-                mShadowPaint.setStrokeWidth(mStrokePaint.getStrokeWidth());
-            } else {
-                mShadowPaint.setStrokeWidth(mShapeState.outerShadowSize / 4f);
-            }
-
-            int shadowColor = mShapeState.outerShadowColor;
-            // If the shadow color is opaque, a little transparency needs to be set, otherwise it will not be displayed
-            if (ShapeDrawableUtils.setColorAlphaComponent(mShapeState.outerShadowColor, 255) == mShapeState.outerShadowColor) {
-                shadowColor = ShapeDrawableUtils.setColorAlphaComponent(mShapeState.outerShadowColor, 254);
-            }
-
-            mShadowPaint.setColor(shadowColor);
-
-            float shadowRadius;
-            // Explain why the shadow size is divided by a multiple: if not done, the shadow display will exceed the View boundary, resulting in the shadow being clipped
-            if (Build.VERSION.SDK_INT >= 28) {
-                shadowRadius = mShapeState.outerShadowSize / 2f;
-            } else {
-                shadowRadius = mShapeState.outerShadowSize / 3f;
-            }
-            if (mCachedOuterShadowFilter == null || mCachedOuterShadowRadius != shadowRadius) {
-                mCachedOuterShadowFilter = new BlurMaskFilter(shadowRadius, BlurMaskFilter.Blur.NORMAL);
-                mCachedOuterShadowRadius = shadowRadius;
-            }
-            mShadowPaint.setMaskFilter(mCachedOuterShadowFilter);
-
-        } else {
-            if (mShadowPaint != null) {
-                mShadowPaint.clearShadowLayer();
-            }
-        }
-
         switch (st.shapeType) {
             case ShapeType.RECTANGLE:
                 if (st.radiusArray != null) {
@@ -1007,11 +1052,6 @@ public class ShapeDrawable extends Drawable {
                         mPath.reset();
                         mPath.addRoundRect(mRect, st.radiusArray, Path.Direction.CW);
                         mPathDirty = mRectDirty = false;
-                    }
-                    if (haveShadow) {
-                        mShadowPath.reset();
-                        mShadowPath.addRoundRect(mShadowRect, st.radiusArray, Path.Direction.CW);
-                        canvas.drawPath(mShadowPath, mShadowPaint);
                     }
                     canvas.drawPath(mPath, mSolidPaint);
                     if (haveStroke) {
@@ -1028,17 +1068,11 @@ public class ShapeDrawable extends Drawable {
                     if (rad > r) {
                         rad = r;
                     }
-                    if (haveShadow) {
-                        canvas.drawRoundRect(mShadowRect, rad, rad, mShadowPaint);
-                    }
                     canvas.drawRoundRect(mRect, rad, rad, mSolidPaint);
                     if (haveStroke) {
                         canvas.drawRoundRect(mRect, rad, rad, mStrokePaint);
                     }
                 } else {
-                    if (haveShadow) {
-                        canvas.drawRect(mShadowRect, mShadowPaint);
-                    }
                     if (mSolidPaint.getColor() != 0 || mColorFilter != null ||
                             mSolidPaint.getShader() != null) {
                         canvas.drawRect(mRect, mSolidPaint);
@@ -1049,75 +1083,18 @@ public class ShapeDrawable extends Drawable {
                 }
                 break;
             case ShapeType.OVAL:
-                if (haveShadow) {
-                    canvas.drawOval(mShadowRect, mShadowPaint);
-                }
                 canvas.drawOval(mRect, mSolidPaint);
                 if (haveStroke) {
                     canvas.drawOval(mRect, mStrokePaint);
                 }
                 break;
             case ShapeType.LINE: {
-                RectF r = mRect;
-                float startX;
-                float startY;
-                float stopX;
-                float stopY;
-                int lineGravity;
-                Callback callback = getCallback();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && callback instanceof View) {
-                    int layoutDirection = ((View) callback).getContext().getResources().getConfiguration().getLayoutDirection();
-                    lineGravity = Gravity.getAbsoluteGravity(st.lineGravity, layoutDirection);
-                } else {
-                    lineGravity = st.lineGravity;
-                }
-
-                switch (lineGravity) {
-                    case Gravity.LEFT:
-                        startX = 0;
-                        startY = 0;
-                        stopX = 0;
-                        stopY = r.bottom;
-                        break;
-                    case Gravity.RIGHT:
-                        startX = r.right;
-                        startY = 0;
-                        stopX = r.right;
-                        stopY = r.bottom;
-                        break;
-                    case Gravity.TOP:
-                        startX = 0;
-                        startY = 0;
-                        stopX = r.right;
-                        stopY = 0;
-                        break;
-                    case Gravity.BOTTOM:
-                        startX = 0;
-                        startY = r.bottom;
-                        stopX = r.right;
-                        stopY = r.bottom;
-                        break;
-                    case Gravity.CENTER:
-                    default:
-                        float y = r.centerY();
-                        startX = r.left;
-                        startY = y;
-                        stopX = r.right;
-                        stopY = y;
-                        break;
-                }
-
-                if (haveShadow) {
-                    canvas.drawLine(startX, startY, stopX, stopY, mShadowPaint);
-                }
-                canvas.drawLine(startX, startY, stopX, stopY, mStrokePaint);
+                computeLinePoints(st, mLinePoints);
+                canvas.drawLine(mLinePoints[0], mLinePoints[1], mLinePoints[2], mLinePoints[3], mStrokePaint);
                 break;
             }
             case ShapeType.RING:
                 Path path = buildRing(st);
-                if (haveShadow) {
-                    canvas.drawPath(path, mShadowPaint);
-                }
                 canvas.drawPath(path, mSolidPaint);
                 if (haveStroke) {
                     canvas.drawPath(path, mStrokePaint);
@@ -1127,9 +1104,25 @@ public class ShapeDrawable extends Drawable {
                 break;
         }
 
-        // Draw inner shadows after fill/stroke but before final restore
-        if (hasInnerShadows()) {
-            drawInnerShadows(canvas, st);
+        // Drawn over the fill and stroke, but still inside any layer above, so the
+        // drawable-level alpha and color filter apply to it along with everything else.
+        if (st.hasInnerShadow()) {
+            if (mInnerShadowDirty) {
+                buildInnerShadowBitmap();
+                mInnerShadowDirty = false;
+            }
+            if (mInnerShadowBitmap != null) {
+                if (mInnerShadowBitmapPaint == null) {
+                    mInnerShadowBitmapPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
+                }
+                // Each shadow's own alpha is already baked into the bitmap; this applies the
+                // drawable-level alpha on top of it.
+                mInnerShadowBitmapPaint.setAlpha(useLayer ? 255 : mAlpha);
+                canvas.drawBitmap(mInnerShadowBitmap, mInnerShadowBitmapSrc,
+                        mInnerShadowBitmapDst, mInnerShadowBitmapPaint);
+            }
+        } else {
+            mInnerShadowBitmap = null;
         }
 
         if (useLayer) {
@@ -1143,108 +1136,329 @@ public class ShapeDrawable extends Drawable {
     }
 
     /**
-     * Draw inner shadows within the shape bounds.
-     * Uses clip path to restrict drawing to shape interior, then draws
-     * blurred shapes at the edges to create the inset shadow effect.
-     *
-     * @param canvas Canvas to draw on
-     * @param st     Current shape state
+     * Work out where a {@link ShapeType#LINE} starts and stops, into
+     * {@code out = {startX, startY, stopX, stopY}}.
      */
-    private void drawInnerShadows(Canvas canvas, ShapeState st) {
-        if (st.innerShadows == null || st.innerShadows.isEmpty()) {
+    private void computeLinePoints(ShapeState st, float[] out) {
+        RectF r = mRect;
+        int lineGravity;
+        Callback callback = getCallback();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && callback instanceof View) {
+            int layoutDirection = ((View) callback).getContext().getResources().getConfiguration().getLayoutDirection();
+            lineGravity = Gravity.getAbsoluteGravity(st.lineGravity, layoutDirection);
+        } else {
+            lineGravity = st.lineGravity;
+        }
+
+        switch (lineGravity) {
+            case Gravity.LEFT:
+                out[0] = 0;
+                out[1] = 0;
+                out[2] = 0;
+                out[3] = r.bottom;
+                break;
+            case Gravity.RIGHT:
+                out[0] = r.right;
+                out[1] = 0;
+                out[2] = r.right;
+                out[3] = r.bottom;
+                break;
+            case Gravity.TOP:
+                out[0] = 0;
+                out[1] = 0;
+                out[2] = r.right;
+                out[3] = 0;
+                break;
+            case Gravity.BOTTOM:
+                out[0] = 0;
+                out[1] = r.bottom;
+                out[2] = r.right;
+                out[3] = r.bottom;
+                break;
+            case Gravity.CENTER:
+            default:
+                float y = r.centerY();
+                out[0] = r.left;
+                out[1] = y;
+                out[2] = r.right;
+                out[3] = y;
+                break;
+        }
+    }
+
+    /**
+     * Rasterize the blurred drop shadows into {@link #mShadowBitmap}, painted in list order
+     * so a stack of them layers up the way it does in Figma.
+     *
+     * Called only when the geometry or the effects change, never per frame. Views big enough
+     * to make a full-resolution bitmap wasteful are rendered downscaled and blitted back up:
+     * a blur is smooth by definition, so there is no detail for the resample to lose.
+     */
+    private void buildShadowBitmap() {
+        final ShapeState st = mShapeState;
+        final Rect bounds = getBounds();
+        final int width = bounds.width();
+        final int height = bounds.height();
+        if (width <= 0 || height <= 0 || mRect.isEmpty() || !st.hasDropShadow()) {
+            mShadowBitmap = null;
             return;
         }
 
-        // Initialize inner shadow paint if needed
-        if (mInnerShadowPaint == null) {
-            mInnerShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mInnerShadowPaint.setStyle(Paint.Style.STROKE);
+        float scale = 1f;
+        final long pixels = (long) width * height;
+        if (pixels > MAX_SHADOW_PIXELS) {
+            scale = (float) Math.sqrt((double) MAX_SHADOW_PIXELS / pixels);
+        }
+        final int bitmapWidth = Math.max(1, Math.round(width * scale));
+        final int bitmapHeight = Math.max(1, Math.round(height * scale));
+
+        if (mShadowBitmap == null || mShadowBitmap.getWidth() != bitmapWidth
+                || mShadowBitmap.getHeight() != bitmapHeight) {
+            mShadowBitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
+        } else {
+            mShadowBitmap.eraseColor(Color.TRANSPARENT);
         }
 
-        canvas.save();
+        if (mShadowPaint == null) {
+            mShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
+        // A line has no interior to fill, so it is traced with the stroke it is drawn with;
+        // every other shape casts a solid shadow.
+        final boolean isLine = st.shapeType == ShapeType.LINE;
+        mShadowPaint.setStyle(isLine ? Paint.Style.STROKE : Paint.Style.FILL);
+        mShadowPaint.setStrokeWidth(isLine ? mStrokePaint.getStrokeWidth() : 0f);
 
-        // Clip to shape bounds - shadows only visible inside
+        final Canvas canvas = new Canvas(mShadowBitmap);
+        // Draw in the drawable's own coordinate space and let the matrix map it into the
+        // bitmap. The blur radius rides along with the matrix, so it scales with the shape.
+        canvas.scale(scale, scale);
+        canvas.translate(-bounds.left, -bounds.top);
+
+        for (int i = 0; i < st.effects.size(); i++) {
+            final ShapeEffect effect = st.effects.get(i);
+            if (!effect.isDropShadow() || !effect.isEnabled()) {
+                continue;
+            }
+            mShadowPaint.setColor(effect.color);
+            mShadowPaint.setMaskFilter(effect.blur > 0
+                    ? new BlurMaskFilter(effect.blur, BlurMaskFilter.Blur.NORMAL)
+                    : null);
+            drawShadowShape(canvas, st, effect, mShadowPaint);
+        }
+
+        mShadowBitmapSrc.set(0, 0, bitmapWidth, bitmapHeight);
+        mShadowBitmapDst.set(bounds);
+    }
+
+    /**
+     * Trace one drop shadow's silhouette: the shape, grown by the spread and moved by the
+     * offset — not a squashed copy of it, so its corners stay concentric with the shape's.
+     *
+     * Spread reaches rectangles and ovals. Rings and lines are only translated — there is no
+     * single sensible way to grow a ring outward — so a spread has no effect on those two.
+     */
+    private void drawShadowShape(Canvas canvas, ShapeState st, ShapeEffect effect, Paint paint) {
+        mShadowRect.set(mRect);
+        mShadowRect.inset(-effect.spread, -effect.spread);
+        mShadowRect.offset(effect.offsetX, effect.offsetY);
+
         switch (st.shapeType) {
             case ShapeType.RECTANGLE:
                 if (st.radiusArray != null) {
-                    // Use the existing path for rounded corners
-                    if (mPathDirty) {
-                        mPath.reset();
-                        mPath.addRoundRect(mRect, st.radiusArray, Path.Direction.CW);
+                    if (mShadowRadii == null) {
+                        mShadowRadii = new float[8];
                     }
-                    canvas.clipPath(mPath);
-                } else if (st.radius > 0) {
-                    float rad = Math.min(st.radius,
-                            Math.min(mRect.width(), mRect.height()) * 0.5f);
-                    mInnerShadowClipPath.reset();
-                    mInnerShadowClipPath.addRoundRect(mRect, rad, rad, Path.Direction.CW);
-                    canvas.clipPath(mInnerShadowClipPath);
+                    // Grow every corner along with the shape so the shadow stays concentric.
+                    for (int i = 0; i < mShadowRadii.length; i++) {
+                        mShadowRadii[i] = Math.max(0f, st.radiusArray[i] + effect.spread);
+                    }
+                    mShadowPath.reset();
+                    mShadowPath.addRoundRect(mShadowRect, mShadowRadii, Path.Direction.CW);
+                    canvas.drawPath(mShadowPath, paint);
+                } else if (st.radius > 0.0f) {
+                    float rad = Math.max(0f, st.radius + effect.spread);
+                    float max = Math.min(mShadowRect.width(), mShadowRect.height()) * 0.5f;
+                    if (rad > max) {
+                        rad = max;
+                    }
+                    canvas.drawRoundRect(mShadowRect, rad, rad, paint);
                 } else {
-                    canvas.clipRect(mRect);
+                    canvas.drawRect(mShadowRect, paint);
                 }
                 break;
             case ShapeType.OVAL:
-                mInnerShadowClipPath.reset();
-                mInnerShadowClipPath.addOval(mRect, Path.Direction.CW);
-                canvas.clipPath(mInnerShadowClipPath);
+                canvas.drawOval(mShadowRect, paint);
                 break;
+            case ShapeType.RING: {
+                int saveCount = canvas.save();
+                canvas.translate(effect.offsetX, effect.offsetY);
+                canvas.drawPath(buildRing(st), paint);
+                canvas.restoreToCount(saveCount);
+                break;
+            }
+            case ShapeType.LINE: {
+                computeLinePoints(st, mLinePoints);
+                int saveCount = canvas.save();
+                canvas.translate(effect.offsetX, effect.offsetY);
+                canvas.drawLine(mLinePoints[0], mLinePoints[1], mLinePoints[2], mLinePoints[3], paint);
+                canvas.restoreToCount(saveCount);
+                break;
+            }
             default:
-                // Inner shadows not supported for LINE or RING shapes
-                canvas.restore();
-                return;
+                break;
+        }
+    }
+
+    /**
+     * Rasterize the stacked inner shadows into {@link #mInnerShadowBitmap}.
+     *
+     * Each shadow is drawn as the room left over between a wall well outside the shape and
+     * the shape's own silhouette shrunk by the spread and moved by the offset — blur that
+     * and the ink piles up along the edge the offset came from, which is what an inset
+     * shadow looks like. The stack is then trimmed back to the shape in one pass, so the
+     * shadows share a single anti-aliased edge instead of each fighting the clip.
+     *
+     * Called only when the geometry or the shadow attributes change, never per frame.
+     * Line and ring shapes have no interior to inset into, so they get nothing.
+     */
+    private void buildInnerShadowBitmap() {
+        final ShapeState st = mShapeState;
+        final Rect bounds = getBounds();
+        final int width = bounds.width();
+        final int height = bounds.height();
+        if (width <= 0 || height <= 0 || mRect.isEmpty() || !st.hasInnerShadow()
+                || (st.shapeType != ShapeType.RECTANGLE && st.shapeType != ShapeType.OVAL)) {
+            mInnerShadowBitmap = null;
+            return;
         }
 
-        // Draw each inner shadow from bottom to top
-        for (InnerShadow shadow : st.innerShadows) {
-            // Skip invisible shadows
-            if (shadow.blurRadius <= 0 && shadow.spread <= 0) {
-                continue;
-            }
+        float scale = 1f;
+        final long pixels = (long) width * height;
+        if (pixels > MAX_SHADOW_PIXELS) {
+            scale = (float) Math.sqrt((double) MAX_SHADOW_PIXELS / pixels);
+        }
+        final int bitmapWidth = Math.max(1, Math.round(width * scale));
+        final int bitmapHeight = Math.max(1, Math.round(height * scale));
 
-            // Skip fully transparent shadows
-            if ((shadow.color >>> 24) == 0) {
-                continue;
-            }
-
-            mInnerShadowPaint.setColor(shadow.color);
-
-            // Calculate stroke width based on blur radius
-            // Larger stroke width extends the shadow further into the shape
-            float strokeWidth = Math.max(shadow.blurRadius * 2f, 4f) + shadow.spread;
-            mInnerShadowPaint.setStrokeWidth(strokeWidth);
-
-            // Apply blur filter (cached per InnerShadow)
-            mInnerShadowPaint.setMaskFilter(shadow.getOrCreateMaskFilter());
-
-            canvas.save();
-
-            // Apply offset
-            canvas.translate(shadow.offsetX, shadow.offsetY);
-
-            // Draw the shape outline with thick stroke
-            // The clip path will cut off the outer portion, leaving only
-            // the inner part visible - creating the inner shadow effect
-            switch (st.shapeType) {
-                case ShapeType.RECTANGLE:
-                    if (st.radiusArray != null) {
-                        canvas.drawPath(mPath, mInnerShadowPaint);
-                    } else if (st.radius > 0) {
-                        float rad = Math.min(st.radius,
-                                Math.min(mRect.width(), mRect.height()) * 0.5f);
-                        canvas.drawRoundRect(mRect, rad, rad, mInnerShadowPaint);
-                    } else {
-                        canvas.drawRect(mRect, mInnerShadowPaint);
-                    }
-                    break;
-                case ShapeType.OVAL:
-                    canvas.drawOval(mRect, mInnerShadowPaint);
-                    break;
-            }
-
-            canvas.restore();
+        if (mInnerShadowBitmap == null || mInnerShadowBitmap.getWidth() != bitmapWidth
+                || mInnerShadowBitmap.getHeight() != bitmapHeight) {
+            mInnerShadowBitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
+        } else {
+            mInnerShadowBitmap.eraseColor(Color.TRANSPARENT);
         }
 
-        canvas.restore();
+        if (mInnerShadowPaint == null) {
+            mInnerShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mInnerShadowPaint.setStyle(Paint.Style.FILL);
+        }
+
+        final Canvas canvas = new Canvas(mInnerShadowBitmap);
+        // Draw in the drawable's own coordinate space and let the matrix map it into the
+        // bitmap. The blur radius rides along with the matrix, so it scales with the shape.
+        canvas.scale(scale, scale);
+        canvas.translate(-bounds.left, -bounds.top);
+
+        for (int i = 0; i < st.effects.size(); i++) {
+            final ShapeEffect effect = st.effects.get(i);
+            if (!effect.isInnerShadow() || !effect.isEnabled()) {
+                continue;
+            }
+            mInnerShadowPaint.setColor(effect.color);
+            mInnerShadowPaint.setMaskFilter(effect.blur > 0
+                    ? new BlurMaskFilter(effect.blur, BlurMaskFilter.Blur.NORMAL)
+                    : null);
+            buildInnerShadowPath(st, effect, mInnerShadowPath);
+            canvas.drawPath(mInnerShadowPath, mInnerShadowPaint);
+        }
+
+        // Clear whatever fell outside the shape, so the shadow honors the corner radii.
+        // The cut has to be drawn as the region *outside* the silhouette — an inverse-filled
+        // path, which Skia expands to the whole canvas — because a Porter-Duff draw only
+        // touches the pixels its own geometry covers: painting the silhouette itself with
+        // DST_IN leaves the corners it never reached untouched, and the shadow spills out
+        // past them as if the shape were square. Masking still beats clipping here: a clip
+        // is aliased, and this edge sits right where the shadow is at its most opaque.
+        if (mInnerShadowMaskPaint == null) {
+            mInnerShadowMaskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mInnerShadowMaskPaint.setStyle(Paint.Style.FILL);
+            mInnerShadowMaskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+            mInnerShadowMaskPaint.setColor(Color.BLACK);
+        }
+        buildShapeOutlinePath(st, mInnerShadowPath);
+        mInnerShadowPath.setFillType(Path.FillType.INVERSE_WINDING);
+        canvas.drawPath(mInnerShadowPath, mInnerShadowMaskPaint);
+
+        mInnerShadowBitmapSrc.set(0, 0, bitmapWidth, bitmapHeight);
+        mInnerShadowBitmapDst.set(bounds);
+    }
+
+    /**
+     * Trace one inner shadow: a wall far outside the shape with the shadow's opening punched
+     * out of it, so filling the path leaves ink everywhere the opening doesn't reach.
+     *
+     * The opening is the shape shrunk by the spread and moved by the offset, corner radii
+     * shrinking with it so the two stay concentric. Shrink it past nothing and the opening
+     * closes, which correctly floods the whole shape with shadow.
+     */
+    private void buildInnerShadowPath(ShapeState st, ShapeEffect effect, Path out) {
+        mInnerShadowRect.set(mRect);
+        mInnerShadowRect.inset(effect.spread, effect.spread);
+        mInnerShadowRect.offset(effect.offsetX, effect.offsetY);
+
+        out.reset();
+        out.setFillType(Path.FillType.EVEN_ODD);
+        // Far enough out that the wall's own blurred edge never reaches back into the shape.
+        final float slack = effect.blur * 2f + Math.abs(effect.spread)
+                + Math.max(Math.abs(effect.offsetX), Math.abs(effect.offsetY)) + 1f;
+        out.addRect(mRect.left - slack, mRect.top - slack,
+                mRect.right + slack, mRect.bottom + slack, Path.Direction.CW);
+
+        if (mInnerShadowRect.width() <= 0 || mInnerShadowRect.height() <= 0) {
+            // The opening has closed: the shadow covers the shape outright.
+            return;
+        }
+
+        if (st.shapeType == ShapeType.OVAL) {
+            out.addOval(mInnerShadowRect, Path.Direction.CW);
+            return;
+        }
+
+        if (st.radiusArray != null) {
+            if (mInnerShadowRadii == null) {
+                mInnerShadowRadii = new float[8];
+            }
+            for (int i = 0; i < mInnerShadowRadii.length; i++) {
+                mInnerShadowRadii[i] = Math.max(0f, st.radiusArray[i] - effect.spread);
+            }
+            out.addRoundRect(mInnerShadowRect, mInnerShadowRadii, Path.Direction.CW);
+        } else if (st.radius > 0f) {
+            float rad = Math.max(0f, st.radius - effect.spread);
+            float max = Math.min(mInnerShadowRect.width(), mInnerShadowRect.height()) * 0.5f;
+            if (rad > max) {
+                rad = max;
+            }
+            out.addRoundRect(mInnerShadowRect, rad, rad, Path.Direction.CW);
+        } else {
+            out.addRect(mInnerShadowRect, Path.Direction.CW);
+        }
+    }
+
+    /**
+     * Trace the shape's silhouette — the same outline the fill occupies — into {@code out}.
+     */
+    private void buildShapeOutlinePath(ShapeState st, Path out) {
+        out.reset();
+        out.setFillType(Path.FillType.WINDING);
+        if (st.shapeType == ShapeType.OVAL) {
+            out.addOval(mRect, Path.Direction.CW);
+        } else if (st.radiusArray != null) {
+            out.addRoundRect(mRect, st.radiusArray, Path.Direction.CW);
+        } else if (st.radius > 0f) {
+            float rad = Math.min(st.radius, Math.min(mRect.width(), mRect.height()) * 0.5f);
+            out.addRoundRect(mRect, rad, rad, Path.Direction.CW);
+        } else {
+            out.addRect(mRect, Path.Direction.CW);
+        }
     }
 
     @Override
@@ -1387,35 +1601,18 @@ public class ShapeDrawable extends Drawable {
 
         final ShapeState st = mShapeState;
 
-        float let = bounds.left + inset + mShapeState.outerShadowSize;
-        float top = bounds.top + inset + mShapeState.outerShadowSize;
-        float right = bounds.right - inset - mShapeState.outerShadowSize;
-        float bottom = bounds.bottom - inset - mShapeState.outerShadowSize;
+        getShadowInsets(mShadowInsets);
+
+        float let = bounds.left + inset + mShadowInsets.left;
+        float top = bounds.top + inset + mShadowInsets.top;
+        float right = bounds.right - inset - mShadowInsets.right;
+        float bottom = bounds.bottom - inset - mShadowInsets.bottom;
 
         mRect.set(let, top, right, bottom);
 
-        float shadowLet;
-        float shadowTop;
-        float shadowRight;
-        float shadowBottom;
-
-        if (mShapeState.outerShadowOffsetX > 0) {
-            shadowLet = let + mShapeState.outerShadowOffsetX;
-            shadowRight = right;
-        } else {
-            shadowLet = let;
-            shadowRight = right + mShapeState.outerShadowOffsetX;
-        }
-
-        if (mShapeState.outerShadowOffsetY > 0) {
-            shadowTop = top + mShapeState.outerShadowOffsetY;
-            shadowBottom = bottom;
-        } else {
-            shadowTop = top;
-            shadowBottom = bottom + mShapeState.outerShadowOffsetY;
-        }
-
-        mShadowRect.set(shadowLet, shadowTop, shadowRight, shadowBottom);
+        // The geometry just moved, so whatever we rasterized last time is stale.
+        mShadowDirty = true;
+        mInnerShadowDirty = true;
 
         if (st.solidColors == null) {
             mSolidPaint.setShader(null);
@@ -1726,20 +1923,15 @@ public class ShapeDrawable extends Drawable {
             setStrokeDashGap(state.strokeDashGap);
         }
 
-        // Initialize outer shadow color from state
-        if (state.outerShadowColorStateList != null) {
-            setOuterShadowColor(state.outerShadowColorStateList.getColorForState(getState(), state.outerShadowColor));
-        } else {
-            setOuterShadowColor(state.outerShadowColor);
-        }
-
-        // Initialize inner shadow colors from state
-        if (state.innerShadows != null) {
-            for (InnerShadow shadow : state.innerShadows) {
-                if (shadow.colorStateList != null) {
-                    shadow.color = shadow.colorStateList.getColorForState(getState(), shadow.color);
+        // Initialize effect colors from state
+        if (state.effects != null) {
+            for (ShapeEffect effect : state.effects) {
+                if (effect.colorStateList != null) {
+                    effect.color = effect.colorStateList.getColorForState(getState(), effect.color);
                 }
             }
+            mShadowDirty = true;
+            mInnerShadowDirty = true;
         }
 
         // Initialize gradient colors from state if present
@@ -1792,9 +1984,6 @@ public class ShapeDrawable extends Drawable {
         if (mShapeState.strokeColorStateList != null && mShapeState.strokeColorStateList.isStateful()) {
             return true;
         }
-        if (mShapeState.outerShadowColorStateList != null && mShapeState.outerShadowColorStateList.isStateful()) {
-            return true;
-        }
         if (mShapeState.solidGradientStartColorStateList != null && mShapeState.solidGradientStartColorStateList.isStateful()) {
             return true;
         }
@@ -1813,9 +2002,9 @@ public class ShapeDrawable extends Drawable {
         if (mShapeState.strokeGradientEndColorStateList != null && mShapeState.strokeGradientEndColorStateList.isStateful()) {
             return true;
         }
-        if (mShapeState.innerShadows != null) {
-            for (InnerShadow shadow : mShapeState.innerShadows) {
-                if (shadow.colorStateList != null && shadow.colorStateList.isStateful()) {
+        if (mShapeState.effects != null) {
+            for (ShapeEffect effect : mShapeState.effects) {
+                if (effect.colorStateList != null && effect.colorStateList.isStateful()) {
                     return true;
                 }
             }
@@ -1843,10 +2032,20 @@ public class ShapeDrawable extends Drawable {
             }
         }
 
-        if (mShapeState.outerShadowColorStateList != null) {
-            int newColor = mShapeState.outerShadowColorStateList.getColorForState(state, mShapeState.outerShadowColor);
-            if (newColor != mShapeState.outerShadowColor) {
-                setOuterShadowColor(newColor);
+        if (mShapeState.effects != null) {
+            boolean effectChanged = false;
+            for (ShapeEffect effect : mShapeState.effects) {
+                if (effect.colorStateList == null) {
+                    continue;
+                }
+                int newColor = effect.colorStateList.getColorForState(state, effect.color);
+                if (newColor != effect.color) {
+                    effect.color = newColor;
+                    effectChanged = true;
+                }
+            }
+            if (effectChanged) {
+                invalidateEffects();
                 changed = true;
             }
         }
@@ -1884,18 +2083,6 @@ public class ShapeDrawable extends Drawable {
 
         if (gradientChanged) {
              changed = true;
-        }
-
-        if (mShapeState.innerShadows != null) {
-            for (InnerShadow shadow : mShapeState.innerShadows) {
-                if (shadow.colorStateList != null) {
-                    int newColor = shadow.colorStateList.getColorForState(state, shadow.color);
-                    if (newColor != shadow.color) {
-                        shadow.color = newColor;
-                        changed = true;
-                    }
-                }
-            }
         }
 
         return changed;
@@ -1950,13 +2137,4 @@ public class ShapeDrawable extends Drawable {
         return this;
     }
 
-    public ShapeDrawable setOuterShadowColor(ColorStateList colorStateList) {
-        mShapeState.outerShadowColorStateList = colorStateList;
-        if (colorStateList != null) {
-            setOuterShadowColor(colorStateList.getColorForState(getState(), 0));
-        } else {
-            setOuterShadowColor(0);
-        }
-        return this;
-    }
 }

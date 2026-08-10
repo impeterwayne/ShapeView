@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
@@ -17,10 +18,7 @@ import com.genesys.shape.drawable.ShapeType;
 import com.genesys.shape.styleable.ShapeImageViewStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/07/17
- *    desc   : ImageView that supports direct definition of Shape background
+ * ImageView that supports direct definition of Shape background
  */
 public class ShapeImageView extends AppCompatImageView implements IGetShapeDrawableBuilder {
 
@@ -98,15 +96,15 @@ public class ShapeImageView extends AppCompatImageView implements IGetShapeDrawa
     private void updateClipPath() {
         ShapeDrawableBuilder builder = getShapeDrawableBuilder();
 
-        float shadowSize = builder.getOuterShadowSize();
-        float shadowOffsetX = builder.getOuterShadowOffsetX();
-        float shadowOffsetY = builder.getOuterShadowOffsetY();
+        // Clip to the shape the background actually painted, which sits inside whatever room
+        // the shadow claimed on each edge.
+        Rect shadowInsets = builder.getShadowInsets();
         float strokeSize = builder.getStrokeSize();
 
-        float left = shadowSize - shadowOffsetX + strokeSize;
-        float top = shadowSize - shadowOffsetY + strokeSize;
-        float right = getWidth() - shadowSize - shadowOffsetX - strokeSize;
-        float bottom = getHeight() - shadowSize - shadowOffsetY - strokeSize;
+        float left = shadowInsets.left + strokeSize;
+        float top = shadowInsets.top + strokeSize;
+        float right = getWidth() - shadowInsets.right - strokeSize;
+        float bottom = getHeight() - shadowInsets.bottom - strokeSize;
 
         mClipRect.set(left, top, right, bottom);
 

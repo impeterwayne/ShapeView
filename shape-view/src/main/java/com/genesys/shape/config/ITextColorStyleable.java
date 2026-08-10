@@ -1,10 +1,7 @@
 package com.genesys.shape.config;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/08/28
- *    desc   : TextColor View attribute collection interface
+ * TextColor View attribute collection interface
  */
 public interface ITextColorStyleable {
 
@@ -13,7 +10,7 @@ public interface ITextColorStyleable {
     int getTextPressedColorStyleable();
 
     default int getTextCheckedColorStyleable() {
-        return 0;
+        return -1;
     }
 
     int getTextDisabledColorStyleable();

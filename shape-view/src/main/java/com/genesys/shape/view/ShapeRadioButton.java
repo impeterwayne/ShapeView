@@ -17,10 +17,7 @@ import com.genesys.shape.config.IGetTextColorBuilder;
 import com.genesys.shape.styleable.ShapeRadioButtonStyleable;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2021/07/17
- *    desc   : RadioButton that supports direct definition of Shape background
+ * RadioButton that supports direct definition of Shape background
  */
 public class ShapeRadioButton extends AppCompatRadioButton implements
         IGetShapeDrawableBuilder, IGetTextColorBuilder, IGetButtonDrawableBuilder {

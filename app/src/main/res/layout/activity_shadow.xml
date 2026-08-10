@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shadowRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    tools:context=".ShadowActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="8dp">
+
+        <!-- Section: Shadow Effects -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/section_shadow_effects"
+            android:textColor="#1F2937"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Outer Shadow: wrap_content, so the room the shadow needs grows the view
+             instead of shrinking the card -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingVertical="22dp"
+            android:text="Outer Shadow Card"
+            android:textColor="#1F2937"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:shape_radius="16dp"
+            app:shape_effect1Color="#30000000"
+            app:shape_effect1Blur="12dp"
+            app:shape_effect1OffsetY="4dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- Inner Shadow: same blur / spread / offset knobs as the outer one, painted
+             inside the shape instead of around it, so it costs no layout room -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Inner Shadow (Inset)"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:shape_effect1Type="innerShadow"
+            app:shape_effect1Color="#80000000"
+            app:shape_effect1Blur="8dp"
+            app:shape_effect1OffsetX="3dp"
+            app:shape_effect1OffsetY="3dp"
+            app:shape_radius="16dp"
+            app:shape_solidColor="#374151" />
+
+        <!-- Spread thickens the shadow all round, so it reads as a rim rather than a
+             single-sided inset -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Inner Shadow: blur 10dp + spread 4dp"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:shape_effect1Type="innerShadow"
+            app:shape_effect1Color="#80000000"
+            app:shape_effect1Blur="10dp"
+            app:shape_effect1Spread="4dp"
+            app:shape_radius="16dp"
+            app:shape_solidColor="#374151" />
+
+        <!-- Bevel Effect (dual inner shadow) -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Bevel Effect (Dual Inner Shadow)"
+            android:textColor="#D1D5DB"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:shape_radius="16dp"
+            app:shape_effect1Type="innerShadow"
+            app:shape_effect1Color="#70000000"
+            app:shape_effect1Blur="6dp"
+            app:shape_effect1OffsetX="3dp"
+            app:shape_effect1OffsetY="3dp"
+            app:shape_effect2Type="innerShadow"
+            app:shape_effect2Color="#40FFFFFF"
+            app:shape_effect2Blur="6dp"
+            app:shape_effect2OffsetX="-3dp"
+            app:shape_effect2OffsetY="-3dp"
+            app:shape_solidColor="#4B5563" />
+
+        <!-- Two drop shadows stacked: a tight dark one for contact, a wide soft one for
+             ambience. The same recipe as an elevation ramp in Figma or Material. -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="22dp"
+            android:text="Two Drop Shadows (elevation ramp)"
+            android:textColor="#1F2937"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:shape_radius="16dp"
+            app:shape_effect1Color="#26000000"
+            app:shape_effect1Blur="4dp"
+            app:shape_effect1OffsetY="2dp"
+            app:shape_effect2Color="#1F000000"
+            app:shape_effect2Blur="24dp"
+            app:shape_effect2OffsetY="12dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- Drop and inner shadow on the same view: the card sits above the page while its
+             face is dished in. Slot order decides nothing here — drop shadows always paint
+             behind the shape, inner ones over it. -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="22dp"
+            android:text="Drop + Inner on one view"
+            android:textColor="#F9FAFB"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:shape_radius="16dp"
+            app:shape_effect1Color="#40000000"
+            app:shape_effect1Blur="14dp"
+            app:shape_effect1OffsetY="6dp"
+            app:shape_effect2Type="innerShadow"
+            app:shape_effect2Color="#99000000"
+            app:shape_effect2Blur="10dp"
+            app:shape_effect2OffsetY="4dp"
+            app:shape_solidColor="#4F46E5" />
+
+        <!-- Section: Shadow Geometry -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/section_shadow_geometry"
+            android:textColor="#1F2937"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:text="Blur, spread, offset and edges are independent. Each is honored literally — no divisors, no squashing."
+            android:textColor="#6B7280"
+            android:textSize="12sp" />
+
+        <!-- Blur alone: an even halo on all four sides -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="blur 16dp"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            app:shape_radius="14dp"
+            app:shape_effect1Color="#33000000"
+            app:shape_effect1Blur="16dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- Spread pushes the shadow shape outwards before it is blurred, so the
+             shadow reads as bigger than the card rather than just softer -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="blur 8dp + spread 6dp"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            app:shape_radius="14dp"
+            app:shape_effect1Color="#33000000"
+            app:shape_effect1Blur="8dp"
+            app:shape_effect1Spread="6dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- A real translate: the shadow keeps the card's shape and corner radii,
+             and only the offset edges reserve room -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="offset 8dp right / 8dp down"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            app:shape_radius="14dp"
+            app:shape_effect1Color="#40000000"
+            app:shape_effect1Blur="10dp"
+            app:shape_effect1OffsetX="8dp"
+            app:shape_effect1OffsetY="8dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- Negative spread tucks the shadow in behind the card: a tight contact
+             shadow that never peeks out at the top -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="blur 12dp + spread -6dp, down 6dp"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            app:shape_radius="14dp"
+            app:shape_effect1Color="#40000000"
+            app:shape_effect1Blur="12dp"
+            app:shape_effect1Spread="-6dp"
+            app:shape_effect1OffsetY="6dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- shadowEdges="top": only the top edge reserves room, so the shadow runs
+             off the other three sides and is clipped there — what lets a panel stay
+             flush with the screen while still casting a shadow upwards. -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="effect1Edges=&quot;top&quot; only"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            app:shape_radius="14dp"
+            app:shape_effect1Color="#40000000"
+            app:shape_effect1Blur="14dp"
+            app:shape_effect1OffsetY="-4dp"
+            app:shape_effect1Edges="top"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- shadowPadContent="false" opts out of the automatic content inset. The
+             shape still shrinks, so the text now sits closer to its edge. -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="effectPadContent=&quot;false&quot;"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            app:shape_radius="14dp"
+            app:shape_effectPadContent="false"
+            app:shape_effect1Color="#33000000"
+            app:shape_effect1Blur="12dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- Bottom spacer -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="32dp" />
+
+    </LinearLayout>
+</ScrollView>

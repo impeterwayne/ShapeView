@@ -230,34 +230,138 @@
     <!-- Stroke dash gap (gap between dash segments) -->
     <attr name="shape_strokeDashGap" format="dimension" />
 
-    <!-- Outer Shadow size -->
-    <attr name="shape_outerShadowSize" format="dimension" />
-    <!-- Outer Shadow color -->
-    <attr name="shape_outerShadowColor" format="color" />
-    <!-- Outer Shadow horizontal offset -->
-    <attr name="shape_outerShadowOffsetX" format="dimension" />
-    <!-- Outer Shadow vertical offset -->
-    <attr name="shape_outerShadowOffsetY" format="dimension" />
+    <!--
+      Effects, modelled on a row of Figma's Effects panel. There are 4 numbered slots; each
+      names a type and carries the same color / blur / spread / offset knobs, and they are
+      painted in slot order — drop shadows behind the shape, inner shadows over it. A slot
+      that declares no geometry paints nothing, so a layout only pays for what it asks for.
+    -->
 
-    <!-- Primary Inner Shadow (typically the dark/main shadow) -->
-    <!-- Inner Shadow size (blur radius) -->
-    <attr name="shape_innerShadowSize" format="dimension" />
-    <!-- Inner Shadow color -->
-    <attr name="shape_innerShadowColor" format="color" />
-    <!-- Inner Shadow horizontal offset -->
-    <attr name="shape_innerShadowOffsetX" format="dimension" />
-    <!-- Inner Shadow vertical offset -->
-    <attr name="shape_innerShadowOffsetY" format="dimension" />
+    <!-- Effect 1: where the shadow lands. Defaults to dropShadow. -->
+    <attr name="shape_effect1Type">
+        <enum name="dropShadow" value="0" />
+        <enum name="innerShadow" value="1" />
+    </attr>
+    <!-- Effect 1 color (defaults to #33000000 once any geometry is set; also takes a selector) -->
+    <attr name="shape_effect1Color" format="color" />
+    <!-- Effect 1 blur radius, applied literally: 8dp of blur fades out over 8dp -->
+    <attr name="shape_effect1Blur" format="dimension" />
+    <!-- Grows effect 1 on every side before it is blurred; negative values shrink it -->
+    <attr name="shape_effect1Spread" format="dimension" />
+    <!-- Effect 1 horizontal offset (positive moves the shadow right) -->
+    <attr name="shape_effect1OffsetX" format="dimension" />
+    <!-- Effect 1 vertical offset (positive moves the shadow down) -->
+    <attr name="shape_effect1OffsetY" format="dimension" />
+    <!--
+      Edges that give up room for effect 1. An omitted edge reserves nothing, so the shadow
+      runs off that side of the view and is clipped there — which is how a bottom sheet gets a
+      shadow above it while staying flush to the screen on its other three sides. An inner
+      shadow costs no room, so it ignores this.
+    -->
+    <attr name="shape_effect1Edges">
+        <flag name="none" value="0" />
+        <flag name="left" value="1" />
+        <flag name="top" value="2" />
+        <flag name="right" value="4" />
+        <flag name="bottom" value="8" />
+        <flag name="all" value="15" />
+    </attr>
 
-    <!-- Secondary Inner Shadow (typically the light highlight for bevel effects) -->
-    <!-- Second Inner Shadow size (blur radius) -->
-    <attr name="shape_innerShadow2Size" format="dimension" />
-    <!-- Second Inner Shadow color -->
-    <attr name="shape_innerShadow2Color" format="color" />
-    <!-- Second Inner Shadow horizontal offset -->
-    <attr name="shape_innerShadow2OffsetX" format="dimension" />
-    <!-- Second Inner Shadow vertical offset -->
-    <attr name="shape_innerShadow2OffsetY" format="dimension" />
+    <!-- Effect 2: where the shadow lands. Defaults to dropShadow. -->
+    <attr name="shape_effect2Type">
+        <enum name="dropShadow" value="0" />
+        <enum name="innerShadow" value="1" />
+    </attr>
+    <!-- Effect 2 color (defaults to #33000000 once any geometry is set; also takes a selector) -->
+    <attr name="shape_effect2Color" format="color" />
+    <!-- Effect 2 blur radius, applied literally: 8dp of blur fades out over 8dp -->
+    <attr name="shape_effect2Blur" format="dimension" />
+    <!-- Grows effect 2 on every side before it is blurred; negative values shrink it -->
+    <attr name="shape_effect2Spread" format="dimension" />
+    <!-- Effect 2 horizontal offset (positive moves the shadow right) -->
+    <attr name="shape_effect2OffsetX" format="dimension" />
+    <!-- Effect 2 vertical offset (positive moves the shadow down) -->
+    <attr name="shape_effect2OffsetY" format="dimension" />
+    <!--
+      Edges that give up room for effect 2. An omitted edge reserves nothing, so the shadow
+      runs off that side of the view and is clipped there — which is how a bottom sheet gets a
+      shadow above it while staying flush to the screen on its other three sides. An inner
+      shadow costs no room, so it ignores this.
+    -->
+    <attr name="shape_effect2Edges">
+        <flag name="none" value="0" />
+        <flag name="left" value="1" />
+        <flag name="top" value="2" />
+        <flag name="right" value="4" />
+        <flag name="bottom" value="8" />
+        <flag name="all" value="15" />
+    </attr>
+
+    <!-- Effect 3: where the shadow lands. Defaults to dropShadow. -->
+    <attr name="shape_effect3Type">
+        <enum name="dropShadow" value="0" />
+        <enum name="innerShadow" value="1" />
+    </attr>
+    <!-- Effect 3 color (defaults to #33000000 once any geometry is set; also takes a selector) -->
+    <attr name="shape_effect3Color" format="color" />
+    <!-- Effect 3 blur radius, applied literally: 8dp of blur fades out over 8dp -->
+    <attr name="shape_effect3Blur" format="dimension" />
+    <!-- Grows effect 3 on every side before it is blurred; negative values shrink it -->
+    <attr name="shape_effect3Spread" format="dimension" />
+    <!-- Effect 3 horizontal offset (positive moves the shadow right) -->
+    <attr name="shape_effect3OffsetX" format="dimension" />
+    <!-- Effect 3 vertical offset (positive moves the shadow down) -->
+    <attr name="shape_effect3OffsetY" format="dimension" />
+    <!--
+      Edges that give up room for effect 3. An omitted edge reserves nothing, so the shadow
+      runs off that side of the view and is clipped there — which is how a bottom sheet gets a
+      shadow above it while staying flush to the screen on its other three sides. An inner
+      shadow costs no room, so it ignores this.
+    -->
+    <attr name="shape_effect3Edges">
+        <flag name="none" value="0" />
+        <flag name="left" value="1" />
+        <flag name="top" value="2" />
+        <flag name="right" value="4" />
+        <flag name="bottom" value="8" />
+        <flag name="all" value="15" />
+    </attr>
+
+    <!-- Effect 4: where the shadow lands. Defaults to dropShadow. -->
+    <attr name="shape_effect4Type">
+        <enum name="dropShadow" value="0" />
+        <enum name="innerShadow" value="1" />
+    </attr>
+    <!-- Effect 4 color (defaults to #33000000 once any geometry is set; also takes a selector) -->
+    <attr name="shape_effect4Color" format="color" />
+    <!-- Effect 4 blur radius, applied literally: 8dp of blur fades out over 8dp -->
+    <attr name="shape_effect4Blur" format="dimension" />
+    <!-- Grows effect 4 on every side before it is blurred; negative values shrink it -->
+    <attr name="shape_effect4Spread" format="dimension" />
+    <!-- Effect 4 horizontal offset (positive moves the shadow right) -->
+    <attr name="shape_effect4OffsetX" format="dimension" />
+    <!-- Effect 4 vertical offset (positive moves the shadow down) -->
+    <attr name="shape_effect4OffsetY" format="dimension" />
+    <!--
+      Edges that give up room for effect 4. An omitted edge reserves nothing, so the shadow
+      runs off that side of the view and is clipped there — which is how a bottom sheet gets a
+      shadow above it while staying flush to the screen on its other three sides. An inner
+      shadow costs no room, so it ignores this.
+    -->
+    <attr name="shape_effect4Edges">
+        <flag name="none" value="0" />
+        <flag name="left" value="1" />
+        <flag name="top" value="2" />
+        <flag name="right" value="4" />
+        <flag name="bottom" value="8" />
+        <flag name="all" value="15" />
+    </attr>
+
+    <!--
+      Whether the room taken by the drop shadows is also added to the view's padding, keeping
+      content inside the visible shape instead of spilling over its edge. Default true.
+    -->
+    <attr name="shape_effectPadContent" format="boolean" />
 
     <!-- Inner radius of the ring (only effective when shape="ring") -->
     <attr name="shape_ringInnerRadiusSize" format="dimension" />
@@ -400,22 +504,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -512,22 +635,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -626,22 +768,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -748,22 +909,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -868,22 +1048,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -980,22 +1179,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -1078,22 +1296,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -1176,22 +1413,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -1274,22 +1530,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -1372,22 +1647,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -1470,22 +1764,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -1568,22 +1881,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />
@@ -1666,22 +1998,41 @@
         <attr name="shape_strokeDashSize" />
         <attr name="shape_strokeDashGap" />
 
-        <attr name="shape_outerShadowSize" />
-        <attr name="shape_outerShadowColor" />
-        <attr name="shape_outerShadowOffsetX" />
-        <attr name="shape_outerShadowOffsetY" />
+        <!-- Effects: 4 slots, painted in order -->
 
-        <!-- Primary Inner Shadow -->
-        <attr name="shape_innerShadowSize" />
-        <attr name="shape_innerShadowColor" />
-        <attr name="shape_innerShadowOffsetX" />
-        <attr name="shape_innerShadowOffsetY" />
+        <attr name="shape_effect1Type" />
+        <attr name="shape_effect1Color" />
+        <attr name="shape_effect1Blur" />
+        <attr name="shape_effect1Spread" />
+        <attr name="shape_effect1OffsetX" />
+        <attr name="shape_effect1OffsetY" />
+        <attr name="shape_effect1Edges" />
 
-        <!-- Secondary Inner Shadow (for bevel effects) -->
-        <attr name="shape_innerShadow2Size" />
-        <attr name="shape_innerShadow2Color" />
-        <attr name="shape_innerShadow2OffsetX" />
-        <attr name="shape_innerShadow2OffsetY" />
+        <attr name="shape_effect2Type" />
+        <attr name="shape_effect2Color" />
+        <attr name="shape_effect2Blur" />
+        <attr name="shape_effect2Spread" />
+        <attr name="shape_effect2OffsetX" />
+        <attr name="shape_effect2OffsetY" />
+        <attr name="shape_effect2Edges" />
+
+        <attr name="shape_effect3Type" />
+        <attr name="shape_effect3Color" />
+        <attr name="shape_effect3Blur" />
+        <attr name="shape_effect3Spread" />
+        <attr name="shape_effect3OffsetX" />
+        <attr name="shape_effect3OffsetY" />
+        <attr name="shape_effect3Edges" />
+
+        <attr name="shape_effect4Type" />
+        <attr name="shape_effect4Color" />
+        <attr name="shape_effect4Blur" />
+        <attr name="shape_effect4Spread" />
+        <attr name="shape_effect4OffsetX" />
+        <attr name="shape_effect4OffsetY" />
+        <attr name="shape_effect4Edges" />
+
+        <attr name="shape_effectPadContent" />
 
         <attr name="shape_ringInnerRadiusRatio" />
         <attr name="shape_ringInnerRadiusSize" />

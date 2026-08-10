@@ -12,10 +12,7 @@ import androidx.annotation.NonNull;
 import com.genesys.shape.config.ITextViewAttribute;
 
 /**
- *    author : Android Wheel
- *    github : https://github.com/getActivity/ShapeView
- *    time   : 2024/09/15
- *    desc   : ReplacementSpan with custom drawing gravity
+ * ReplacementSpan with custom drawing gravity
  */
 public abstract class AlignmentReplacementSpan extends ReplacementSpan implements AlignmentSpan {
 
