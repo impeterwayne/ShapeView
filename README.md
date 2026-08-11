@@ -27,7 +27,12 @@
 
 ## Installation
 
-Add the JitPack repository to your `settings.gradle` (or root `build.gradle`):
+### 1. Add JitPack repository
+
+Add JitPack to `settings.gradle` or `settings.gradle.kts`:
+
+<details open>
+<summary>Groovy (settings.gradle)</summary>
 
 ```groovy
 dependencyResolutionManagement {
@@ -37,14 +42,44 @@ dependencyResolutionManagement {
     }
 }
 ```
+</details>
 
-Add the dependency to your module `build.gradle`:
+<details>
+<summary>Kotlin DSL (settings.gradle.kts)</summary>
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+```
+</details>
+
+### 2. Add dependency
+
+Add the dependency to your app module `build.gradle` or `build.gradle.kts`:
+
+<details open>
+<summary>Groovy (build.gradle)</summary>
 
 ```groovy
 dependencies {
     implementation 'com.github.impeterwayne:ShapeView:101'
 }
 ```
+</details>
+
+<details>
+<summary>Kotlin DSL (build.gradle.kts)</summary>
+
+```kotlin
+dependencies {
+    implementation("com.github.impeterwayne:ShapeView:101")
+}
+```
+</details>
 
 ---
 
