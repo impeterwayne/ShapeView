@@ -33,7 +33,6 @@ Add the JitPack repository to your `settings.gradle` (or root `build.gradle`):
 dependencyResolutionManagement {
     repositories {
         google()
-        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 }
