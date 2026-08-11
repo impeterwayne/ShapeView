@@ -66,7 +66,7 @@ Add the dependency to your app module `build.gradle` or `build.gradle.kts`:
 
 ```groovy
 dependencies {
-    implementation 'com.github.impeterwayne:ShapeView:101'
+    implementation 'com.github.impeterwayne:ShapeView:1.0.1'
 }
 ```
 </details>
@@ -76,7 +76,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("com.github.impeterwayne:ShapeView:101")
+    implementation("com.github.impeterwayne:ShapeView:1.0.1")
 }
 ```
 </details>

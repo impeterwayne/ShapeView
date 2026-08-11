@@ -43,7 +43,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.impeterwayne'
                 artifactId = 'ShapeView'
-                version = '101'
+                version = '1.0.1'
             }
         }
     }
