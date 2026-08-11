@@ -42,7 +42,7 @@ Add the dependency to your module `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.github.impeterwayne.ShapeView:shape-view:v101'
+    implementation 'com.github.impeterwayne:ShapeView:101'
 }
 ```
 

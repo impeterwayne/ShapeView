@@ -42,8 +42,8 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = 'com.github.impeterwayne'
-                artifactId = 'shape-view'
-                version = 'v101'
+                artifactId = 'ShapeView'
+                version = '101'
             }
         }
     }
