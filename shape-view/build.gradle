@@ -33,9 +33,11 @@ dependencies {
 // ── Maven Central Publishing Configuration ──────────────────────────────────
 mavenPublishing {
     publishToMavenCentral()
-    signAllPublications()
+    if (project.hasProperty("signing.keyId") || project.hasProperty("signingKey") || project.hasProperty("signing.secretKeyRingFile")) {
+        signAllPublications()
+    }
 
-    coordinates("io.github.impeterwayne", "shape-view", "1.0.0")
+    coordinates("io.github.impeterwayne", "shape-view", "101")
 
     pom {
         name = "ShapeView-ktx"

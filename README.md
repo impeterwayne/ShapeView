@@ -1,5 +1,6 @@
 # ShapeView-ktx
 
+[![JitPack](https://jitpack.io/v/impeterwayne/ShapeView.svg)](https://jitpack.io/#impeterwayne/ShapeView)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.impeterwayne/shape-view.svg)](https://central.sonatype.com/artifact/io.github.impeterwayne/shape-view)
 [![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg)](https://android-arsenal.com/api?level=23)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -25,7 +26,31 @@
 
 ---
 
-## Installation (Maven Central)
+## Installation
+
+### Via JitPack
+
+Add the JitPack repository to your `settings.gradle` (or root `build.gradle`):
+
+```groovy
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Add the dependency to your module `build.gradle`:
+
+```groovy
+dependencies {
+    implementation 'com.github.impeterwayne.ShapeView:shape-view:101'
+}
+```
+
+### Via Maven Central
 
 ```groovy
 dependencies {
