@@ -7,17 +7,30 @@
 **Stop writing boilerplate `res/drawable` XML files.**  
 ShapeView lets you design backgrounds, rounded corners, state selectors, gradients, ripples, and Figma-style drop & inner shadows directly in your layout XML or dynamically at runtime with Kotlin builders.
 
-<p align="center">
-  <img src="screenshots/buttons_showcase.png" width="150" alt="Buttons & Inputs" />
-  &nbsp;
-  <img src="screenshots/shadows_showcase.png" width="150" alt="Shadow Effects" />
-  &nbsp;
-  <img src="screenshots/shadow_geometry_showcase.png" width="150" alt="Shadow Geometry" />
-  &nbsp;
-  <img src="screenshots/gradients_showcase.png" width="150" alt="Gradients & Borders" />
-  &nbsp;
-  <img src="screenshots/media_showcase.png" width="150" alt="Media & Typography" />
-</p>
+<table align="center">
+  <tr>
+    <th align="center">Buttons, Inputs & States</th>
+    <th align="center">Figma Drop & Inner Shadows</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="screenshots/buttons_showcase.png" width="300" alt="Buttons and Inputs" /></td>
+    <td align="center"><img src="screenshots/shadows_showcase.png" width="300" alt="Figma Shadows" /></td>
+  </tr>
+  <tr>
+    <th align="center">Gradients & Borders</th>
+    <th align="center">Media & Typography</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="screenshots/gradients_showcase.png" width="300" alt="Gradients and Borders" /></td>
+    <td align="center"><img src="screenshots/media_showcase.png" width="300" alt="Media and Typography" /></td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2">Shadow Geometry Controls</th>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><img src="screenshots/shadow_geometry_showcase.png" width="300" alt="Shadow Geometry" /></td>
+  </tr>
+</table>
 
 ```
 Traditional Android (3 files):                   ShapeView (Inline in XML):
@@ -33,7 +46,7 @@ Traditional Android (3 files):                   ShapeView (Inline in XML):
 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-- [Sample App Structure](#sample-app-structure)
+- [Attribute Reference](#attribute-reference)
 - [Recipe Gallery](#recipe-gallery)
   - [Buttons, Inputs & States](#1-buttons-inputs--states)
   - [Cards, Sheets & Shadows](#2-cards-sheets--shadows)
@@ -41,8 +54,6 @@ Traditional Android (3 files):                   ShapeView (Inline in XML):
   - [Media & Typography](#4-media--typography)
 - [Changing Shapes at Runtime](#changing-shapes-at-runtime)
 - [Figma-Style Effects Engine](#figma-style-effects-engine)
-- [Which View Supports What](#which-view-supports-what)
-- [Attribute Reference](#attribute-reference)
 - [Requirements](#requirements)
 - [License](#license)
 
@@ -138,18 +149,143 @@ Swap any standard platform view for its `Shape*` counterpart. Nothing else chang
 
 ---
 
-## Sample App Structure
+## Attribute Reference
 
-The sample app module (`:app`) is modularized into dedicated activities to test and showcase each component interactively on device:
+<details open>
+<summary><b>1. Base Shape & Dimensions</b></summary>
 
-| Activity | Demonstrates |
-|---|---|
-| [`MainActivity`](file:///D:/Quest/ShapeView/app/src/main/java/com/infinity/shapeview_ktx/MainActivity.kt) | Interactive showcase hub and navigation dashboard |
-| [`ButtonActivity`](file:///D:/Quest/ShapeView/app/src/main/java/com/infinity/shapeview_ktx/ButtonActivity.kt) | Normal/pressed/disabled buttons, ghost outlines, focus inputs, filter chips |
-| [`ShadowActivity`](file:///D:/Quest/ShapeView/app/src/main/java/com/infinity/shapeview_ktx/ShadowActivity.kt) | Figma-style drop & inner shadows, elevation ramps, bevels & combos |
-| [`ShadowGeometryActivity`](file:///D:/Quest/ShapeView/app/src/main/java/com/infinity/shapeview_ktx/ShadowGeometryActivity.kt) | Blur, spread, offset, edge masking & padding controls |
-| [`GradientActivity`](file:///D:/Quest/ShapeView/app/src/main/java/com/infinity/shapeview_ktx/GradientActivity.kt) | Linear, radial glow, conic sweep gradients, gradient borders & dashed zones |
-| [`MediaActivity`](file:///D:/Quest/ShapeView/app/src/main/java/com/infinity/shapeview_ktx/MediaActivity.kt) | ShapeImageView avatar clipping, gradient/outline typography & universal ripples |
+| Attribute | Format | Default | Description |
+|---|---|---|---|
+| `shape_type` | enum | `rectangle` | `rectangle` · `oval` · `line` · `ring` |
+| `shape_width` | dimension | view width | Explicit shape width |
+| `shape_height` | dimension | view height | Explicit shape height |
+</details>
+
+<details open>
+<summary><b>2. Corner Radii (RTL-Ready)</b></summary>
+
+| Attribute | Format | Description |
+|---|---|---|
+| `shape_radius` | dimension | Uniform radius on all 4 corners |
+| `shape_radiusInTopStart` / `…TopLeft` | dimension | Top start (auto-flips in RTL) / Top left |
+| `shape_radiusInTopEnd` / `…TopRight` | dimension | Top end (auto-flips in RTL) / Top right |
+| `shape_radiusInBottomStart` / `…BottomLeft` | dimension | Bottom start (auto-flips in RTL) / Bottom left |
+| `shape_radiusInBottomEnd` / `…BottomRight` | dimension | Bottom end (auto-flips in RTL) / Bottom right |
+
+> Individual corner attributes override `shape_radius`.
+</details>
+
+<details open>
+<summary><b>3. Background Fill & State Colors</b></summary>
+
+| Attribute | Format | Notes |
+|---|---|---|
+| `shape_solidColor` | color | Default background fill |
+| `shape_solidPressedColor` | color | Pressed state |
+| `shape_solidDisabledColor` | color | Disabled state |
+| `shape_solidFocusedColor` | color | Focused state |
+| `shape_solidSelectedColor` | color | Selected state |
+| `shape_solidCheckedColor` | color | Checked state (`ShapeCheckBox` / `ShapeRadioButton` only) |
+</details>
+
+<details>
+<summary><b>4. Fill Gradients</b></summary>
+
+Set `StartColor` and `EndColor` to activate a gradient fill (replaces `shape_solidColor`).
+
+| Attribute | Format | Default | Description |
+|---|---|---|---|
+| `shape_solidGradientStartColor` | color | | Start color |
+| `shape_solidGradientCenterColor` | color | | Center color (optional) |
+| `shape_solidGradientEndColor` | color | | End color |
+| `shape_solidGradientOrientation` | enum | `startToEnd` | `startToEnd` · `endToStart` · `topToBottom` · `bottomToTop` · `topLeftToBottomRight` · etc. |
+| `shape_solidGradientCenterX` · `…CenterY` | float | `0.5` | Center point (0.0 to 1.0) for radial/sweep |
+| `shape_solidGradientRadiusSize` | dimension | | Absolute radial radius |
+| `shape_solidGradientRadiusRatio` | float | `0.5` | Radial radius as ratio of half shortest side |
+| `shape_solidGradientRadiusX` · `…RadiusY` | float | `-1` | Elliptical scale factors |
+| `shape_solidRadialAngle` | float | `0` | Radial rotation in degrees |
+| `shape_solidGradientStartPercent` | float | `0.0` | Color stop position for start color |
+| `shape_solidGradientCenterPercent` | float | `0.5` | Color stop position for center color |
+| `shape_solidGradientEndPercent` | float | `1.0` | Color stop position for end color |
+| `shape_solidGradientStartX` · `…StartY` | float | | Explicit linear start point (0.0–1.0) |
+| `shape_solidGradientEndX` · `…EndY` | float | | Explicit linear end point (0.0–1.0) |
+
+> [!WARNING]
+> `shape_solidGradientRadius` is **deprecated** in favor of `shape_solidGradientRadiusSize` and `shape_solidGradientRadiusRatio`.
+</details>
+
+<details open>
+<summary><b>5. Stroke (Border) & Dashes</b></summary>
+
+| Attribute | Format | Notes |
+|---|---|---|
+| `shape_strokeSize` | dimension | Border thickness (required for stroke to draw) |
+| `shape_strokeColor` | color | Default border color |
+| `shape_strokePressedColor` | color | Pressed border color |
+| `shape_strokeDisabledColor` | color | Disabled border color |
+| `shape_strokeFocusedColor` | color | Focused border color |
+| `shape_strokeSelectedColor` | color | Selected border color |
+| `shape_strokeCheckedColor` | color | Checked border color (`ShapeCheckBox` / `ShapeRadioButton`) |
+| `shape_strokeDashSize` | dimension | Dash length (`0` = solid line) |
+| `shape_strokeDashGap` | dimension | Gap between dashes |
+</details>
+
+<details>
+<summary><b>6. Stroke Gradients</b></summary>
+
+Stroke gradients share the exact same configuration as fill gradients by substituting the `solid` prefix with `stroke`:  
+`shape_strokeGradientStartColor` · `…CenterColor` · `…EndColor` · `…Type` · `…Orientation` · `…CenterX/Y` · `…RadiusSize` · `…RadiusRatio` · `…RadiusX/Y` · `shape_strokeRadialAngle` · `…StartPercent` · `…CenterPercent` · `…EndPercent` · `…StartX/Y` · `…EndX/Y`.
+</details>
+
+<details>
+<summary><b>7. Rings & Lines</b></summary>
+
+#### Ring (`shape_type="ring"`)
+| Attribute | Format | Default | Description |
+|---|---|---|---|
+| `shape_ringInnerRadiusSize` | dimension | `-1` | Inner radius, absolute |
+| `shape_ringInnerRadiusRatio` | float | `3.0` | Inner radius = ring size ÷ ratio |
+| `shape_ringThicknessSize` | dimension | `-1` | Ring thickness, absolute |
+| `shape_ringThicknessRatio` | float | `9.0` | Thickness = ring size ÷ ratio |
+
+#### Line (`shape_type="line"`)
+| Attribute | Format | Default | Description |
+|---|---|---|---|
+| `shape_lineGravity` | flags | `center` | `top` · `bottom` · `left` · `right` · `start` · `end` · `center` |
+</details>
+
+<details>
+<summary><b>8. Typography & Text Outlines (Text Views Only)</b></summary>
+
+| Attribute | Format | Description |
+|---|---|---|
+| `shape_textColor` | color | Default text color |
+| `shape_textPressedColor` | color | Pressed text color |
+| `shape_textDisabledColor` | color | Disabled text color |
+| `shape_textFocusedColor` | color | Focused text color |
+| `shape_textSelectedColor` | color | Selected text color |
+| `shape_textCheckedColor` | color | Checked text color (`ShapeCheckBox` / `ShapeRadioButton`) |
+| `shape_textStartColor` | color | Gradient start color |
+| `shape_textCenterColor` | color | Gradient center color (optional) |
+| `shape_textEndColor` | color | Gradient end color |
+| `shape_textGradientOrientation` | enum | `horizontal` (default) · `vertical` |
+| `shape_textStrokeColor` | color | Text outline color |
+| `shape_textStrokeSize` | dimension | Text outline thickness |
+</details>
+
+<details>
+<summary><b>9. Ripple & Button Drawables</b></summary>
+
+#### Ripple Effect
+| Attribute | Format | Default | Description |
+|---|---|---|---|
+| `shape_ripple_enabled` | boolean | `false` | Enables ripple **and automatically sets view clickable** |
+| `shape_ripple_color` | color | `#20FFFFFF` | Ripple color |
+| `shape_ripple_radius` | dimension | corner radii | Overrides default ripple mask radius |
+
+#### Button State Drawables (`ShapeCheckBox` / `ShapeRadioButton`)
+`shape_buttonDrawable` · `shape_buttonPressedDrawable` · `shape_buttonCheckedDrawable` · `shape_buttonDisabledDrawable` · `shape_buttonFocusedDrawable` · `shape_buttonSelectedDrawable` (all accept `@drawable/…` references).
+</details>
 
 ---
 
@@ -582,170 +718,6 @@ card.shapeDrawableBuilder
     .addEffect(ShapeEffect.innerShadow(0x40FFFFFF, 6, 0, -3, -3))
     .intoBackground()
 ```
-
----
-
-## Which View Supports What
-
-All views inherit background shapes, corner radii, solid/gradient fills, solid/gradient strokes, Figma shadows, rings/lines, and ripples.
-
-| View Class | Extends | Text Attributes | `Checked` State | Button Drawables |
-|---|---|:---:|:---:|:---:|
-| `ShapeView` | `View` | – | – | – |
-| `ShapeTextView` | `TextView` | ✅ | – | – |
-| `ShapeButton` | `Button` | ✅ | – | – |
-| `ShapeEditText` | `EditText` | ✅ | – | – |
-| `ShapeImageView` | `ImageView` | – | – | – |
-| `ShapeCheckBox` | `CheckBox` | ✅ | ✅ | ✅ |
-| `ShapeRadioButton` | `RadioButton` | ✅ | ✅ | ✅ |
-| `ShapeLinearLayout` | `LinearLayout` | – | – | – |
-| `ShapeFrameLayout` | `FrameLayout` | – | – | – |
-| `ShapeRelativeLayout` | `RelativeLayout` | – | – | – |
-| `ShapeConstraintLayout` | `ConstraintLayout` | – | – | – |
-| `ShapeRadioGroup` | `RadioGroup` | – | – | – |
-| `ShapeRecyclerView` | `RecyclerView` | – | – | – |
-
-*All views reside in package `com.genesys.shape.view.*` or `com.genesys.shape.layout.*`.*
-
----
-
-## Attribute Reference
-
-<details open>
-<summary><b>1. Base Shape & Dimensions</b></summary>
-
-| Attribute | Format | Default | Description |
-|---|---|---|---|
-| `shape_type` | enum | `rectangle` | `rectangle` · `oval` · `line` · `ring` |
-| `shape_width` | dimension | view width | Explicit shape width |
-| `shape_height` | dimension | view height | Explicit shape height |
-</details>
-
-<details open>
-<summary><b>2. Corner Radii (RTL-Ready)</b></summary>
-
-| Attribute | Format | Description |
-|---|---|---|
-| `shape_radius` | dimension | Uniform radius on all 4 corners |
-| `shape_radiusInTopStart` / `…TopLeft` | dimension | Top start (auto-flips in RTL) / Top left |
-| `shape_radiusInTopEnd` / `…TopRight` | dimension | Top end (auto-flips in RTL) / Top right |
-| `shape_radiusInBottomStart` / `…BottomLeft` | dimension | Bottom start (auto-flips in RTL) / Bottom left |
-| `shape_radiusInBottomEnd` / `…BottomRight` | dimension | Bottom end (auto-flips in RTL) / Bottom right |
-
-> Individual corner attributes override `shape_radius`.
-</details>
-
-<details open>
-<summary><b>3. Background Fill & State Colors</b></summary>
-
-| Attribute | Format | Notes |
-|---|---|---|
-| `shape_solidColor` | color | Default background fill |
-| `shape_solidPressedColor` | color | Pressed state |
-| `shape_solidDisabledColor` | color | Disabled state |
-| `shape_solidFocusedColor` | color | Focused state |
-| `shape_solidSelectedColor` | color | Selected state |
-| `shape_solidCheckedColor` | color | Checked state (`ShapeCheckBox` / `ShapeRadioButton` only) |
-</details>
-
-<details>
-<summary><b>4. Fill Gradients</b></summary>
-
-Set `StartColor` and `EndColor` to activate a gradient fill (replaces `shape_solidColor`).
-
-| Attribute | Format | Default | Description |
-|---|---|---|---|
-| `shape_solidGradientStartColor` | color | | Start color |
-| `shape_solidGradientCenterColor` | color | | Center color (optional) |
-| `shape_solidGradientEndColor` | color | | End color |
-| `shape_solidGradientOrientation` | enum | `startToEnd` | `startToEnd` · `endToStart` · `topToBottom` · `bottomToTop` · `topLeftToBottomRight` · etc. |
-| `shape_solidGradientCenterX` · `…CenterY` | float | `0.5` | Center point (0.0 to 1.0) for radial/sweep |
-| `shape_solidGradientRadiusSize` | dimension | | Absolute radial radius |
-| `shape_solidGradientRadiusRatio` | float | `0.5` | Radial radius as ratio of half shortest side |
-| `shape_solidGradientRadiusX` · `…RadiusY` | float | `-1` | Elliptical scale factors |
-| `shape_solidRadialAngle` | float | `0` | Radial rotation in degrees |
-| `shape_solidGradientStartPercent` | float | `0.0` | Color stop position for start color |
-| `shape_solidGradientCenterPercent` | float | `0.5` | Color stop position for center color |
-| `shape_solidGradientEndPercent` | float | `1.0` | Color stop position for end color |
-| `shape_solidGradientStartX` · `…StartY` | float | | Explicit linear start point (0.0–1.0) |
-| `shape_solidGradientEndX` · `…EndY` | float | | Explicit linear end point (0.0–1.0) |
-
-> [!WARNING]
-> `shape_solidGradientRadius` is **deprecated** in favor of `shape_solidGradientRadiusSize` and `shape_solidGradientRadiusRatio`.
-</details>
-
-<details open>
-<summary><b>5. Stroke (Border) & Dashes</b></summary>
-
-| Attribute | Format | Notes |
-|---|---|---|
-| `shape_strokeSize` | dimension | Border thickness (required for stroke to draw) |
-| `shape_strokeColor` | color | Default border color |
-| `shape_strokePressedColor` | color | Pressed border color |
-| `shape_strokeDisabledColor` | color | Disabled border color |
-| `shape_strokeFocusedColor` | color | Focused border color |
-| `shape_strokeSelectedColor` | color | Selected border color |
-| `shape_strokeCheckedColor` | color | Checked border color (`ShapeCheckBox` / `ShapeRadioButton`) |
-| `shape_strokeDashSize` | dimension | Dash length (`0` = solid line) |
-| `shape_strokeDashGap` | dimension | Gap between dashes |
-</details>
-
-<details>
-<summary><b>6. Stroke Gradients</b></summary>
-
-Stroke gradients share the exact same configuration as fill gradients by substituting the `solid` prefix with `stroke`:  
-`shape_strokeGradientStartColor` · `…CenterColor` · `…EndColor` · `…Type` · `…Orientation` · `…CenterX/Y` · `…RadiusSize` · `…RadiusRatio` · `…RadiusX/Y` · `shape_strokeRadialAngle` · `…StartPercent` · `…CenterPercent` · `…EndPercent` · `…StartX/Y` · `…EndX/Y`.
-</details>
-
-<details>
-<summary><b>7. Rings & Lines</b></summary>
-
-#### Ring (`shape_type="ring"`)
-| Attribute | Format | Default | Description |
-|---|---|---|---|
-| `shape_ringInnerRadiusSize` | dimension | `-1` | Inner radius, absolute |
-| `shape_ringInnerRadiusRatio` | float | `3.0` | Inner radius = ring size ÷ ratio |
-| `shape_ringThicknessSize` | dimension | `-1` | Ring thickness, absolute |
-| `shape_ringThicknessRatio` | float | `9.0` | Thickness = ring size ÷ ratio |
-
-#### Line (`shape_type="line"`)
-| Attribute | Format | Default | Description |
-|---|---|---|---|
-| `shape_lineGravity` | flags | `center` | `top` · `bottom` · `left` · `right` · `start` · `end` · `center` |
-</details>
-
-<details>
-<summary><b>8. Typography & Text Outlines (Text Views Only)</b></summary>
-
-| Attribute | Format | Description |
-|---|---|---|
-| `shape_textColor` | color | Default text color |
-| `shape_textPressedColor` | color | Pressed text color |
-| `shape_textDisabledColor` | color | Disabled text color |
-| `shape_textFocusedColor` | color | Focused text color |
-| `shape_textSelectedColor` | color | Selected text color |
-| `shape_textCheckedColor` | color | Checked text color (`ShapeCheckBox` / `ShapeRadioButton`) |
-| `shape_textStartColor` | color | Gradient start color |
-| `shape_textCenterColor` | color | Gradient center color (optional) |
-| `shape_textEndColor` | color | Gradient end color |
-| `shape_textGradientOrientation` | enum | `horizontal` (default) · `vertical` |
-| `shape_textStrokeColor` | color | Text outline color |
-| `shape_textStrokeSize` | dimension | Text outline thickness |
-</details>
-
-<details>
-<summary><b>9. Ripple & Button Drawables</b></summary>
-
-#### Ripple Effect
-| Attribute | Format | Default | Description |
-|---|---|---|---|
-| `shape_ripple_enabled` | boolean | `false` | Enables ripple **and automatically sets view clickable** |
-| `shape_ripple_color` | color | `#20FFFFFF` | Ripple color |
-| `shape_ripple_radius` | dimension | corner radii | Overrides default ripple mask radius |
-
-#### Button State Drawables (`ShapeCheckBox` / `ShapeRadioButton`)
-`shape_buttonDrawable` · `shape_buttonPressedDrawable` · `shape_buttonCheckedDrawable` · `shape_buttonDisabledDrawable` · `shape_buttonFocusedDrawable` · `shape_buttonSelectedDrawable` (all accept `@drawable/…` references).
-</details>
 
 ---
 
