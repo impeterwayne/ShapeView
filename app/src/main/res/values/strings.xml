@@ -1,16 +1,98 @@
 <resources>
     <string name="app_name">ShapeView-ktx</string>
-    <string name="shape_image_view_title">Shape ImageView</string>
-    <string name="label_rounded_16dp">Rounded (16dp)</string>
-    <string name="label_circle_oval">Circle (Oval)</string>
-    <string name="label_custom_corners">Custom Corners</string>
+
+    <!-- Hub / Main Menu -->
+    <string name="hub_title">ShapeView Showcase</string>
+    <string name="hub_subtitle">Inline shapes, gradients, borders, and Figma-accurate shadows.</string>
+    <string name="menu_buttons_title">Buttons &amp; Inputs</string>
+    <string name="menu_buttons_desc">Interactive states, ghost outlines, focus-aware inputs &amp; filter chips.</string>
+    <string name="menu_shadows_title">Shadow Effects</string>
+    <string name="menu_shadows_desc">Drop shadows, inner shadows, elevation ramps, bevels &amp; combos.</string>
+    <string name="menu_shadow_geometry_title">Shadow Geometry</string>
+    <string name="menu_shadow_geometry_desc">Blur, spread, offset, edge masking &amp; layout padding knobs.</string>
+    <string name="menu_gradients_title">Gradients &amp; Borders</string>
+    <string name="menu_gradients_desc">Linear, radial &amp; sweep gradients, gradient borders &amp; dashed strokes.</string>
+    <string name="menu_media_title">Media &amp; Typography</string>
+    <string name="menu_media_desc">Image clipping (avatars), gradient/outline text &amp; universal ripples.</string>
+
+    <string name="title_shadow_geometry">Shadow Geometry</string>
+    <string name="btn_open_shadow_geometry">Explore Shadow Geometry →</string>
+
+    <!-- Buttons & Inputs Activity -->
+    <string name="title_buttons">Buttons &amp; Inputs</string>
+    <string name="section_state_buttons">Stateful Buttons</string>
+    <string name="desc_state_buttons">Normal, pressed, and disabled states defined inline without selectors.</string>
+    <string name="btn_primary_label">Primary Button</string>
+    <string name="btn_ripple_label">Custom Ripple Color</string>
+    <string name="btn_disabled_label">Disabled State Button</string>
+    <string name="section_ghost_buttons">Ghost &amp; Outlined Buttons</string>
+    <string name="btn_ghost_label">Cancel (Ghost Button)</string>
+    <string name="section_inputs">Focus-Aware Inputs</string>
+    <string name="input_email_hint">Email address (focused highlight)</string>
+    <string name="input_search_hint">Search query...</string>
+    <string name="section_chips">Filter Chips &amp; CheckBoxes</string>
+    <string name="chip_design">Design</string>
+    <string name="chip_develop">Develop</string>
+    <string name="chip_deploy">Deploy</string>
+    <string name="check_remember_me">Remember my preferences</string>
+
+    <!-- Toasts for ButtonActivity -->
+    <string name="toast_primary_clicked">Primary button clicked!</string>
+    <string name="toast_ripple_clicked">Ripple button clicked!</string>
+    <string name="toast_ghost_clicked">Ghost button clicked!</string>
+    <string name="toast_chip_toggled">Chip state changed</string>
+    <string name="toast_checkbox_toggled">Checkbox toggled</string>
+
+    <!-- Shadows Activity -->
+    <string name="title_shadows">Shadows &amp; Effects</string>
+    <string name="section_shadow_effects">Shadow Effects</string>
+    <string name="shadow_outer_card">Outer Drop Shadow Card</string>
+    <string name="shadow_hard_card">Hard Shadow</string>
+    <string name="shadow_hard_card_desc">Solid offset · blur 0dp</string>
+    <string name="shadow_inner_card">Inner Shadow (Inset)</string>
+    <string name="shadow_spread_rim">Inner Shadow: Blur 10dp + Spread 4dp</string>
+    <string name="shadow_bevel">Bevel Effect (Dual Inner Shadow)</string>
+    <string name="shadow_elevation_ramp">Two Drop Shadows (Elevation Ramp)</string>
+    <string name="shadow_drop_inner_combo">Drop + Inner on One View</string>
+    <string name="section_shadow_geometry">Shadow Geometry</string>
+    <string name="shadow_geometry_desc">Blur, spread, offset and edges are independent. Each is honored literally — no divisors, no squashing.</string>
+    <string name="shadow_blur_only">Blur 16dp</string>
+    <string name="shadow_blur_zero_hard">Blur 0dp (Hard Edge)</string>
+    <string name="shadow_blur_spread">Blur 8dp + Spread 6dp</string>
+    <string name="shadow_offset">Offset 8dp right / 8dp down</string>
+    <string name="shadow_negative_spread">Blur 12dp + Spread -6dp, down 6dp</string>
+    <string name="shadow_edges_top">effect1Edges=\"top\" only</string>
+    <string name="shadow_pad_content_false">effectPadContent=\"false\"</string>
+
+    <!-- Gradients Activity -->
+    <string name="title_gradients">Gradients &amp; Borders</string>
+    <string name="section_linear_gradients">Linear Gradients</string>
+    <string name="gradient_linear_horizontal">Linear Gradient (Start to End)</string>
+    <string name="gradient_linear_diagonal">Linear Gradient (Top-Left to Bottom-Right)</string>
+    <string name="section_radial_sweep">Radial &amp; Sweep Gradients</string>
+    <string name="gradient_radial_glow">Radial Glow (Center: 0.5, 0.35)</string>
+    <string name="gradient_sweep_conic">Sweep / Conic Gradient</string>
+    <string name="section_gradient_borders">Gradient Borders</string>
+    <string name="gradient_border_sample">Gradient Stroke Border (2dp)</string>
+    <string name="section_dashed_borders">Dashed Borders &amp; Drop Zones</string>
+    <string name="dashed_drop_zone">Dashed Border (Dash 8dp, Gap 6dp)</string>
+
+    <!-- Media & Typography Activity -->
+    <string name="title_media">Media &amp; Typography</string>
+    <string name="section_image_view">ShapeImageView (Clipping &amp; Borders)</string>
+    <string name="label_rounded_16dp">Rounded Corners (16dp)</string>
+    <string name="label_circle_oval">Circle (Oval) with 2dp Border</string>
+    <string name="label_custom_corners">Top-Left &amp; Bottom-Right (24dp)</string>
     <string name="toast_rounded_clicked">Rounded ShapeImageView clicked!</string>
     <string name="toast_circle_clicked">Circle ShapeImageView clicked!</string>
     <string name="toast_custom_clicked">Custom Corners ShapeImageView clicked!</string>
-    <string name="title_shadows">Shadows</string>
-    <string name="section_shadows">Shadows</string>
-    <string name="section_shadow_effects">Shadow Effects</string>
-    <string name="section_shadow_geometry">Shadow Geometry</string>
-    <string name="action_open_shadow_showcase">Open shadow showcase</string>
-    <string name="hint_shadow_showcase">Outer shadow blur · spread · offset · edges, and inner shadows.</string>
+    <string name="section_typography">ShapeTextView (Gradients &amp; Outlines)</string>
+    <string name="text_gradient_sample">GRADIENT TYPOGRAPHY</string>
+    <string name="text_outline_sample">OUTLINE TEXT</string>
+    <string name="text_combo_sample">GRADIENT &amp; OUTLINE</string>
+    <string name="section_universal_ripple">Universal Ripple on Layouts</string>
+    <string name="ripple_frame_label">ShapeFrameLayout with Ripple</string>
+    <string name="ripple_constraint_label">ShapeConstraintLayout with Ripple</string>
+    <string name="toast_frame_clicked">ShapeFrameLayout tapped!</string>
+    <string name="toast_constraint_clicked">ShapeConstraintLayout tapped!</string>
 </resources>

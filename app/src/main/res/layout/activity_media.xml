@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mediaRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    tools:context=".MediaActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="32dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/title_media"
+            android:textColor="#111827"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- Section 1: ShapeImageView -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/section_image_view"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Rounded 16dp -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.genesys.shape.view.ShapeImageView
+                    android:id="@+id/ivRounded"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_thanks"
+                    app:shape_radius="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="@string/label_rounded_16dp"
+                    android:textColor="#6B7280"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <!-- Circular with Border -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.genesys.shape.view.ShapeImageView
+                    android:id="@+id/ivCircle"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_permission_manage"
+                    app:shape_strokeColor="#6366F1"
+                    app:shape_strokeSize="2.5dp"
+                    app:shape_type="oval" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="@string/label_circle_oval"
+                    android:textColor="#6B7280"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <!-- Custom Corners -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.genesys.shape.view.ShapeImageView
+                    android:id="@+id/ivCustom"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_empty"
+                    app:shape_radiusInBottomRight="24dp"
+                    app:shape_radiusInTopLeft="24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="@string/label_custom_corners"
+                    android:textColor="#6B7280"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Section 2: ShapeTextView Typography -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/section_typography"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Gradient Typography -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_gradient_sample"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:shape_textCenterColor="#A855F7"
+            app:shape_textEndColor="#EC4899"
+            app:shape_textGradientOrientation="horizontal"
+            app:shape_textStartColor="#6366F1" />
+
+        <!-- Outlined Typography -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/text_outline_sample"
+            android:textColor="#FFFFFF"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            app:shape_textStrokeColor="#1F2937"
+            app:shape_textStrokeSize="1.5dp" />
+
+        <!-- Gradient + Outlined Combo -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/text_combo_sample"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:shape_textEndColor="#F59E0B"
+            app:shape_textGradientOrientation="horizontal"
+            app:shape_textStartColor="#EF4444"
+            app:shape_textStrokeColor="#78350F"
+            app:shape_textStrokeSize="1dp" />
+
+        <!-- Section 3: Universal Ripple Layouts -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/section_universal_ripple"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.genesys.shape.layout.ShapeFrameLayout
+            android:id="@+id/rippleFrame"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            app:shape_radius="14dp"
+            app:shape_ripple_color="#206366F1"
+            app:shape_ripple_enabled="true"
+            app:shape_solidColor="#FFFFFF"
+            app:shape_strokeColor="#E5E7EB"
+            app:shape_strokeSize="1dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/ripple_frame_label"
+                android:textColor="#374151"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </com.genesys.shape.layout.ShapeFrameLayout>
+
+        <com.genesys.shape.layout.ShapeConstraintLayout
+            android:id="@+id/rippleConstraint"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="12dp"
+            app:shape_radius="14dp"
+            app:shape_ripple_color="#2510B981"
+            app:shape_ripple_enabled="true"
+            app:shape_solidColor="#FFFFFF"
+            app:shape_strokeColor="#E5E7EB"
+            app:shape_strokeSize="1dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ripple_constraint_label"
+                android:textColor="#065F46"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </com.genesys.shape.layout.ShapeConstraintLayout>
+
+    </LinearLayout>
+</ScrollView>

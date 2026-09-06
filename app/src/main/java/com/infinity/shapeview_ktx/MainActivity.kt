@@ -2,65 +2,47 @@ package com.infinity.shapeview_ktx
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.genesys.shape.layout.ShapeConstraintLayout
-import com.genesys.shape.layout.ShapeFrameLayout
-import com.genesys.shape.view.ShapeButton
-import com.genesys.shape.view.ShapeImageView
+import com.genesys.shape.layout.ShapeLinearLayout
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        setupClickListeners()
+        setupNavigation()
     }
 
-    private fun setupClickListeners() {
-        findViewById<ShapeButton>(R.id.btnPrimary).setOnClickListener {
-            Toast.makeText(this, "Primary Button clicked!", Toast.LENGTH_SHORT).show()
+    private fun setupNavigation() {
+        findViewById<ShapeLinearLayout>(R.id.cardButtons).setOnClickListener {
+            startActivity(Intent(this, ButtonActivity::class.java))
         }
 
-        findViewById<ShapeButton>(R.id.btnRipple).setOnClickListener {
-            Toast.makeText(this, "Ripple Button clicked!", Toast.LENGTH_SHORT).show()
-        }
-
-        findViewById<ShapeButton>(R.id.btnOutline).setOnClickListener {
-            Toast.makeText(this, "Outline Button clicked!", Toast.LENGTH_SHORT).show()
-        }
-
-        findViewById<ShapeFrameLayout>(R.id.rippleFrame).setOnClickListener {
-            Toast.makeText(this, "ShapeFrameLayout tapped!", Toast.LENGTH_SHORT).show()
-        }
-
-        findViewById<ShapeConstraintLayout>(R.id.rippleConstraint).setOnClickListener {
-            Toast.makeText(this, "ShapeConstraintLayout tapped!", Toast.LENGTH_SHORT).show()
-        }
-
-        findViewById<ShapeImageView>(R.id.ivRounded).setOnClickListener {
-            Toast.makeText(this, getString(R.string.toast_rounded_clicked), Toast.LENGTH_SHORT).show()
-        }
-
-        findViewById<ShapeImageView>(R.id.ivCircle).setOnClickListener {
-            Toast.makeText(this, getString(R.string.toast_circle_clicked), Toast.LENGTH_SHORT).show()
-        }
-
-        findViewById<ShapeImageView>(R.id.ivCustom).setOnClickListener {
-            Toast.makeText(this, getString(R.string.toast_custom_clicked), Toast.LENGTH_SHORT).show()
-        }
-
-        findViewById<ShapeButton>(R.id.btnShadowShowcase).setOnClickListener {
+        findViewById<ShapeLinearLayout>(R.id.cardShadows).setOnClickListener {
             startActivity(Intent(this, ShadowActivity::class.java))
+        }
+
+        findViewById<ShapeLinearLayout>(R.id.cardShadowGeometry).setOnClickListener {
+            startActivity(Intent(this, ShadowGeometryActivity::class.java))
+        }
+
+        findViewById<ShapeLinearLayout>(R.id.cardGradients).setOnClickListener {
+            startActivity(Intent(this, GradientActivity::class.java))
+        }
+
+        findViewById<ShapeLinearLayout>(R.id.cardMedia).setOnClickListener {
+            startActivity(Intent(this, MediaActivity::class.java))
         }
     }
 }

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/buttonRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    tools:context=".ButtonActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="32dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/title_buttons"
+            android:textColor="#111827"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- Section 1: Stateful Buttons -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/section_state_buttons"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="@string/desc_state_buttons"
+            android:textColor="#6B7280"
+            android:textSize="12sp" />
+
+        <!-- Primary Button -->
+        <com.genesys.shape.view.ShapeButton
+            android:id="@+id/btnPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="@string/btn_primary_label"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:shape_radius="14dp"
+            app:shape_solidColor="#6366F1"
+            app:shape_solidPressedColor="#4F46E5"
+            app:shape_solidDisabledColor="#C7D2FE"
+            app:shape_textDisabledColor="#E0E7FF" />
+
+        <!-- Ripple Button -->
+        <com.genesys.shape.view.ShapeButton
+            android:id="@+id/btnRipple"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/btn_ripple_label"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:shape_radius="14dp"
+            app:shape_ripple_color="#40FFFFFF"
+            app:shape_ripple_enabled="true"
+            app:shape_solidColor="#10B981"
+            app:shape_solidPressedColor="#059669" />
+
+        <!-- Disabled Button -->
+        <com.genesys.shape.view.ShapeButton
+            android:id="@+id/btnDisabled"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="12dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="@string/btn_disabled_label"
+            android:textColor="#9CA3AF"
+            android:textSize="15sp"
+            app:shape_radius="14dp"
+            app:shape_solidColor="#6366F1"
+            app:shape_solidDisabledColor="#E5E7EB"
+            app:shape_textDisabledColor="#9CA3AF" />
+
+        <!-- Section 2: Ghost & Outlined Buttons -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/section_ghost_buttons"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.genesys.shape.view.ShapeButton
+            android:id="@+id/btnGhost"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="@string/btn_ghost_label"
+            android:textColor="#374151"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:shape_radius="26dp"
+            app:shape_solidColor="#00000000"
+            app:shape_strokeColor="#D1D5DB"
+            app:shape_strokePressedColor="#6366F1"
+            app:shape_strokeSize="1.5dp"
+            app:shape_textPressedColor="#6366F1" />
+
+        <!-- Section 3: Focus-Aware Inputs -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/section_inputs"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.genesys.shape.view.ShapeEditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="@string/input_email_hint"
+            android:inputType="textEmailAddress"
+            android:paddingHorizontal="16dp"
+            android:textColor="#1F2937"
+            android:textColorHint="#9CA3AF"
+            android:textSize="14sp"
+            app:shape_radius="10dp"
+            app:shape_solidColor="#FFFFFF"
+            app:shape_solidFocusedColor="#F5F3FF"
+            app:shape_strokeColor="#D1D5DB"
+            app:shape_strokeFocusedColor="#6366F1"
+            app:shape_strokeSize="1.5dp" />
+
+        <com.genesys.shape.view.ShapeEditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="12dp"
+            android:hint="@string/input_search_hint"
+            android:paddingHorizontal="16dp"
+            android:textColor="#1F2937"
+            android:textColorHint="#9CA3AF"
+            android:textSize="14sp"
+            app:shape_radius="23dp"
+            app:shape_solidColor="#FFFFFF"
+            app:shape_strokeColor="#E5E7EB"
+            app:shape_strokeFocusedColor="#10B981"
+            app:shape_strokeSize="1dp" />
+
+        <!-- Section 4: Filter Chips & CheckBoxes -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/section_chips"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.genesys.shape.view.ShapeCheckBox
+                android:id="@+id/chipDesign"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:paddingHorizontal="18dp"
+                android:text="@string/chip_design"
+                android:textSize="14sp"
+                app:shape_radius="19dp"
+                app:shape_solidCheckedColor="#6366F1"
+                app:shape_solidColor="#E5E7EB"
+                app:shape_textCheckedColor="#FFFFFF"
+                app:shape_textColor="#374151" />
+
+            <com.genesys.shape.view.ShapeCheckBox
+                android:id="@+id/chipDevelop"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="10dp"
+                android:button="@null"
+                android:gravity="center"
+                android:paddingHorizontal="18dp"
+                android:text="@string/chip_develop"
+                android:textSize="14sp"
+                app:shape_radius="19dp"
+                app:shape_solidCheckedColor="#6366F1"
+                app:shape_solidColor="#E5E7EB"
+                app:shape_textCheckedColor="#FFFFFF"
+                app:shape_textColor="#374151" />
+
+            <com.genesys.shape.view.ShapeCheckBox
+                android:id="@+id/chipDeploy"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="10dp"
+                android:button="@null"
+                android:gravity="center"
+                android:paddingHorizontal="18dp"
+                android:text="@string/chip_deploy"
+                android:textSize="14sp"
+                app:shape_radius="19dp"
+                app:shape_solidCheckedColor="#6366F1"
+                app:shape_solidColor="#E5E7EB"
+                app:shape_textCheckedColor="#FFFFFF"
+                app:shape_textColor="#374151" />
+
+        </LinearLayout>
+
+        <com.genesys.shape.view.ShapeCheckBox
+            android:id="@+id/cbStandard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:checked="true"
+            android:text="@string/check_remember_me"
+            android:textColor="#374151"
+            android:textSize="14sp"
+            app:shape_textCheckedColor="#6366F1" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gradientRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    tools:context=".GradientActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="32dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/title_gradients"
+            android:textColor="#111827"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- Section 1: Linear Gradients -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/section_linear_gradients"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Linear Start to End -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:text="@string/gradient_linear_horizontal"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:shape_radius="14dp"
+            app:shape_solidGradientCenterColor="#8B5CF6"
+            app:shape_solidGradientEndColor="#3B82F6"
+            app:shape_solidGradientOrientation="leftToRight"
+            app:shape_solidGradientStartColor="#EC4899" />
+
+        <!-- Linear Top-Left to Bottom-Right -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/gradient_linear_diagonal"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:shape_radius="14dp"
+            app:shape_solidGradientEndColor="#F59E0B"
+            app:shape_solidGradientOrientation="topLeftToBottomRight"
+            app:shape_solidGradientStartColor="#EF4444" />
+
+        <!-- Section 2: Radial & Sweep Gradients -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/section_radial_sweep"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Radial Glow -->
+            <com.genesys.shape.view.ShapeTextView
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/gradient_radial_glow"
+                android:textColor="#78350F"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:shape_solidGradientCenterX="0.5"
+                app:shape_solidGradientCenterY="0.35"
+                app:shape_solidGradientEndColor="#F59E0B"
+                app:shape_solidGradientRadiusRatio="0.9"
+                app:shape_solidGradientStartColor="#FEF3C7"
+                app:shape_solidGradientType="radial"
+                app:shape_type="oval" />
+
+            <!-- Sweep / Conic -->
+            <com.genesys.shape.view.ShapeTextView
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginStart="20dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/gradient_sweep_conic"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:shape_solidGradientCenterColor="#EC4899"
+                app:shape_solidGradientEndColor="#6366F1"
+                app:shape_solidGradientStartColor="#6366F1"
+                app:shape_solidGradientType="sweep"
+                app:shape_type="oval" />
+
+        </LinearLayout>
+
+        <!-- Section 3: Gradient Borders -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/section_gradient_borders"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.genesys.shape.layout.ShapeFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            app:shape_radius="16dp"
+            app:shape_solidColor="#111827"
+            app:shape_strokeGradientEndColor="#EC4899"
+            app:shape_strokeGradientOrientation="leftToRight"
+            app:shape_strokeGradientStartColor="#6366F1"
+            app:shape_strokeSize="2.5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/gradient_border_sample"
+                android:textColor="#F3F4F6"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </com.genesys.shape.layout.ShapeFrameLayout>
+
+        <!-- Section 4: Dashed Borders -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/section_dashed_borders"
+            android:textColor="#374151"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.genesys.shape.layout.ShapeFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:shape_radius="14dp"
+            app:shape_solidColor="#F9FAFB"
+            app:shape_strokeColor="#9CA3AF"
+            app:shape_strokeDashGap="6dp"
+            app:shape_strokeDashSize="8dp"
+            app:shape_strokeSize="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/dashed_drop_zone"
+                android:textColor="#4B5563"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+        </com.genesys.shape.layout.ShapeFrameLayout>
+
+    </LinearLayout>
+</ScrollView>

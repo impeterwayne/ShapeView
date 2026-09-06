@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shadowGeometryRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    tools:context=".ShadowGeometryActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="32dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/title_shadow_geometry"
+            android:textColor="#111827"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/shadow_geometry_desc"
+            android:textColor="#6B7280"
+            android:textSize="13sp" />
+
+        <!-- 1. Blur alone -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="@string/shadow_blur_only"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:shape_effect1Blur="16dp"
+            app:shape_effect1Color="#33000000"
+            app:shape_radius="14dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- 2. Hard Edge (Blur 0dp + Offset) -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="@string/shadow_blur_zero_hard"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:shape_effect1Blur="0dp"
+            app:shape_effect1Color="#FF000000"
+            app:shape_effect1OffsetX="6dp"
+            app:shape_effect1OffsetY="6dp"
+            app:shape_radius="14dp"
+            app:shape_ripple_color="#18000000"
+            app:shape_ripple_enabled="true"
+            app:shape_solidColor="#FFFFFF"
+            app:shape_strokeColor="#D1D5DB"
+            app:shape_strokeSize="1dp" />
+
+        <!-- 2. Blur + Spread -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="@string/shadow_blur_spread"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:shape_effect1Blur="8dp"
+            app:shape_effect1Color="#33000000"
+            app:shape_effect1Spread="6dp"
+            app:shape_radius="14dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- 3. Offset -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="@string/shadow_offset"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:shape_effect1Blur="10dp"
+            app:shape_effect1Color="#40000000"
+            app:shape_effect1OffsetX="8dp"
+            app:shape_effect1OffsetY="8dp"
+            app:shape_radius="14dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- 4. Negative Spread -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="@string/shadow_negative_spread"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:shape_effect1Blur="12dp"
+            app:shape_effect1Color="#40000000"
+            app:shape_effect1OffsetY="6dp"
+            app:shape_effect1Spread="-6dp"
+            app:shape_radius="14dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- 5. Top Edges Only -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="@string/shadow_edges_top"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:shape_effect1Blur="14dp"
+            app:shape_effect1Color="#40000000"
+            app:shape_effect1Edges="top"
+            app:shape_effect1OffsetY="-4dp"
+            app:shape_radius="14dp"
+            app:shape_solidColor="#FFFFFF" />
+
+        <!-- 6. PadContent False -->
+        <com.genesys.shape.view.ShapeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="@string/shadow_pad_content_false"
+            android:textColor="#1F2937"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:shape_effect1Blur="12dp"
+            app:shape_effect1Color="#33000000"
+            app:shape_effectPadContent="false"
+            app:shape_radius="14dp"
+            app:shape_solidColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>

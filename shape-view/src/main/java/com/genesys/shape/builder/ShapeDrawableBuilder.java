@@ -148,6 +148,7 @@ public final class ShapeDrawableBuilder {
     private float mRingThicknessRatio;
 
     private int mLineGravity;
+    private RippleBuilder mRippleBuilder;
 
     public ShapeDrawableBuilder(View view, TypedArray typedArray, IShapeDrawableStyleable styleable) {
         mView = view;
@@ -1610,6 +1611,13 @@ public final class ShapeDrawableBuilder {
             mView.setBackground(drawable);
         }
         applyShadowPadding();
+        if (mRippleBuilder != null && mRippleBuilder.isRippleEnabled()) {
+            mRippleBuilder.apply();
+        }
+    }
+
+    public void setRippleBuilder(RippleBuilder rippleBuilder) {
+        mRippleBuilder = rippleBuilder;
     }
 
     /**

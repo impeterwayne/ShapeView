@@ -2,10 +2,17 @@ package com.genesys.shape.builder;
 
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.graphics.drawable.shapes.Shape;
 import android.view.View;
+
+import com.genesys.shape.drawable.ShapeType;
 
 /**
  * Builder that handles ripple foreground for any Shape view.
@@ -30,6 +37,7 @@ public class RippleBuilder {
                          int rippleColorIndex, int rippleRadiusIndex) {
         mView = view;
         mShapeDrawableBuilder = shapeDrawableBuilder;
+        mShapeDrawableBuilder.setRippleBuilder(this);
 
         mRippleEnabled = typedArray.getBoolean(rippleEnabledIndex, false);
         if (typedArray.hasValue(rippleColorIndex)) {
@@ -53,28 +61,33 @@ public class RippleBuilder {
     private void applyRipple() {
         mView.setClickable(true);
 
-        float topLeft, topRight, bottomLeft, bottomRight;
-        if (mRippleRadius >= 0f) {
-            topLeft = mRippleRadius;
-            topRight = mRippleRadius;
-            bottomLeft = mRippleRadius;
-            bottomRight = mRippleRadius;
+        Shape shape;
+        if (mShapeDrawableBuilder.getType() == ShapeType.OVAL) {
+            shape = new OvalShape();
         } else {
-            topLeft = mShapeDrawableBuilder.getTopLeftRadius();
-            topRight = mShapeDrawableBuilder.getTopRightRadius();
-            bottomLeft = mShapeDrawableBuilder.getBottomLeftRadius();
-            bottomRight = mShapeDrawableBuilder.getBottomRightRadius();
+            float topLeft, topRight, bottomLeft, bottomRight;
+            if (mRippleRadius >= 0f) {
+                topLeft = mRippleRadius;
+                topRight = mRippleRadius;
+                bottomLeft = mRippleRadius;
+                bottomRight = mRippleRadius;
+            } else {
+                topLeft = mShapeDrawableBuilder.getTopLeftRadius();
+                topRight = mShapeDrawableBuilder.getTopRightRadius();
+                bottomLeft = mShapeDrawableBuilder.getBottomLeftRadius();
+                bottomRight = mShapeDrawableBuilder.getBottomRightRadius();
+            }
+
+            float tl = topLeft + DEFAULT_FIXED_OFFSET;
+            float tr = topRight + DEFAULT_FIXED_OFFSET;
+            float bl = bottomLeft + DEFAULT_FIXED_OFFSET;
+            float br = bottomRight + DEFAULT_FIXED_OFFSET;
+
+            float[] radii = new float[]{
+                    tl, tl, tr, tr, br, br, bl, bl
+            };
+            shape = new RoundRectShape(radii, null, null);
         }
-
-        float tl = topLeft + DEFAULT_FIXED_OFFSET;
-        float tr = topRight + DEFAULT_FIXED_OFFSET;
-        float bl = bottomLeft + DEFAULT_FIXED_OFFSET;
-        float br = bottomRight + DEFAULT_FIXED_OFFSET;
-
-        float[] radii = new float[]{
-                tl, tl, tr, tr, br, br, bl, bl
-        };
-        RoundRectShape shape = new RoundRectShape(radii, null, null);
         ShapeDrawable mask = new ShapeDrawable(shape);
 
         RippleDrawable rippleDrawable = new RippleDrawable(
@@ -83,7 +96,13 @@ public class RippleBuilder {
                 mask
         );
 
-        mView.setForeground(rippleDrawable);
+        Drawable foregroundDrawable = rippleDrawable;
+        Rect insets = mShapeDrawableBuilder.getShadowInsets();
+        if (insets != null && (insets.left > 0 || insets.top > 0 || insets.right > 0 || insets.bottom > 0)) {
+            foregroundDrawable = new InsetDrawable(rippleDrawable, insets.left, insets.top, insets.right, insets.bottom);
+        }
+
+        mView.setForeground(foregroundDrawable);
     }
 
     public void setRippleEnabled(boolean enabled) {

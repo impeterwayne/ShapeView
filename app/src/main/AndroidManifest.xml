@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShapeViewktx">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -20,11 +21,37 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ButtonActivity"
+            android:exported="true"
+            android:label="@string/title_buttons"
+            android:parentActivityName=".MainActivity" />
+
         <activity
             android:name=".ShadowActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_shadows"
             android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".ShadowGeometryActivity"
+            android:exported="true"
+            android:label="@string/title_shadow_geometry"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".GradientActivity"
+            android:exported="true"
+            android:label="@string/title_gradients"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".MediaActivity"
+            android:exported="true"
+            android:label="@string/title_media"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>
