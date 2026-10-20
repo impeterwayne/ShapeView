@@ -14,6 +14,8 @@
     <string name="menu_gradients_desc">Linear, radial &amp; sweep gradients, gradient borders &amp; dashed strokes.</string>
     <string name="menu_media_title">Media &amp; Typography</string>
     <string name="menu_media_desc">Image clipping (avatars), gradient/outline text &amp; universal ripples.</string>
+    <string name="menu_contour_title">ShapeContourLayout</string>
+    <string name="menu_contour_desc">Zero-XML programmatic Kotlin layouts with type-safe axis solvers &amp; inline shapes.</string>
 
     <string name="title_shadow_geometry">Shadow Geometry</string>
     <string name="btn_open_shadow_geometry">Explore Shadow Geometry →</string>
@@ -95,4 +97,29 @@
     <string name="ripple_constraint_label">ShapeConstraintLayout with Ripple</string>
     <string name="toast_frame_clicked">ShapeFrameLayout tapped!</string>
     <string name="toast_constraint_clicked">ShapeConstraintLayout tapped!</string>
+
+    <!-- ShapeContourLayout Activity -->
+    <string name="title_contour">ShapeContourLayout</string>
+    <string name="contour_subtitle">Built 100% in Kotlin with zero XML inflation, type-safe XInt/YInt lambdas, and Figma shadows.</string>
+    <string name="section_contour_profile">1. Sibling Constraints &amp; Shadow Padding</string>
+    <string name="contour_profile_name">Sarah Jenkins</string>
+    <string name="contour_profile_badge">PRO</string>
+    <string name="contour_profile_role">Staff Design Technologist</string>
+    <string name="contour_profile_bio">Building type-safe compound views in pure Kotlin with zero XML inflation overhead and Figma-accurate drop shadows.</string>
+    <string name="contour_btn_follow">Follow</string>
+    <string name="contour_btn_following">Following ✓</string>
+    <string name="toast_follow_toggled">Follow state updated!</string>
+    <string name="section_contour_dynamic">2. Dynamic Runtime Relayout (Tap Card)</string>
+    <string name="contour_dynamic_title">Interactive Layout Solver</string>
+    <string name="contour_dynamic_collapsed">Tap anywhere on this card to dynamically swap axis constraints via updateLayoutBy().</string>
+    <string name="contour_dynamic_expanded">Expanded! The badge moved to the bottom-right and this card recomputed its height on the fly without XML.</string>
+    <string name="contour_dynamic_pill_compact">COMPACT</string>
+    <string name="contour_dynamic_pill_expanded">EXPANDED</string>
+    <string name="section_contour_brutalist">3. Neo-Brutalist Stats (Hard Shadow + Columns)</string>
+    <string name="contour_stat_inflate_val">0 ms</string>
+    <string name="contour_stat_inflate_label">XML Inflate</string>
+    <string name="contour_stat_safety_val">100%</string>
+    <string name="contour_stat_safety_label">Axis Type-Safe</string>
+    <string name="contour_stat_effects_val">4 Slots</string>
+    <string name="contour_stat_effects_label">Figma Effects</string>
 </resources>

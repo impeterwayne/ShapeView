@@ -136,11 +136,8 @@ public final class ShapeDrawableBuilder {
     /** Drop and inner shadows, in the order they are painted. */
     private final List<ShapeEffect> mEffects = new ArrayList<>();
     private boolean mEffectPadContent = true;
-    /**
-     * Padding this builder has already added on the drop shadows' behalf, so that re-applying
-     * is idempotent instead of stacking a second inset on top of the first.
-     */
     private final Rect mAppliedShadowPadding = new Rect();
+    private boolean mApplyingShadowPadding = false;
 
     private int mRingInnerRadiusSize;
     private float mRingInnerRadiusRatio;
@@ -149,6 +146,35 @@ public final class ShapeDrawableBuilder {
 
     private int mLineGravity;
     private RippleBuilder mRippleBuilder;
+
+    public ShapeDrawableBuilder(View view) {
+        mView = view;
+        mType = ShapeType.RECTANGLE;
+        mWidth = -1;
+        mHeight = -1;
+        mSolidColor = NO_COLOR;
+        mTopLeftRadius = mTopRightRadius = mBottomLeftRadius = mBottomRightRadius = 0f;
+        mSolidGradientOrientation = transformGradientOrientation(getDefaultGradientOrientation());
+        mSolidGradientType = ShapeGradientType.LINEAR_GRADIENT;
+        mSolidGradientCenterX = 0.5f;
+        mSolidGradientCenterY = 0.5f;
+        mSolidGradientRadius = 0.5f;
+        mStrokeColor = NO_COLOR;
+        mStrokeGradientOrientation = transformGradientOrientation(getDefaultGradientOrientation());
+        mStrokeGradientType = ShapeGradientType.LINEAR_GRADIENT;
+        mStrokeGradientCenterX = 0.5f;
+        mStrokeGradientCenterY = 0.5f;
+        mStrokeGradientRadius = 0.5f;
+        mStrokeSize = 0;
+        mStrokeDashSize = 0;
+        mStrokeDashGap = 0;
+        mEffectPadContent = true;
+        mRingInnerRadiusSize = -1;
+        mRingInnerRadiusRatio = 3.0f;
+        mRingThicknessSize = -1;
+        mRingThicknessRatio = 9.0f;
+        mLineGravity = Gravity.CENTER;
+    }
 
     public ShapeDrawableBuilder(View view, TypedArray typedArray, IShapeDrawableStyleable styleable) {
         mView = view;
@@ -1634,13 +1660,30 @@ public final class ShapeDrawableBuilder {
         if (insets.equals(mAppliedShadowPadding)) {
             return;
         }
-        // Subtract what was added last time, so calling this repeatedly settles on one inset.
-        mView.setPadding(
-                mView.getPaddingLeft() - mAppliedShadowPadding.left + insets.left,
-                mView.getPaddingTop() - mAppliedShadowPadding.top + insets.top,
-                mView.getPaddingRight() - mAppliedShadowPadding.right + insets.right,
-                mView.getPaddingBottom() - mAppliedShadowPadding.bottom + insets.bottom);
-        mAppliedShadowPadding.set(insets);
+        mApplyingShadowPadding = true;
+        try {
+            // Subtract what was added last time, so calling this repeatedly settles on one inset.
+            mView.setPadding(
+                    mView.getPaddingLeft() - mAppliedShadowPadding.left + insets.left,
+                    mView.getPaddingTop() - mAppliedShadowPadding.top + insets.top,
+                    mView.getPaddingRight() - mAppliedShadowPadding.right + insets.right,
+                    mView.getPaddingBottom() - mAppliedShadowPadding.bottom + insets.bottom);
+            mAppliedShadowPadding.set(insets);
+        } finally {
+            mApplyingShadowPadding = false;
+        }
+    }
+
+    public boolean isApplyingShadowPadding() {
+        return mApplyingShadowPadding;
+    }
+
+    public void onUserPaddingChanged() {
+        if (mApplyingShadowPadding) {
+            return;
+        }
+        mAppliedShadowPadding.setEmpty();
+        applyShadowPadding();
     }
 
     public Drawable getDrawable() {

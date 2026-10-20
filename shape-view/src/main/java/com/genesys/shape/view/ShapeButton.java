@@ -38,18 +38,24 @@ public class ShapeButton extends AppCompatButton implements
     public ShapeButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ShapeButton);
-        mShapeDrawableBuilder = new ShapeDrawableBuilder(this, typedArray, STYLEABLE);
-        mTextColorBuilder = new TextColorBuilder(this, typedArray, STYLEABLE);
-        mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder, typedArray,
-                R.styleable.ShapeButton_shape_ripple_enabled,
-                R.styleable.ShapeButton_shape_ripple_color,
-                R.styleable.ShapeButton_shape_ripple_radius);
-        typedArray.recycle();
+        if (attrs == null) {
+            mShapeDrawableBuilder = new ShapeDrawableBuilder(this);
+            mTextColorBuilder = new TextColorBuilder(this);
+            mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder);
+        } else {
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ShapeButton);
+            mShapeDrawableBuilder = new ShapeDrawableBuilder(this, typedArray, STYLEABLE);
+            mTextColorBuilder = new TextColorBuilder(this, typedArray, STYLEABLE);
+            mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder, typedArray,
+                    R.styleable.ShapeButton_shape_ripple_enabled,
+                    R.styleable.ShapeButton_shape_ripple_color,
+                    R.styleable.ShapeButton_shape_ripple_radius);
+            typedArray.recycle();
 
-        mShapeDrawableBuilder.intoBackground();
-        mTextColorBuilder.intoTextColor();
-        mRippleBuilder.apply();
+            mShapeDrawableBuilder.intoBackground();
+            mTextColorBuilder.intoTextColor();
+            mRippleBuilder.apply();
+        }
     }
 
     @Override

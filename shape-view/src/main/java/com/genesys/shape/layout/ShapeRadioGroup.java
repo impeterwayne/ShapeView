@@ -27,16 +27,21 @@ public class ShapeRadioGroup extends RadioGroup implements IGetShapeDrawableBuil
 
     public ShapeRadioGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ShapeRadioGroup);
-        mShapeDrawableBuilder = new ShapeDrawableBuilder(this, typedArray, STYLEABLE);
-        mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder, typedArray,
-                R.styleable.ShapeRadioGroup_shape_ripple_enabled,
-                R.styleable.ShapeRadioGroup_shape_ripple_color,
-                R.styleable.ShapeRadioGroup_shape_ripple_radius);
-        typedArray.recycle();
+        if (attrs == null) {
+            mShapeDrawableBuilder = new ShapeDrawableBuilder(this);
+            mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder);
+        } else {
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ShapeRadioGroup);
+            mShapeDrawableBuilder = new ShapeDrawableBuilder(this, typedArray, STYLEABLE);
+            mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder, typedArray,
+                    R.styleable.ShapeRadioGroup_shape_ripple_enabled,
+                    R.styleable.ShapeRadioGroup_shape_ripple_color,
+                    R.styleable.ShapeRadioGroup_shape_ripple_radius);
+            typedArray.recycle();
 
-        mShapeDrawableBuilder.intoBackground();
-        mRippleBuilder.apply();
+            mShapeDrawableBuilder.intoBackground();
+            mRippleBuilder.apply();
+        }
     }
 
     @Override

@@ -32,16 +32,21 @@ public class ShapeFrameLayout extends FrameLayout implements IGetShapeDrawableBu
     public ShapeFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ShapeFrameLayout);
-        mShapeDrawableBuilder = new ShapeDrawableBuilder(this, typedArray, STYLEABLE);
-        mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder, typedArray,
-                R.styleable.ShapeFrameLayout_shape_ripple_enabled,
-                R.styleable.ShapeFrameLayout_shape_ripple_color,
-                R.styleable.ShapeFrameLayout_shape_ripple_radius);
-        typedArray.recycle();
+        if (attrs == null) {
+            mShapeDrawableBuilder = new ShapeDrawableBuilder(this);
+            mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder);
+        } else {
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ShapeFrameLayout);
+            mShapeDrawableBuilder = new ShapeDrawableBuilder(this, typedArray, STYLEABLE);
+            mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder, typedArray,
+                    R.styleable.ShapeFrameLayout_shape_ripple_enabled,
+                    R.styleable.ShapeFrameLayout_shape_ripple_color,
+                    R.styleable.ShapeFrameLayout_shape_ripple_radius);
+            typedArray.recycle();
 
-        mShapeDrawableBuilder.intoBackground();
-        mRippleBuilder.apply();
+            mShapeDrawableBuilder.intoBackground();
+            mRippleBuilder.apply();
+        }
     }
 
     @Override

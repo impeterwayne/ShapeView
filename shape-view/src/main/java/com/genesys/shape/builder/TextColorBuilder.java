@@ -73,6 +73,13 @@ public final class TextColorBuilder {
     private int mCachedGradientOrientation = -1;
     private int mCachedGradientColorsHash;
 
+    public TextColorBuilder(TextView textView) {
+        mTextView = textView;
+        mTextColor = textView.getTextColors().getDefaultColor();
+        mTextGradientOrientation = LinearGradientFontSpan.GRADIENT_ORIENTATION_HORIZONTAL;
+        mTextViewAttribute = new TextViewAttribute(mTextView);
+    }
+
     public TextColorBuilder(TextView textView, TypedArray typedArray, ITextColorStyleable styleable) {
         mTextView = textView;
         

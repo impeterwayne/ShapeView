@@ -227,5 +227,41 @@
 
         </com.genesys.shape.layout.ShapeLinearLayout>
 
+        <!-- Menu Item 6: ShapeContourLayout -->
+        <com.genesys.shape.layout.ShapeLinearLayout
+            android:id="@+id/cardContour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="vertical"
+            android:padding="18dp"
+            app:shape_effect1Blur="10dp"
+            app:shape_effect1Color="#1A000000"
+            app:shape_effect1OffsetY="3dp"
+            app:shape_radius="16dp"
+            app:shape_ripple_color="#206366F1"
+            app:shape_ripple_enabled="true"
+            app:shape_solidColor="#FFFFFF"
+            app:shape_strokeColor="#E2E8F0"
+            app:shape_strokeSize="1dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_contour_title"
+                android:textColor="#1E293B"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/menu_contour_desc"
+                android:textColor="#64748B"
+                android:textSize="13sp" />
+
+        </com.genesys.shape.layout.ShapeLinearLayout>
+
     </LinearLayout>
 </ScrollView>

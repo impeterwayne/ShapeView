@@ -32,6 +32,12 @@ public class RippleBuilder {
     private int mRippleColor = DEFAULT_RIPPLE_COLOR;
     private float mRippleRadius = -1f;
 
+    public RippleBuilder(View view, ShapeDrawableBuilder shapeDrawableBuilder) {
+        mView = view;
+        mShapeDrawableBuilder = shapeDrawableBuilder;
+        mShapeDrawableBuilder.setRippleBuilder(this);
+    }
+
     public RippleBuilder(View view, ShapeDrawableBuilder shapeDrawableBuilder,
                          TypedArray typedArray, int rippleEnabledIndex,
                          int rippleColorIndex, int rippleRadiusIndex) {

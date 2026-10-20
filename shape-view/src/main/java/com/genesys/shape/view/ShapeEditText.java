@@ -38,18 +38,24 @@ public class ShapeEditText extends AppCompatEditText implements
     public ShapeEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ShapeEditText);
-        mShapeDrawableBuilder = new ShapeDrawableBuilder(this, typedArray, STYLEABLE);
-        mTextColorBuilder = new TextColorBuilder(this, typedArray, STYLEABLE);
-        mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder, typedArray,
-                R.styleable.ShapeEditText_shape_ripple_enabled,
-                R.styleable.ShapeEditText_shape_ripple_color,
-                R.styleable.ShapeEditText_shape_ripple_radius);
-        typedArray.recycle();
+        if (attrs == null) {
+            mShapeDrawableBuilder = new ShapeDrawableBuilder(this);
+            mTextColorBuilder = new TextColorBuilder(this);
+            mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder);
+        } else {
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ShapeEditText);
+            mShapeDrawableBuilder = new ShapeDrawableBuilder(this, typedArray, STYLEABLE);
+            mTextColorBuilder = new TextColorBuilder(this, typedArray, STYLEABLE);
+            mRippleBuilder = new RippleBuilder(this, mShapeDrawableBuilder, typedArray,
+                    R.styleable.ShapeEditText_shape_ripple_enabled,
+                    R.styleable.ShapeEditText_shape_ripple_color,
+                    R.styleable.ShapeEditText_shape_ripple_radius);
+            typedArray.recycle();
 
-        mShapeDrawableBuilder.intoBackground();
-        mTextColorBuilder.intoTextColor();
-        mRippleBuilder.apply();
+            mShapeDrawableBuilder.intoBackground();
+            mTextColorBuilder.intoTextColor();
+            mRippleBuilder.apply();
+        }
     }
 
     @Override

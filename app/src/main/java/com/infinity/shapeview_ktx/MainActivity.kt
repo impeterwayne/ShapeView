@@ -44,5 +44,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<ShapeLinearLayout>(R.id.cardMedia).setOnClickListener {
             startActivity(Intent(this, MediaActivity::class.java))
         }
+
+        findViewById<ShapeLinearLayout>(R.id.cardContour).setOnClickListener {
+            startActivity(Intent(this, ContourActivity::class.java))
+        }
     }
 }

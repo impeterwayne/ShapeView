@@ -52,6 +52,12 @@
             android:label="@string/title_media"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".ContourActivity"
+            android:exported="true"
+            android:label="@string/title_contour"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>
