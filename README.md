@@ -53,6 +53,7 @@ Traditional Android (3 files):                   ShapeView (Inline in XML):
   - [Gradients & Borders](#3-gradients--borders)
   - [Media & Typography](#4-media--typography)
 - [Changing Shapes at Runtime](#changing-shapes-at-runtime)
+- [ShapeContourLayout (Programmatic Kotlin DSL)](#shapecontourlayout-programmatic-kotlin-dsl)
 - [Figma-Style Effects Engine](#figma-style-effects-engine)
 - [Requirements](#requirements)
 - [License](#license)
@@ -657,6 +658,113 @@ card.rippleBuilder.rippleColor = Color.parseColor("#206366F1")
 
 > [!NOTE]
 > Builder setters accept values in **pixels**. Convert from dp where necessary: `(24 * resources.displayMetrics.density)`.
+
+---
+
+## ShapeContourLayout (Programmatic Kotlin DSL)
+
+`ShapeContourLayout` integrates [Cash App's Contour](https://github.com/cashapp/contour) lambda-based constraint engine directly into ShapeView. Build high-performance, zero-XML custom views in Kotlin with expressive `leftTo` / `rightTo` / `topTo` / `bottomTo` constraints while retaining full access to `shapeDrawableBuilder`, Figma drop/inner shadows, and `rippleBuilder`.
+
+- **Zero-`TypedArray` Fast Path**: Instantiating any `Shape*` view in code (`ShapeTextView(context)`, `ShapeButton(context)`, `ShapeImageView(context)`) skips XML attribute inflation entirely.
+- **Shadow-Aware Parent Bounds**: `parent.left()`, `parent.top()`, `parent.right()`, `parent.bottom()`, and `contourHeightWrapContent()` automatically respect `ShapeDrawableBuilder`'s drop-shadow insets and user padding.
+- **Android Studio Layout Preview**: Annotate your `ShapeContourLayout` subclass or `@Composable` wrapper with `@Preview` to inspect programmatic views live in Android Studio without deploying to a device.
+
+### 1. Define a Custom `ShapeContourLayout` in Kotlin
+
+```kotlin
+class ProfileCardView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : ShapeContourLayout(context, attrs) {
+
+    private val avatar = ShapeImageView(context).apply {
+        scaleType = ImageView.ScaleType.CENTER_CROP
+        setImageResource(R.drawable.avatar)
+        shapeDrawableBuilder
+            .setType(ShapeType.OVAL)
+            .setStrokeColor(0xFF6366F1.toInt())
+            .setStrokeSize(2.dp)
+            .intoBackground()
+    }
+
+    private val nameText = ShapeTextView(context).apply {
+        text = context.getString(R.string.profile_name)
+        textSize = 18f
+        textColorBuilder
+            .setTextGradientColors(0xFF312E81.toInt(), 0xFF6366F1.toInt())
+            .intoTextColor()
+    }
+
+    private val followButton = ShapeButton(context).apply {
+        text = context.getString(R.string.action_follow)
+        shapeDrawableBuilder
+            .setRadius(18f.dp)
+            .setSolidColor(0xFF6366F1.toInt())
+            .setSolidPressedColor(0xFF4F46E5.toInt())
+            .intoBackground()
+    }
+
+    init {
+        setPadding(20.dp, 20.dp, 20.dp, 20.dp)
+
+        // Style the container itself (or via app:shape_* attributes if inflated in XML)
+        if (attrs == null) {
+            shapeDrawableBuilder
+                .setRadius(20f.dp)
+                .setSolidColor(Color.WHITE)
+                .addEffect(ShapeEffect.dropShadow(0x220F172A, 20.dp, 0, 0, 8.dp))
+                .intoBackground()
+            rippleBuilder.setRippleEnabled(true)
+            rippleBuilder.setRippleColor(0x186366F1)
+        }
+
+        avatar.layoutBy(
+            x = leftTo { parent.left() }.widthOf { 56.xdp },
+            y = topTo { parent.top() }.heightOf { 56.ydp }
+        )
+
+        followButton.layoutBy(
+            x = rightTo { parent.right() }.widthOf { 88.xdp },
+            y = centerVerticallyTo { avatar.centerY() }.heightOf { 36.ydp }
+        )
+
+        nameText.layoutBy(
+            x = leftTo { avatar.right() + 14.xdp }.rightTo { followButton.left() - 12.xdp },
+            y = centerVerticallyTo { avatar.centerY() }
+        )
+
+        contourHeightWrapContent()
+    }
+}
+```
+
+### 2. Dynamic Constraint Switching (`updateLayoutBy`)
+
+Swap constraints at runtime with `updateLayoutBy(...)` — no `ConstraintSet` cloning or view IDs required:
+
+```kotlin
+// Switch from horizontal row to vertical centered stack on tap
+avatar.updateLayoutBy(
+    x = centerHorizontallyTo { parent.centerX() }.widthOf { 64.xdp },
+    y = topTo { parent.top() }.heightOf { 64.ydp }
+)
+```
+
+### 3. Hybrid Usage (XML Container + Kotlin Child Constraints)
+
+You can also place your `ShapeContourLayout` subclass inside an XML layout and style its background, border, shadow, and ripple declaratively with `app:shape_*` attributes while keeping child positioning in Kotlin:
+
+```xml
+<com.example.ui.ProfileCardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:shape_radius="20dp"
+    app:shape_solidColor="#FFFFFF"
+    app:shape_effect1Color="#220F172A"
+    app:shape_effect1Blur="20dp"
+    app:shape_effect1OffsetY="8dp"
+    app:shape_ripple_enabled="true" />
+```
 
 ---
 
